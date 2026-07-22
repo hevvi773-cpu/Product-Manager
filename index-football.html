@@ -1,0 +1,849 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>踢踢 - 校园足球助手</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="app-container">
+
+ <!-- ===== 状态栏 ===== -->
+ <div class="status-bar">
+ <span class="time">12:08</span>
+ <span class="icons">📶 🔋</span>
+ </div>
+
+ <!-- ===== PAGE: 首页 ===== -->
+ <div class="page active" id="page-home">
+ <!-- 顶部导航 -->
+ <div class="header">
+ <div class="header-left">
+ <span class="logo">⚽ 踢踢</span>
+ </div>
+ <div class="header-center">
+ <span class="school-badge">西南大学</span>
+ </div>
+ <div class="header-right">
+ <span class="icon-btn">🔔</span>
+ <span class="badge-dot"></span>
+ </div>
+ </div>
+
+ <!-- 球队选择 -->
+ <div class="team-selector">
+ <span class="team-name">🏫 计信学院足球队</span>
+ <span class="team-role">· 队长</span>
+ <span class="arrow">▾</span>
+ </div>
+
+ <!-- AI预测入口 (置顶大卡片) -->
+ <div class="ai-banner" onclick="switchPage('page-ai')">
+ <div class="ai-banner-content">
+ <div class="ai-badge">🔮 AI 赛前预测</div>
+ <div class="ai-match">下一轮：计信学院 vs <strong>计算机学院</strong></div>
+ <div class="ai-score">
+ <span class="score-home">2</span>
+ <span class="score-colon">:</span>
+ <span class="score-away">1</span>
+ </div>
+ <div class="ai-prob">胜率 62% · 平 20% · 负 18%</div>
+ </div>
+ <div class="ai-arrow">查看完整攻略 ›</div>
+ </div>
+
+ <!-- 下一场赛程 -->
+ <div class="section">
+ <div class="section-header">
+ <span>📅 下一场比赛</span>
+ <span class="more">查看全部 ›</span>
+ </div>
+ <div class="match-card">
+ <div class="match-teams">
+ <div class="team-info">
+ <div class="team-badge blue">计</div>
+ <span>计信学院</span>
+ </div>
+ <div class="match-vs">VS</div>
+ <div class="team-info">
+ <div class="team-badge orange">计</div>
+ <span>计算机学院</span>
+ </div>
+ </div>
+ <div class="match-meta">
+ <span>📅 7月25日 周六 16:00</span>
+ <span>📍 第一运动场</span>
+ </div>
+ <div class="match-status">
+ <span class="status-tag">已报名 14/18 人</span>
+ <span class="status-tag">阵容未确认</span>
+ </div>
+ </div>
+ </div>
+
+ <!-- 战绩概览 -->
+ <div class="section">
+ <div class="section-header">
+ <span>📊 近期战绩</span>
+ <span class="more">查看全部 ›</span>
+ </div>
+ <div class="result-scroll">
+ <div class="result-card win">
+ <span class="result-score">3 : 1</span>
+ <span class="result-opponent">vs 经管学院</span>
+ <span class="result-date">7/15</span>
+ </div>
+ <div class="result-card draw">
+ <span class="result-score">2 : 2</span>
+ <span class="result-opponent">vs 物院</span>
+ <span class="result-date">7/10</span>
+ </div>
+ <div class="result-card lose">
+ <span class="result-score">0 : 1</span>
+ <span class="result-opponent">vs 体院</span>
+ <span class="result-date">7/3</span>
+ </div>
+ </div>
+ </div>
+
+    <!-- 全校球队战绩 -->
+    <div class="section">
+      <div class="section-header">
+        <span>🏆 全校球队战绩</span>
+        <span class="more">完整榜单 ›</span>
+      </div>
+      <div class="team-rank-scroll">
+        <div class="team-rank-card rank-1">
+          <div class="rank-badge">🥇</div>
+          <div class="rank-team-badge" style="background:#1a8c4a;">体</div>
+          <div class="rank-info">
+            <span class="rank-name">体育学院</span>
+            <span class="rank-record">10胜 2平 1负</span>
+          </div>
+          <span class="rank-points">32分</span>
+        </div>
+        <div class="team-rank-card rank-2">
+          <div class="rank-badge">🥈</div>
+          <div class="rank-team-badge" style="background:#3b82f6;">计</div>
+          <div class="rank-info">
+            <span class="rank-name">计信学院</span>
+            <span class="rank-record">8胜 3平 4负</span>
+          </div>
+          <span class="rank-points">27分</span>
+        </div>
+        <div class="team-rank-card rank-3">
+          <div class="rank-badge">🥉</div>
+          <div class="rank-team-badge" style="background:#f59e0b;">经</div>
+          <div class="rank-info">
+            <span class="rank-name">经管学院</span>
+            <span class="rank-record">7胜 4平 3负</span>
+          </div>
+          <span class="rank-points">25分</span>
+        </div>
+        <div class="team-rank-card">
+          <div class="rank-badge">4</div>
+          <div class="rank-team-badge" style="background:#8b5cf6;">物</div>
+          <div class="rank-info">
+            <span class="rank-name">物理学院</span>
+            <span class="rank-record">6胜 3平 5负</span>
+          </div>
+          <span class="rank-points">21分</span>
+        </div>
+        <div class="team-rank-card">
+          <div class="rank-badge">5</div>
+          <div class="rank-team-badge" style="background:#ef4444;">文</div>
+          <div class="rank-info">
+            <span class="rank-name">文学院</span>
+            <span class="rank-record">4胜 5平 6负</span>
+          </div>
+          <span class="rank-points">17分</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 赛后复盘 -->
+    <div class="section">
+      <div class="section-header">
+        <span>📝 赛后复盘 · 7/15 vs 经管学院</span>
+        <span class="more">查看全部复盘 ›</span>
+      </div>
+      <div class="review-card">
+        <!-- AI数据复盘 -->
+        <div class="review-ai">
+          <div class="review-ai-header">🤖 AI 数据复盘</div>
+          <div class="review-ai-grid">
+            <div class="review-stat">
+              <span class="review-stat-num">62%</span>
+              <span class="review-stat-label">控球率</span>
+            </div>
+            <div class="review-stat">
+              <span class="review-stat-num">14</span>
+              <span class="review-stat-label">射门</span>
+            </div>
+            <div class="review-stat">
+              <span class="review-stat-num">6</span>
+              <span class="review-stat-label">射正</span>
+            </div>
+            <div class="review-stat">
+              <span class="review-stat-num">83%</span>
+              <span class="review-stat-label">传球成功率</span>
+            </div>
+          </div>
+          <div class="review-ai-insight">💡 本场边路传中成功率仅 18%（低于赛季平均 32%），建议下场增加中路渗透</div>
+        </div>
+
+        <!-- 队员感想 -->
+        <div class="review-player-section">
+          <div class="review-sub-header">👥 队员感想</div>
+          <div class="review-player-item">
+            <div class="rp-avatar" style="background:#3b82f6;">赵</div>
+            <div class="rp-content">
+              <span class="rp-name">赵一鸣 <span class="rp-goal">⚽ 2球</span></span>
+              <span class="rp-text">"今天前场配合比之前流畅多了，第二个球是训练里练过的套路，直接打出来了"</span>
+              <span class="rp-time">赛后 10min</span>
+            </div>
+            <span class="rp-like">❤️ 8</span>
+          </div>
+          <div class="review-player-item">
+            <div class="rp-avatar" style="background:#f59e0b;">李</div>
+            <div class="rp-content">
+              <span class="rp-name">李浩 <span class="rp-goal">🛡️ 后腰</span></span>
+              <span class="rp-text">"中场有点脱节，对面反击时我回防来不及，下次站位要再靠后一些"</span>
+              <span class="rp-time">赛后 25min</span>
+            </div>
+            <span class="rp-like">❤️ 12</span>
+          </div>
+        </div>
+
+        <!-- 队长总结 -->
+        <div class="review-captain">
+          <div class="review-sub-header">🎯 队长总结</div>
+          <div class="captain-text">
+            "整体满意，进攻端打出了训练效果，但中场拦截还是老问题。下轮计算机学院边路快，李浩你位置往后收一点，边后卫注意协防。周末加练一次定位球。"
+          </div>
+          <div class="captain-name">—— 小张 · 队长</div>
+        </div>
+
+        <!-- AI总结合 -->
+        <div class="review-ai-summary">
+          <div class="review-ai-summary-header">🤖 AI 综合总结</div>
+          <div class="summary-text">
+            <div class="summary-tag good">✅ 亮点</div>
+            <ul>
+              <li>前场进攻套路成熟，赵一鸣把握机会能力强（2球）</li>
+              <li>传球成功率83%创赛季新高，短传渗透执行到位</li>
+            </ul>
+            <div class="summary-tag improve">⚠️ 待改进</div>
+            <ul>
+              <li>中场拦截偏弱，对手反击直接面对后防线（已获队长确认）</li>
+              <li>边路传中效率低（18%），建议下场减少传中战术</li>
+            </ul>
+            <div class="summary-tag next">🔮 下场建议</div>
+            <ul>
+              <li>对计算机学院建议收紧中场、打防守反击</li>
+              <li>赛前加练定位球（本场3次角球0转化）</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- 交互 -->
+        <div class="review-footer">
+          <span class="review-footer-btn">💬 我也说两句</span>
+          <span class="review-footer-btn">📊 录入详细赛果</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 数据看板 -->
+    <div class="section">
+      <div class="section-header">
+        <span>📈 本赛季数据</span>
+      </div>
+ <div class="stats-grid">
+ <div class="stat-item">
+ <span class="stat-num">8</span>
+ <span class="stat-label">胜</span>
+ </div>
+ <div class="stat-item">
+ <span class="stat-num">3</span>
+ <span class="stat-label">平</span>
+ </div>
+ <div class="stat-item">
+ <span class="stat-num">4</span>
+ <span class="stat-label">负</span>
+ </div>
+ <div class="stat-item">
+ <span class="stat-num">32</span>
+ <span class="stat-label">进球</span>
+ </div>
+ <div class="stat-item">
+ <span class="stat-num">18</span>
+ <span class="stat-label">失球</span>
+ </div>
+ <div class="stat-item">
+ <span class="stat-num">15</span>
+ <span class="stat-label">场次</span>
+ </div>
+ </div>
+ </div>
+
+ <div class="bottom-spacer"></div>
+ </div>
+
+ <!-- ===== PAGE: 阵容管理 ===== -->
+ <div class="page" id="page-lineup">
+ <div class="header">
+ <div class="header-left">
+ <span class="logo">📋 阵容管理</span>
+ </div>
+ <div class="header-right">
+ <span class="icon-btn">⚙️</span>
+ </div>
+ </div>
+
+ <!-- 赛事选择 -->
+ <div class="match-selector">
+ <span class="label">选择赛事：</span>
+ <span class="select-value">7/25 vs 计算机学院 ▾</span>
+ </div>
+
+ <!-- 球场阵型图 -->
+ <div class="pitch-container">
+ <div class="pitch">
+ <div class="pitch-label">4-3-3 阵型</div>
+
+ <!-- 前锋线 -->
+ <div class="pitch-row forwards">
+ <div class="player-slot" onclick="alert('7号 王浩然\n左边锋｜状态：可用 🟢')">
+ <div class="slot-avatar">7</div>
+ <div class="slot-name">王浩然</div>
+ </div>
+ <div class="player-slot striker" onclick="alert('9号 赵一鸣\n中锋｜状态：可用 🟢')">
+ <div class="slot-avatar">9</div>
+ <div class="slot-name">赵一鸣</div>
+ </div>
+ <div class="player-slot" onclick="alert('11号 陈宇\n右边锋｜状态：可用 🟢')">
+ <div class="slot-avatar">11</div>
+ <div class="slot-name">陈宇</div>
+ </div>
+ </div>
+
+ <!-- 中场线 -->
+ <div class="pitch-row midfielders">
+ <div class="player-slot" onclick="alert('8号 张志远\n中前卫｜状态：轻伤 🟡')">
+ <div class="slot-avatar yellow-bg">8</div>
+ <div class="slot-name warn">张志远 🟡</div>
+ </div>
+ <div class="player-slot" onclick="alert('6号 李浩\n后腰｜状态：可用 🟢')">
+ <div class="slot-avatar">6</div>
+ <div class="slot-name">李浩</div>
+ </div>
+ <div class="player-slot" onclick="alert('10号 刘洋\n前腰｜状态：可用 🟢')">
+ <div class="slot-avatar">10</div>
+ <div class="slot-name">刘洋</div>
+ </div>
+ </div>
+
+ <!-- 后卫线 -->
+ <div class="pitch-row defenders">
+ <div class="player-slot" onclick="alert('3号 周杰\n左后卫｜状态：可用 🟢')">
+ <div class="slot-avatar">3</div>
+ <div class="slot-name">周杰</div>
+ </div>
+ <div class="player-slot" onclick="alert('4号 吴昊\n中后卫｜状态：可用 🟢')">
+ <div class="slot-avatar">4</div>
+ <div class="slot-name">吴昊</div>
+ </div>
+ <div class="player-slot disabled-slot" onclick="alert('❌ 5号 郑锋\n中后卫｜红牌停赛\n请替换此位置')">
+ <div class="slot-avatar red-bg">5</div>
+ <div class="slot-name banned">郑锋 🚫</div>
+ </div>
+ <div class="player-slot" onclick="alert('2号 杨帆\n右后卫｜状态：可用 🟢')">
+ <div class="slot-avatar">2</div>
+ <div class="slot-name">杨帆</div>
+ </div>
+ </div>
+
+ <!-- 门将 -->
+ <div class="pitch-row goalkeeper">
+ <div class="player-slot" onclick="alert('1号 张宇\n门将｜状态：可用 🟢')">
+ <div class="slot-avatar">1</div>
+ <div class="slot-name">张宇</div>
+ </div>
+ </div>
+ </div>
+ </div>
+
+ <!-- 停赛提醒 -->
+ <div class="warning-banner">
+ ⚠️ <strong>停赛提醒：</strong>郑锋（5号）红牌停赛，请在首发中替换该位置
+ </div>
+
+ <!-- 替补席 -->
+ <div class="section">
+ <div class="section-header">
+ <span>🔄 替补席</span>
+ </div>
+ <div class="sub-list">
+ <div class="sub-item">
+ <span class="sub-num">12</span>
+ <span class="sub-name">黄磊</span>
+ <span class="sub-pos">中后卫</span>
+ <span class="sub-status green">🟢 可用</span>
+ </div>
+ <div class="sub-item">
+ <span class="sub-num">14</span>
+ <span class="sub-name">马超</span>
+ <span class="sub-pos">边锋</span>
+ <span class="sub-status green">🟢 可用</span>
+ </div>
+ <div class="sub-item">
+ <span class="sub-num">15</span>
+ <span class="sub-name">孙宇</span>
+ <span class="sub-pos">中场</span>
+ <span class="sub-status yellow">🟡 轻伤</span>
+ </div>
+ </div>
+ </div>
+
+ <!-- 发布按钮 -->
+ <div class="publish-bar">
+ <button class="btn-primary" onclick="alert('阵容已发布！\n所有队员将收到通知')">📢 发布阵容</button>
+ </div>
+
+ <div class="bottom-spacer"></div>
+ </div>
+
+ <!-- ===== PAGE: 广场 ===== -->
+ <div class="page" id="page-square">
+ <div class="header">
+ <div class="header-left">
+ <span class="logo">🏟️ 广场</span>
+ </div>
+ <div class="header-right">
+ <span class="icon-btn">🔍</span>
+ </div>
+ </div>
+
+ <!-- 分类Tab -->
+ <div class="square-tabs">
+ <span class="tab active">全部</span>
+ <span class="tab">⚽ 约球</span>
+ <span class="tab">🍜 约饭</span>
+ <span class="tab">📺 看球</span>
+ <span class="tab">💬 闲聊</span>
+ </div>
+
+ <!-- 信息流 -->
+ <div class="feed">
+ <!-- 约球卡 -->
+ <div class="post-card">
+ <div class="post-type soccer">⚽ 约球</div>
+ <div class="post-title">周六下午野球局，缺边锋！</div>
+ <div class="post-meta-grid">
+ <span>📅 7/24 周六 15:00</span>
+ <span>📍 二运足球场</span>
+ <span>👥 已报 6/10 人</span>
+ <span>⏰ 截止 7/23 20:00</span>
+ </div>
+ <div class="post-avatars">
+ <span class="mini-avatar">张</span>
+ <span class="mini-avatar">李</span>
+ <span class="mini-avatar">王</span>
+ <span class="mini-avatar">赵</span>
+ <span class="mini-avatar">刘</span>
+ <span class="mini-avatar">+1</span>
+ </div>
+ <div class="post-actions">
+ <button class="btn-join" onclick="alert('已报名成功！')">👋 我要报名</button>
+ <span class="post-author">发布：张同学 · 计信</span>
+ </div>
+ </div>
+
+ <!-- 约饭卡 -->
+ <div class="post-card">
+ <div class="post-type food">🍜 约饭</div>
+ <div class="post-title">赛后李园食堂聚餐！</div>
+ <div class="post-meta-grid">
+ <span>📅 7/25 赛后</span>
+ <span>📍 李园食堂二楼</span>
+ <span>👥 已报 8/15 人</span>
+ <span>💰 人均约 25</span>
+ </div>
+ <div class="post-avatars">
+ <span class="mini-avatar">陈</span>
+ <span class="mini-avatar">周</span>
+ <span class="mini-avatar">吴</span>
+ <span class="mini-avatar">+5</span>
+ </div>
+ <div class="post-actions">
+ <button class="btn-join" onclick="alert('已报名成功！')">👋 我要报名</button>
+ <span class="post-author">发布：陈同学 · 物院</span>
+ </div>
+ </div>
+
+ <!-- 看球卡 -->
+ <div class="post-card">
+ <div class="post-type watch">📺 看球</div>
+ <div class="post-title">周六欧冠决赛！一起看球！</div>
+ <div class="post-meta-grid">
+ <span>📅 7/26 周日 03:00</span>
+ <span>📍 校外烧烤摊</span>
+ <span>👥 已报 5/12 人</span>
+ <span>🍺 AA制</span>
+ </div>
+ <div class="post-avatars">
+ <span class="mini-avatar">黄</span>
+ <span class="mini-avatar">马</span>
+ <span class="mini-avatar">孙</span>
+ <span class="mini-avatar">+2</span>
+ </div>
+ <div class="post-actions">
+ <button class="btn-join" onclick="alert('已报名成功！')">👋 我要报名</button>
+ <span class="post-author">发布：黄同学 · 计信</span>
+ </div>
+ </div>
+
+ <!-- 闲聊卡 -->
+ <div class="post-card">
+ <div class="post-type chat">💬 闲聊</div>
+ <div class="post-title">有人这周末去踢球吗？</div>
+ <p class="post-text">好久没踢了，约一波？顺便有没有人想看欧洲杯集锦，我整理了链接</p>
+ <div class="post-actions">
+ <span>💬 12条回复</span>
+ <span>❤️ 5</span>
+ <span class="post-author">发布：赵同学 · 经管</span>
+ </div>
+ </div>
+ </div>
+
+ <!-- 悬浮发布按钮 -->
+ <button class="fab" onclick="showPublishModal()">+</button>
+
+ <div class="bottom-spacer"></div>
+ </div>
+
+ <!-- ===== PAGE: 消息 ===== -->
+ <div class="page" id="page-messages">
+ <div class="header">
+ <div class="header-left">
+ <span class="logo">💬 消息</span>
+ </div>
+ </div>
+
+ <div class="msg-tabs">
+ <span class="tab active">通知</span>
+ <span class="tab">私聊</span>
+ </div>
+
+ <div class="msg-list">
+ <div class="msg-item unread">
+ <div class="msg-icon">📢</div>
+ <div class="msg-content">
+ <span class="msg-title">阵容已发布</span>
+ <span class="msg-preview">队长已发布 7/25 对阵计算机学院的首发阵容，点击查看</span>
+ </div>
+ <span class="msg-time">10:30</span>
+ <span class="unread-dot"></span>
+ </div>
+ <div class="msg-item unread">
+ <div class="msg-icon">🔮</div>
+ <div class="msg-content">
+ <span class="msg-title">AI 预测已更新</span>
+ <span class="msg-preview">基于最近5场比赛数据，AI预测对阵计算机学院胜率62%</span>
+ </div>
+ <span class="msg-time">09:00</span>
+ <span class="unread-dot"></span>
+ </div>
+ <div class="msg-item">
+ <div class="msg-icon">👋</div>
+ <div class="msg-content">
+ <span class="msg-title">报名确认</span>
+ <span class="msg-preview">你已成功报名「周六下午野球局」</span>
+ </div>
+ <span class="msg-time">昨天</span>
+ </div>
+ <div class="msg-item">
+ <div class="msg-icon">⚽</div>
+ <div class="msg-content">
+ <span class="msg-title">赛后复盘已生成</span>
+ <span class="msg-preview">7/15 对阵经管学院 3:1 胜利，查看AI复盘分析</span>
+ </div>
+ <span class="msg-time">昨天</span>
+ </div>
+ </div>
+
+ <div class="bottom-spacer"></div>
+ </div>
+
+ <!-- ===== PAGE: 我的 ===== -->
+ <div class="page" id="page-mine">
+ <div class="header">
+ <div class="header-left">
+ <span class="logo">👤 我的</span>
+ </div>
+ <div class="header-right">
+ <span class="icon-btn">⚙️</span>
+ </div>
+ </div>
+
+ <!-- 个人信息 -->
+ <div class="profile-card">
+ <div class="profile-avatar">张</div>
+ <div class="profile-info">
+ <span class="profile-name">小张 <span class="profile-role">· 队长</span></span>
+ <span class="profile-detail">计信学院 · 10号 · 前腰</span>
+ <span class="profile-detail">📧 xiaozhang@email.com</span>
+ </div>
+ </div>
+
+ <!-- 状态标记 -->
+ <div class="section">
+ <div class="section-header">
+ <span>🟢 我的状态</span>
+ </div>
+ <div class="status-selector">
+ <div class="status-option active" onclick="alert('状态已设为：可上场')">
+ <span>🟢</span>
+ <span>可上场</span>
+ </div>
+ <div class="status-option" onclick="alert('状态已设为：轻伤')">
+ <span>🟡</span>
+ <span>轻伤</span>
+ </div>
+ <div class="status-option" onclick="alert('状态已设为：缺阵')">
+ <span>🔴</span>
+ <span>缺阵</span>
+ </div>
+ </div>
+ </div>
+
+ <!-- 个人数据 -->
+ <div class="section">
+ <div class="section-header">
+ <span>📊 个人数据</span>
+ </div>
+ <div class="stats-grid">
+ <div class="stat-item">
+ <span class="stat-num">12</span>
+ <span class="stat-label">出场</span>
+ </div>
+ <div class="stat-item">
+ <span class="stat-num">4</span>
+ <span class="stat-label">进球</span>
+ </div>
+ <div class="stat-item">
+ <span class="stat-num">6</span>
+ <span class="stat-label">助攻</span>
+ </div>
+ <div class="stat-item">
+ <span class="stat-num">1</span>
+ <span class="stat-label">黄牌</span>
+ </div>
+ <div class="stat-item">
+ <span class="stat-num">0</span>
+ <span class="stat-label">红牌</span>
+ </div>
+ <div class="stat-item">
+ <span class="stat-num">82%</span>
+ <span class="stat-label">传球率</span>
+ </div>
+ </div>
+ </div>
+
+ <!-- 我的球队 -->
+ <div class="section">
+ <div class="section-header">
+ <span>🏫 我的球队</span>
+ </div>
+ <div class="my-team-card">
+ <span class="team-badge big">计</span>
+ <div>
+ <span class="team-name-lg">计信学院足球队</span>
+ <span class="team-member-count">18 名队员</span>
+ </div>
+ <span class="team-role-badge">队长</span>
+ </div>
+ </div>
+
+ <!-- 设置 -->
+ <div class="settings-list">
+ <div class="setting-item">📱 推送通知设置 ›</div>
+ <div class="setting-item">🔒 隐私设置 ›</div>
+ <div class="setting-item">💡 使用帮助 ›</div>
+ <div class="setting-item">ℹ️ 关于踢踢 ›</div>
+ </div>
+
+ <div class="bottom-spacer"></div>
+ </div>
+
+ <!-- ===== PAGE: AI攻略详情 ===== -->
+ <div class="page" id="page-ai">
+ <div class="header">
+ <div class="header-left">
+ <span class="back-btn" onclick="switchPage('page-home')">‹ 返回</span>
+ </div>
+ <div class="header-center">
+ <span>🔮 AI赛前预测</span>
+ </div>
+ </div>
+
+ <div class="ai-detail">
+ <div class="ai-detail-header">
+ <span class="ai-detail-match">计信学院 vs 计算机学院</span>
+ <span class="ai-detail-date">7月25日 周六 16:00</span>
+ </div>
+
+ <!-- 预测比分 -->
+ <div class="ai-score-big">
+ <div class="ai-team">
+ <span class="ai-team-badge">计</span>
+ <span>计信学院</span>
+ </div>
+ <div class="ai-score-num">
+ <span class="score-num">2</span>
+ <span class="score-colon">:</span>
+ <span class="score-num away">1</span>
+ </div>
+ <div class="ai-team">
+ <span class="ai-team-badge orange">计</span>
+ <span>计算机学院</span>
+ </div>
+ </div>
+
+ <!-- 胜率条 -->
+ <div class="prob-bar">
+ <div class="prob-segment win" style="width:62%">胜 62%</div>
+ <div class="prob-segment draw" style="width:20%">平 20%</div>
+ <div class="prob-segment lose" style="width:18%">负 18%</div>
+ </div>
+
+ <!-- 战术建议 -->
+ <div class="ai-section">
+ <div class="ai-section-title">📋 AI战术建议</div>
+ <div class="ai-tips">
+ <div class="tip-item">
+ <span class="tip-icon">💡</span>
+ <span>对手近3场边路防守薄弱（失球中60%来自边路传中），建议加强两侧进攻</span>
+ </div>
+ <div class="tip-item">
+ <span class="tip-icon">💡</span>
+ <span>对手中场拦截成功率仅42%，可多利用短传渗透</span>
+ </div>
+ <div class="tip-item">
+ <span class="tip-icon">💡</span>
+ <span>本队定位球得分率35%（近5场），建议争取角球/任意球机会</span>
+ </div>
+ </div>
+ </div>
+
+ <!-- 推荐阵容 -->
+ <div class="ai-section">
+ <div class="ai-section-title">✅ AI推荐阵容 (4-3-3)</div>
+ <div class="ai-lineup">
+ <span class="ai-lineup-pos">前锋：</span> 王浩然(7) · 赵一鸣(9) · 陈宇(11)
+ </div>
+ <div class="ai-lineup">
+ <span class="ai-lineup-pos">中场：</span> 刘洋(10) · 李浩(6) · 张志远(8)
+ </div>
+ <div class="ai-lineup">
+ <span class="ai-lineup-pos">后卫：</span> 周杰(3) · 吴昊(4) · 黄磊(12) · 杨帆(2)
+ </div>
+ <div class="ai-lineup">
+ <span class="ai-lineup-pos">门将：</span> 张宇(1)
+ </div>
+ <div class="ai-note">
+ ⚠️ 郑锋(5)红牌停赛，AI建议用替补黄磊(12)替换
+ </div>
+ <button class="btn-primary" onclick="alert('✅ 已一键应用AI推荐阵容\n请前往阵容管理页面微调后发布')">📋 一键应用此阵容</button>
+ </div>
+
+ <!-- 数据来源 -->
+ <div class="ai-source">
+ 基于球队历史 15 场比赛数据预测 · 模型持续迭代中
+ </div>
+ </div>
+
+ <div class="bottom-spacer"></div>
+ </div>
+
+ <!-- ===== 底部导航 ===== -->
+ <div class="bottom-nav">
+ <div class="nav-item active" data-page="page-home" onclick="switchPage('page-home')">
+ <span class="nav-icon">🏠</span>
+ <span class="nav-label">首页</span>
+ </div>
+ <div class="nav-item" data-page="page-lineup" onclick="switchPage('page-lineup')">
+ <span class="nav-icon">📋</span>
+ <span class="nav-label">阵容</span>
+ </div>
+ <div class="nav-item" data-page="page-square" onclick="switchPage('page-square')">
+ <span class="nav-icon">🏟️</span>
+ <span class="nav-label">广场</span>
+ </div>
+ <div class="nav-item" data-page="page-messages" onclick="switchPage('page-messages')">
+ <span class="nav-icon">💬</span>
+ <span class="nav-label">消息</span>
+ <span class="nav-badge">2</span>
+ </div>
+ <div class="nav-item" data-page="page-mine" onclick="switchPage('page-mine')">
+ <span class="nav-icon">👤</span>
+ <span class="nav-label">我的</span>
+ </div>
+ </div>
+
+</div>
+
+<!-- 发布弹窗 -->
+<div class="modal-overlay" id="publishModal" onclick="hidePublishModal()">
+ <div class="modal-content" onclick="event.stopPropagation()">
+ <div class="modal-header">
+ <span>发布帖子</span>
+ <span class="modal-close" onclick="hidePublishModal()">✕</span>
+ </div>
+ <div class="modal-body">
+ <div class="modal-field">
+ <label>类型</label>
+ <div class="type-selector">
+ <span class="type-opt active">⚽ 约球</span>
+ <span class="type-opt">🍜 约饭</span>
+ <span class="type-opt">📺 看球</span>
+ <span class="type-opt">💬 闲聊</span>
+ </div>
+ </div>
+ <div class="modal-field">
+ <label>标题</label>
+ <input type="text" placeholder="例如：周六下午约球">
+ </div>
+ <div class="modal-field">
+ <label>时间</label>
+ <input type="text" placeholder="日期+时段，如：7/24 周六 15:00">
+ </div>
+ <div class="modal-field">
+ <label>地点</label>
+ <input type="text" placeholder="场地/餐厅">
+ </div>
+ <div class="modal-field">
+ <label>人数上限</label>
+ <input type="text" placeholder="例如：10">
+ </div>
+ <div class="modal-field">
+ <label>截止时间</label>
+ <input type="text" placeholder="报名截止时间">
+ </div>
+ <div class="modal-field">
+ <label>备注</label>
+ <textarea placeholder="其他说明..." rows="3"></textarea>
+ </div>
+ </div>
+ <div class="modal-footer">
+ <button class="btn-primary full" onclick="alert('✅ 发布成功！'); hidePublishModal();">发布</button>
+ </div>
+ </div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
