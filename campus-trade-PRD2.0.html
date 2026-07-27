@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>校园二手交易平台 · PRD V2.0</title>
+<style>
+  :root{
+    --bg:#f5f7fa; --panel:#ffffff; --ink:#1f2933; --muted:#64748b;
+    --line:#e2e8f0; --brand:#2563eb; --brand-soft:#eff6ff;
+    --pending:#ffc107; --confirmed:#28a745; --cancelled:#dc3545;
+    --code-bg:#0f172a; --code-ink:#e2e8f0;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;
+    background:var(--bg); color:var(--ink); line-height:1.7; font-size:15px;
+  }
+  .layout{display:flex; max-width:1280px; margin:0 auto;}
+  /* Sidebar TOC */
+  nav.toc{
+    width:260px; flex:0 0 260px; position:sticky; top:0; align-self:flex-start;
+    height:100vh; overflow-y:auto; padding:24px 18px; background:#0f172a; color:#cbd5e1;
+  }
+  nav.toc h2{font-size:13px; text-transform:uppercase; letter-spacing:1px; color:#94a3b8; margin:0 0 12px;}
+  nav.toc a{display:block; color:#cbd5e1; text-decoration:none; font-size:13.5px; padding:6px 10px; border-radius:6px;}
+  nav.toc a:hover{background:#1e293b; color:#fff;}
+  nav.toc a .n{display:inline-block; width:22px; color:#64748b;}
+  main{flex:1; min-width:0; padding:0 0 80px;}
+  .hero{
+    background:linear-gradient(135deg,#1e3a8a 0%,#2563eb 55%,#3b82f6 100%);
+    color:#fff; padding:48px 56px;
+  }
+  .hero h1{margin:0 0 6px; font-size:32px; letter-spacing:.5px;}
+  .hero .sub{opacity:.9; font-size:15px;}
+  .badges{margin-top:20px; display:flex; flex-wrap:wrap; gap:10px;}
+  .badge{background:rgba(255,255,255,.15); border:1px solid rgba(255,255,255,.3); padding:6px 12px; border-radius:999px; font-size:13px;}
+  .badge b{font-weight:600;}
+  .hero .links{margin-top:18px; font-size:13.5px; opacity:.95;}
+  .hero .links a{color:#dbedff; text-decoration:underline;}
+  .content{padding:32px 56px;}
+  section{
+    background:var(--panel); border:1px solid var(--line); border-radius:14px;
+    padding:28px 32px; margin-bottom:26px; box-shadow:0 1px 3px rgba(15,23,42,.04);
+  }
+  section > h2{
+    margin:0 0 4px; font-size:22px; color:#0f172a; display:flex; align-items:center; gap:10px;
+  }
+  section > h2 .tag{font-size:12px; font-weight:600; color:#fff; background:var(--brand); padding:2px 9px; border-radius:6px;}
+  .lead{color:var(--muted); margin:0 0 18px; font-size:14px;}
+  h3{font-size:17px; margin:26px 0 10px; color:#1e293b; border-left:4px solid var(--brand); padding-left:10px;}
+  h4{font-size:15px; margin:18px 0 8px; color:#334155;}
+  p{margin:10px 0;}
+  ul,ol{margin:10px 0; padding-left:22px;}
+  li{margin:5px 0;}
+  table{border-collapse:collapse; width:100%; margin:14px 0; font-size:13.5px; background:#fff;}
+  th,td{border:1px solid var(--line); padding:9px 12px; text-align:left; vertical-align:top;}
+  th{background:#f1f5f9; color:#0f172a; font-weight:600;}
+  tr:nth-child(even) td{background:#fafcff;}
+  code{background:#eef2f7; padding:1px 6px; border-radius:5px; font-family:"SFMono-Regular",Consolas,monospace; font-size:12.5px; color:#b91c1c;}
+  pre{background:var(--code-bg); color:var(--code-ink); padding:16px 18px; border-radius:10px; overflow:auto; font-size:12.5px; line-height:1.5;}
+  .diagram{background:#f8fafc; border:1px dashed #cbd5e1; border-radius:12px; padding:18px; margin:18px 0; text-align:center;}
+  .diagram svg{max-width:100%; height:auto;}
+  .diagram .cap{font-size:12.5px; color:var(--muted); margin-top:8px;}
+  .callout{border-left:4px solid var(--brand); background:var(--brand-soft); padding:12px 16px; border-radius:0 8px 8px 0; margin:14px 0; font-size:13.5px;}
+  .callout.warn{border-color:#f59e0b; background:#fffbeb;}
+  .callout.danger{border-color:#ef4444; background:#fef2f2;}
+  .grid2{display:grid; grid-template-columns:1fr 1fr; gap:16px;}
+  .grid3{display:grid; grid-template-columns:repeat(3,1fr); gap:16px;}
+  @media(max-width:900px){.grid2,.grid3{grid-template-columns:1fr;}}
+  .card{border:1px solid var(--line); border-radius:12px; padding:16px 18px; background:#fff;}
+  .card.v1{border-top:4px solid #94a3b8;}
+  .card.v2{border-top:4px solid var(--brand);}
+  .card h4{margin-top:0;}
+  .pill{display:inline-block; font-size:11.5px; padding:2px 8px; border-radius:999px; font-weight:600;}
+  .pill.v1{background:#e2e8f0; color:#475569;}
+  .pill.v2{background:var(--brand-soft); color:var(--brand);}
+  .pill.new{background:#dcfce7; color:#15803d;}
+  .pill.refactor{background:#fef3c7; color:#b45309;}
+  .state-pending{color:#b58900;} .state-confirmed{color:#15803d;} .state-cancelled{color:#b91c1c;}
+  .footer{padding:24px 56px; color:var(--muted); font-size:12.5px; text-align:center;}
+  .muted{color:var(--muted);}
+  .formula{background:#f1f5f9; border-radius:10px; padding:14px 18px; font-family:Consolas,monospace; font-size:13px; line-height:1.9;}
+</style>
+</head>
+<body>
+<div class="layout">
+<nav class="toc">
+  <h2>目录 · 校园二手交易 PRD</h2>
+  <a href="#p1"><span class="n">01</span>文档概述与背景</a>
+  <a href="#p2"><span class="n">02</span>项目目标与范围</a>
+  <a href="#p3"><span class="n">03</span>角色与典型场景</a>
+  <a href="#p4"><span class="n">04</span>功能架构总览</a>
+  <a href="#p5"><span class="n">05</span>V2.0 新增功能详述</a>
+  <a href="#p6"><span class="n">06</span>数据模型</a>
+  <a href="#p7"><span class="n">07</span>非功能需求</a>
+  <a href="#p8"><span class="n">08</span>验收标准</a>
+  <a href="#p9"><span class="n">09</span>未来迭代方向</a>
+  <a href="#p10"><span class="n">10</span>附录</a>
+  <a href="#diagrams"><span class="n">★</span>核心流程图汇总</a>
+</nav>
+
+<main>
+<div class="hero">
+  <h1>校园二手交易平台</h1>
+  <div class="sub">Product Requirements Document · 产品需求文档</div>
+  <div class="badges">
+    <span class="badge">当前版本 <b>V2.0</b></span>
+    <span class="badge">状态 <b>已上线</b></span>
+    <span class="badge">日期 <b>2026-07-27</b></span>
+    <span class="badge">核心 <b>订单驱动交易闭环</b></span>
+  </div>
+  <div class="links">
+    线上地址：<a href="http://106.53.27.244" target="_blank">http://106.53.27.244</a><br>
+    代码仓库：<a href="https://github.com/hewi773-cpu/Product-Manager" target="_blank">github.com/hewi773-cpu/Product-Manager</a>
+  </div>
+</div>
+
+<div class="content">
+
+<!-- ============ PART 1 ============ -->
+<section id="p1">
+  <h2><span class="tag">Part 1</span>文档概述与项目背景</h2>
+  <p class="lead">本文档覆盖平台所有已上线功能模块及核心业务规则，面向产品、开发、测试及运营人员。</p>
+
+  <h3>1.1 文档说明</h3>
+  <p>本文档为「校园二手交易平台」的产品需求文档，覆盖平台所有已上线功能模块及核心业务规则。V2.0 版本新增订单系统，实现从“信息展示”到“交易闭环”的升级，并保留 V1.0→V2.0 的迭代演进记录。</p>
+
+  <h3>1.2 项目背景</h3>
+  <h4>1.2.1 为什么选择校园场景？</h4>
+  <p>西南大学拥有五万余名在校同学，闲置物品流转需求体现在三方面：</p>
+  <ul>
+    <li><b>信任基础更深厚</b>：用户均为同校同学，身份可追溯，比全开放平台信任起点更高。</li>
+    <li><b>交易成本更低</b>：无需物流体系，可约定校园内地点（宿舍楼下、食堂门口、教学楼前）面对面交接。</li>
+    <li><b>需求集中且高频</b>：开学季教材采购、毕业季清仓甩卖、期末季复习资料流转，形成明确交易波峰。</li>
+  </ul>
+
+  <h4>1.2.2 核心判断：身份校验是最大效率杠杆</h4>
+  <p>做好“用户一定是本校在校学生”这一身份校验，是所有信任机制的基础。一旦发生纠纷或违规，平台可直接向学校相关部门上报，追溯到具体责任人。真实身份 + 可追责的闭环，使平台无需在虚假账号防控、复杂物流追踪、高强度信用累积上过度投入。</p>
+  <div class="callout">产品策略：先做优先级最高的核心功能，用<b>身份校验替代泛化信用体系</b>，不盲目堆砌功能。</div>
+
+  <h4>1.2.3 V1.0 回顾与 V2.0 迭代动因</h4>
+  <p><b>V1.0 成果：</b>实现二手信息的结构化展示与状态透明化，验证了校园场景下轻量级信息聚合平台的可行性。用户经学号注册登录，可发布、浏览、线下交易、标记售出、评价，初步跑通交易闭环。</p>
+  <p><b>V1.0 遗留问题：</b></p>
+  <ul>
+    <li><b>交易状态依赖卖家单方面操作</b>：卖家点击“标记已售出”时，系统不校验是否真有买家购买，也不记录买家身份。后果是已售出商品出现大量“无订单”记录，买家无法评价。</li>
+    <li><b>买卖双方缺少明确确认机制</b>：卖家可能忘记/延迟/不标记售出，平台无法知道交易是否真正完成。</li>
+  </ul>
+  <p><b>V2.0 核心判断：</b>用<b>订单系统</b>替代“卖家单方面标记售出”。所有交易必须经过“买家下单 → 卖家确认”流程才能完成，确保每笔售出都有买家记录可追溯、可评价。</p>
+
+  <h4>1.2.4 版本迭代路径</h4>
+  <table>
+    <tr><th>版本</th><th>核心目标</th><th>关键交付</th><th>状态</th></tr>
+    <tr><td>V1.0</td><td>信息展示与状态透明化</td><td>信息结构化展示、身份验证、基础评价</td><td>✅ 已上线</td></tr>
+    <tr><td><b>V2.0</b></td><td><b>交易闭环与订单驱动</b></td><td><b>订单系统、确认机制、取消机制</b></td><td>✅ <b>已上线</b></td></tr>
+    <tr><td>V3.0</td><td>智能推荐与实时互动</td><td>AI推荐、即时通讯、数据驱动运营</td><td>规划中</td></tr>
+  </table>
+
+  <h3>1.3 产品定位</h3>
+  <p>面向西南大学在校学生的校园内二手物品交易平台，支持出售与求购两类需求，提供从信息发布、浏览发现、下单购买、卖家确认到信用积累的<b>完整交易闭环</b>。平台定位为半封闭社区型交易工具，只有本校学生可注册使用，交易全部在线下完成，平台提供信息撮合、订单管理和信用背书，<b>不介入资金流转和物流配送</b>。</p>
+</section>
+
+<!-- ============ PART 2 ============ -->
+<section id="p2">
+  <h2><span class="tag">Part 2</span>项目目标与产品范围</h2>
+  <h3>2.1 项目目标</h3>
+  <table>
+    <tr><th>序号</th><th>目标</th><th>说明</th></tr>
+    <tr><td>目标一</td><td>跑通交易最小闭环</td><td>注册登录→发布→浏览→详情→下单→卖家确认→评价，全流程顺畅</td></tr>
+    <tr><td>目标二</td><td>基于真实学籍的身份信任体系</td><td>学号验证确保本校学生，再用信用等级约束行为</td></tr>
+    <tr><td><b>目标三</b></td><td><b>订单驱动的交易闭环（V2.0新增）</b></td><td>所有交易须经过“买家下单→卖家确认”，确保每笔售出有买家记录</td></tr>
+    <tr><td>目标四</td><td>轻量高效的管理工具</td><td>商品内容审核、用户违规处置、意见反馈处理</td></tr>
+  </table>
+
+  <h3>2.2 产品范围（已覆盖模块）</h3>
+  <table>
+    <tr><th>序号</th><th>功能模块</th><th>说明</th><th>版本</th></tr>
+    <tr><td>1</td><td>学生注册登录</td><td>含学号格式校验</td><td>V1.0</td></tr>
+    <tr><td>2</td><td>商品发布</td><td>出售/求购两类，可上传描述图与联系图</td><td>V1.0</td></tr>
+    <tr><td>3</td><td>商品列表浏览</td><td>关键词搜索 + 类型筛选</td><td>V1.0</td></tr>
+    <tr><td>4</td><td>商品详情</td><td>价格、描述、联系方式</td><td>V1.0</td></tr>
+    <tr><td>5</td><td><b>下单购买</b></td><td>买家点击“立即购买”创建订单，商品立即下架</td><td><b>V2.0</b></td></tr>
+    <tr><td>6</td><td><b>我的订单列表</b></td><td>买家和卖家统一管理订单</td><td><b>V2.0</b></td></tr>
+    <tr><td>7</td><td><b>卖家确认订单</b></td><td>确认后绑定买家，交易完成</td><td><b>V2.0</b></td></tr>
+    <tr><td>8</td><td><b>取消订单</b></td><td>双方均可取消，商品恢复在售</td><td><b>V2.0</b></td></tr>
+    <tr><td>9</td><td>信用评价体系</td><td>买卖互评 + 五级信用等级</td><td>V1.0（V2.0升级权限）</td></tr>
+    <tr><td>10–17</td><td>管理后台 / 个人中心 / 站内私信 / 意见反馈 / 自动审核兜底</td><td>风控、信用管理、数据监控、回复反馈、24h超时自动通过</td><td>V1.0</td></tr>
+  </table>
+
+  <div class="callout warn"><b>不包含内容：</b>①在线支付（不介入资金流转）②物流配送（线下面对面）③全开放平台注册（仅限本校）④实时即时通讯（站内信仅辅助）。</div>
+</section>
+
+<!-- ============ PART 3 ============ -->
+<section id="p3">
+  <h2><span class="tag">Part 3</span>用户角色与典型场景</h2>
+  <h3>3.1 用户角色定义</h3>
+  <div class="grid3">
+    <div class="card"><h4>👨‍🎓 学生用户</h4><p class="muted">核心使用群体。学号即用户名，可发布、浏览、下单、管理订单、评价、查看消息、提交反馈。</p></div>
+    <div class="card"><h4>🛡️ 管理员</h4><p class="muted">运营方，独立后台入口，凭预设密码登录。负责审核、信用管理、反馈回复、数据监控，不参与交易。</p></div>
+    <div class="card"><h4>👁️ 游客</h4><p class="muted">未登录访问者，可浏览列表与详情，无法发布、下单或使用需认证的功能。</p></div>
+  </div>
+
+  <h3>3.2 V2.0 新增典型场景</h3>
+  <h4>场景一：买家完整交易流程</h4>
+  <ol>
+    <li>进入商品详情页 → 点击「立即购买」。</li>
+    <li>填写联系方式（选填）和留言（选填）→ 提交创建订单，商品立即下架。</li>
+    <li>通过卖家联系方式约定线下见面交易。</li>
+    <li>卖家登录「我的订单」点击「确认」→ 订单 confirmed，系统将买家写入商品 buyer 字段。</li>
+    <li>买家在订单列表/详情页点击「评价」→ 一至五星 + 文字，自动更新卖家信用分。</li>
+    <li>确认前任一方取消 → 订单 cancelled，商品恢复在售。</li>
+  </ol>
+  <h4>场景二：卖家完整交易流程</h4>
+  <ol>
+    <li>商品审核通过后出现在首页。</li>
+    <li>买家下单 → 卖家在「我的订单」看到 pending 订单。</li>
+    <li>点击「确认」→ confirmed，买家被写入商品 buyer 字段，买家可评价。</li>
+    <li>若决定不出售 → 点击「取消」→ cancelled，商品恢复在售。</li>
+  </ol>
+  <h4>场景三：买家取消订单 & 场景四：评价流程</h4>
+  <p>买家在 pending 状态订单点击「取消」→ cancelled，商品恢复在售，他人可再次下单。买家在卖家确认后，于已确认订单点击「评价」，提交后系统自动更新卖家信用分。</p>
+
+  <h3>3.3 订单状态流转图</h3>
+  <div class="diagram">
+    <svg viewBox="0 0 720 400" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system,Segoe UI,Microsoft YaHei,sans-serif">
+      <defs>
+        <marker id="arr" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
+          <path d="M0,0 L8,3 L0,6 Z" fill="#475569"/>
+        </marker>
+      </defs>
+      <!-- 下单 -->
+      <rect x="280" y="20" width="160" height="46" rx="10" fill="#2563eb" stroke="#1e40af"/>
+      <text x="360" y="42" fill="#fff" font-size="15" font-weight="600" text-anchor="middle">买家点击「立即购买」</text>
+      <text x="360" y="58" fill="#dbeafe" font-size="11" text-anchor="middle">提交联系方式 + 留言</text>
+      <!-- down arrow -->
+      <line x1="360" y1="66" x2="360" y2="100" stroke="#475569" stroke-width="2" marker-end="url(#arr)"/>
+      <!-- pending -->
+      <rect x="270" y="102" width="180" height="58" rx="10" fill="#fff3cd" stroke="#ffc107" stroke-width="2"/>
+      <text x="360" y="126" fill="#7c5e00" font-size="15" font-weight="700" text-anchor="middle">待确认 pending</text>
+      <text x="360" y="145" fill="#92700a" font-size="11.5" text-anchor="middle">商品已下架（sold）</text>
+      <!-- pending -> confirmed -->
+      <line x1="450" y1="131" x2="540" y2="131" stroke="#475569" stroke-width="2" marker-end="url(#arr)"/>
+      <text x="495" y="123" fill="#15803d" font-size="11.5" text-anchor="middle">卖家确认</text>
+      <!-- pending -> cancelled -->
+      <line x1="360" y1="160" x2="360" y2="240" stroke="#475569" stroke-width="2" marker-end="url(#arr)"/>
+      <text x="372" y="205" fill="#b91c1c" font-size="11.5">买家/卖家取消</text>
+      <!-- confirmed -->
+      <rect x="540" y="102" width="170" height="58" rx="10" fill="#d4edda" stroke="#28a745" stroke-width="2"/>
+      <text x="625" y="126" fill="#0f5132" font-size="15" font-weight="700" text-anchor="middle">已确认 confirmed</text>
+      <text x="625" y="145" fill="#1a7a45" font-size="11.5" text-anchor="middle">buyer 字段写入</text>
+      <!-- confirmed -> evaluate -->
+      <line x1="625" y1="160" x2="625" y2="240" stroke="#475569" stroke-width="2" marker-end="url(#arr)"/>
+      <text x="637" y="205" fill="#0f172a" font-size="11.5">可评价</text>
+      <!-- cancelled -->
+      <rect x="270" y="242" width="180" height="58" rx="10" fill="#f8d7da" stroke="#dc3545" stroke-width="2"/>
+      <text x="360" y="266" fill="#842029" font-size="15" font-weight="700" text-anchor="middle">已取消 cancelled</text>
+      <text x="360" y="285" fill="#a33" font-size="11.5" text-anchor="middle">商品恢复在售（unsold）</text>
+      <!-- evaluate node -->
+      <rect x="540" y="242" width="170" height="58" rx="10" fill="#e7f1ff" stroke="#0d6efd" stroke-width="2"/>
+      <text x="625" y="266" fill="#0b3d91" font-size="15" font-weight="700" text-anchor="middle">⭐ 买家可评价</text>
+      <text x="625" y="285" fill="#1e5fd0" font-size="11.5" text-anchor="middle">自动更新卖家信用分</text>
+      <!-- legend -->
+      <g font-size="11" fill="#64748b">
+        <rect x="60" y="340" width="14" height="14" rx="3" fill="#fff3cd" stroke="#ffc107"/><text x="80" y="351">待确认</text>
+        <rect x="160" y="340" width="14" height="14" rx="3" fill="#d4edda" stroke="#28a745"/><text x="180" y="351">已确认</text>
+        <rect x="270" y="340" width="14" height="14" rx="3" fill="#f8d7da" stroke="#dc3545"/><text x="290" y="351">已取消</text>
+        <rect x="380" y="340" width="14" height="14" rx="3" fill="#e7f1ff" stroke="#0d6efd"/><text x="400" y="351">评价</text>
+      </g>
+    </svg>
+    <div class="cap">图 3.1　订单状态流转：下单→pending→（确认）confirmed /（取消）cancelled</div>
+  </div>
+</section>
+
+<!-- ============ PART 4 ============ -->
+<section id="p4">
+  <h2><span class="tag">Part 4</span>功能架构总览</h2>
+  <h3>4.1 V1.0 → V2.0 功能变更对照</h3>
+  <div class="grid2">
+    <div class="card v1"><h4><span class="pill v1">V1.0</span> 下单</h4><p>点击“求购”锁定商品 15 分钟。</p></div>
+    <div class="card v2"><h4><span class="pill v2">V2.0</span> 下单 <span class="pill refactor">重构</span></h4><p>点击“立即购买”创建订单，商品立即下架。</p></div>
+    <div class="card v1"><h4><span class="pill v1">V1.0</span> 售出</h4><p>卖家手动标记售出（无买家校验）。</p></div>
+    <div class="card v2"><h4><span class="pill v2">V2.0</span> 售出 <span class="pill refactor">重构</span></h4><p>卖家在订单列表确认订单。</p></div>
+    <div class="card v1"><h4><span class="pill v1">V1.0</span> 买家记录</h4><p>locker 字段，可能为空。</p></div>
+    <div class="card v2"><h4><span class="pill v2">V2.0</span> 买家记录 <span class="pill refactor">增强</span></h4><p>buyer 字段，确认时写入。</p></div>
+    <div class="card v1"><h4><span class="pill v1">V1.0</span> 评价权限</h4><p>任意已登录用户（需商品已售出）。</p></div>
+    <div class="card v2"><h4><span class="pill v2">V2.0</span> 评价权限 <span class="pill refactor">升级</span></h4><p>仅 confirmed 订单的买家。</p></div>
+    <div class="card v1"><h4><span class="pill v1">V1.0</span> 订单管理</h4><p>无。</p></div>
+    <div class="card v2"><h4><span class="pill v2">V2.0</span> 订单管理 <span class="pill new">新增</span></h4><p>我的订单页面。</p></div>
+    <div class="card v1"><h4><span class="pill v1">V1.0</span> 取消机制</h4><p>仅锁定 15 分钟自动释放。</p></div>
+    <div class="card v2"><h4><span class="pill v2">V2.0</span> 取消机制 <span class="pill new">新增</span></h4><p>双方手动取消，商品恢复在售。</p></div>
+  </div>
+
+  <h3>4.2 交易闭环功能（V2.0）</h3>
+  <table>
+    <tr><th>序号</th><th>功能</th><th>核心价值</th><th>版本</th></tr>
+    <tr><td>1</td><td>注册与登录</td><td>学号验证确保本校身份</td><td>V1.0</td></tr>
+    <tr><td>2</td><td>商品发布</td><td>出售/求购，可上传图片</td><td>V1.0</td></tr>
+    <tr><td>3</td><td>商品列表浏览</td><td>搜索 + 类型筛选</td><td>V1.0</td></tr>
+    <tr><td>4</td><td>商品详情</td><td>价格、描述、联系方式</td><td>V1.0</td></tr>
+    <tr><td>5</td><td><b>下单购买</b></td><td>立即购买创建订单，商品下架</td><td><b>V2.0</b></td></tr>
+    <tr><td>6</td><td><b>卖家确认订单</b></td><td>确认绑定买家，交易完成</td><td><b>V2.0</b></td></tr>
+    <tr><td>7</td><td><b>取消订单</b></td><td>双方可取消，商品恢复在售</td><td><b>V2.0</b></td></tr>
+    <tr><td>8</td><td><b>我的订单</b></td><td>买家卖家统一管理</td><td><b>V2.0</b></td></tr>
+    <tr><td>9</td><td>信用评价</td><td>买家评卖家，信用分自动更新</td><td>V1.0（权限升级）</td></tr>
+  </table>
+
+  <h3>4.3 订单状态定义</h3>
+  <table>
+    <tr><th>状态</th><th>英文</th><th>说明</th><th>可执行操作</th></tr>
+    <tr><td class="state-pending"><b>待确认</b></td><td>pending</td><td>买家已下单，等待卖家确认</td><td>卖家确认 / 买家取消 / 卖家取消</td></tr>
+    <tr><td class="state-confirmed"><b>已确认</b></td><td>confirmed</td><td>卖家已确认，交易完成</td><td>买家评价</td></tr>
+    <tr><td class="state-cancelled"><b>已取消</b></td><td>cancelled</td><td>订单取消，商品已恢复在售</td><td>无</td></tr>
+  </table>
+</section>
+
+<!-- ============ PART 5 ============ -->
+<section id="p5">
+  <h2><span class="tag">Part 5</span>V2.0 新增功能详细说明</h2>
+
+  <h3>功能一：下单购买</h3>
+  <p><b>功能描述：</b>买家在商品详情页点击「立即购买」，填写联系方式（选填）和留言（选填），提交后系统创建订单（status=pending），商品 sold_status 立即变为 sold（下架），防止重复购买。</p>
+  <p><b>触发入口：</b>商品详情页「立即购买」按钮 → POST <code>/order/create</code></p>
+  <p><b>校验逻辑：</b></p>
+  <ul>
+    <li>用户是否已登录（未登录跳转登录页）</li>
+    <li>商品状态是否为 approved 且 unsold</li>
+    <li>当前用户不是卖家本人</li>
+    <li>当前用户没有该商品的未取消订单</li>
+  </ul>
+  <p><b>事务：</b>① orders 表插入记录 status=pending；② products 表 sold_status=sold，sold_time=NOW()。</p>
+  <div class="callout warn"><b>异常：</b>未登录→跳转登录；已售出→弹窗“商品不可购买”；是卖家→“不能购买自己的商品”；已有未取消订单→“您已对该商品下过订单”。</div>
+
+  <h3>功能二：我的订单列表</h3>
+  <p>用户可在「我的订单」页面查看自己作为买家或卖家的所有订单，按创建时间倒序排列，展示商品名、价格、买家、卖家、状态、下单时间、联系方式、留言及差异化操作按钮。仅已登录学生用户可访问，已取消订单仍展示但不可操作，确认/取消需二次弹窗。</p>
+  <table>
+    <tr><th>订单状态</th><th>用户角色</th><th>显示按钮</th></tr>
+    <tr><td class="state-pending">pending</td><td>卖家</td><td>✅ 确认 ｜ ❌ 取消</td></tr>
+    <tr><td class="state-pending">pending</td><td>买家</td><td>❌ 取消订单</td></tr>
+    <tr><td class="state-confirmed">confirmed</td><td>买家</td><td>⭐ 评价</td></tr>
+    <tr><td class="state-confirmed">confirmed</td><td>卖家</td><td>无</td></tr>
+    <tr><td class="state-cancelled">cancelled</td><td>任意</td><td>无</td></tr>
+  </table>
+
+  <h3>功能三：卖家确认订单</h3>
+  <p>卖家在「我的订单」点击「确认」→ 二次确认弹窗 → 事务：① orders.status=confirmed；② products.buyer=买家用户名。确认后买家获得评价权限。仅订单对应卖家、且订单状态为 pending 时可执行；buyer 写入不可撤销。</p>
+
+  <h3>功能四：取消订单</h3>
+  <p>买家与卖家均可在 pending 时取消。事务：① orders.status=cancelled；② products.sold_status=unsold，sold_time=NULL。取消后商品恢复在售，不可恢复。</p>
+
+  <h3>功能五：信用评价（V2.0 权限升级）</h3>
+  <p><b>评价权限：</b>仅 confirmed 订单的买家可评价（V1.0 为“商品 sold 即可评”，无法校验真实购买）。兼容旧数据：V1.0 已售且无订单的商品，保留“卖家手动标记 sold 且当前用户是卖家本人”的评价权限。</p>
+  <div class="formula">
+评价权限校验逻辑：<br>
+1. 查询 orders：product_id 匹配 且 buyer=当前用户 且 status=confirmed → 允许评价<br>
+2. 否则检查 V1.0 旧数据（sold 且当前用户是卖家本人）→ 允许<br>
+3. 均不满足 → “您尚未完成该商品的交易，无法评价”
+  </div>
+  <p><b>信用分计算规则：</b></p>
+  <div class="formula">
+平均分 = Σ评分 ÷ 评价总数（无评价默认 100 分）<br>
+基础分 = 平均分 × 20<br>
+数量奖励 = MIN(评价总数 × 2, 15)<br>
+差评惩罚 = 1星数 × 5 + 2星数 × 2<br>
+信用分 = MAX(基础分 + 数量奖励 − 差评惩罚, 0)
+  </div>
+  <table>
+    <tr><th>等级</th><th>信用分</th><th>标签</th><th>图标</th><th>颜色</th></tr>
+    <tr><td>S</td><td>≥ 150</td><td>信用极好</td><td>🌟</td><td>#FFD700</td></tr>
+    <tr><td>A</td><td>120–149</td><td>信用优秀</td><td>✅</td><td>#0d6efd</td></tr>
+    <tr><td>B</td><td>80–119</td><td>信用良好</td><td>👍</td><td>#198754</td></tr>
+    <tr><td>C</td><td>40–79</td><td>信用一般</td><td>⚠️</td><td>#fd7e14</td></tr>
+    <tr><td>D</td><td>&lt; 40</td><td>信用较差</td><td>❌</td><td>#dc3545</td></tr>
+  </table>
+
+  <h3>功能六：导航栏入口（新增）</h3>
+  <p>首页导航栏新增「我的订单」入口，访问 <code>/orders</code>。仅已登录学生用户可见，管理员和游客不显示。</p>
+</section>
+
+<!-- ============ PART 6 ============ -->
+<section id="p6">
+  <h2><span class="tag">Part 6</span>数据模型</h2>
+  <h3>6.1 orders——订单表（V2.0 新增）</h3>
+  <table>
+    <tr><th>字段</th><th>类型</th><th>约束</th><th>说明</th></tr>
+    <tr><td>id</td><td>SERIAL</td><td>PK</td><td>订单唯一标识</td></tr>
+    <tr><td>product_id</td><td>INTEGER</td><td>NOT NULL</td><td>商品ID，关联 products.id</td></tr>
+    <tr><td>buyer</td><td>VARCHAR(100)</td><td>NOT NULL</td><td>买家用户名</td></tr>
+    <tr><td>seller</td><td>VARCHAR(100)</td><td>NOT NULL</td><td>卖家用户名</td></tr>
+    <tr><td>status</td><td>VARCHAR(20)</td><td>DEFAULT 'pending'</td><td>pending/confirmed/cancelled</td></tr>
+    <tr><td>contact</td><td>VARCHAR(100)</td><td>DEFAULT ''</td><td>买家联系方式（选填）</td></tr>
+    <tr><td>message</td><td>VARCHAR(500)</td><td>DEFAULT ''</td><td>买家留言（选填）</td></tr>
+    <tr><td>created_at</td><td>DATETIME</td><td>默认当前时间</td><td>下单时间</td></tr>
+    <tr><td>updated_at</td><td>DATETIME</td><td>ON UPDATE</td><td>更新时间</td></tr>
+  </table>
+
+  <h3>6.2 products——商品表（V2.0 字段新增）</h3>
+  <table>
+    <tr><th>字段</th><th>类型</th><th>约束</th><th>说明</th><th>版本</th></tr>
+    <tr><td>buyer</td><td>VARCHAR(100)</td><td>DEFAULT NULL</td><td>最终买家用户名（确认时写入）</td><td><b>V2.0 新增</b></td></tr>
+  </table>
+
+  <h3>6.3 变更说明 & 6.4 关系图</h3>
+  <ul>
+    <li><b>新增表：</b>orders（订单表）</li>
+    <li><b>新增字段：</b>products.buyer（最终买家）</li>
+    <li><b>字段废弃：</b>products.locker（V1.0 求购锁定字段，保留但无业务逻辑）</li>
+  </ul>
+  <div class="diagram">
+    <svg viewBox="0 0 760 380" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system,Segoe UI,Microsoft YaHei,sans-serif">
+      <defs>
+        <marker id="fkey" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#0d6efd"/></marker>
+      </defs>
+      <!-- users -->
+      <rect x="30" y="120" width="200" height="150" rx="10" fill="#fff" stroke="#0f172a" stroke-width="2"/>
+      <rect x="30" y="120" width="200" height="30" rx="10" fill="#0f172a"/>
+      <text x="130" y="140" fill="#fff" font-size="14" font-weight="700" text-anchor="middle">users（用户）</text>
+      <text x="44" y="172" font-size="12.5">username  (PK) 🔑</text>
+      <text x="44" y="194" font-size="12.5">password</text>
+      <text x="44" y="216" font-size="12.5">student_id</text>
+      <text x="44" y="238" font-size="12.5">credit_score</text>
+      <text x="44" y="260" font-size="12.5">...</text>
+      <!-- products -->
+      <rect x="290" y="20" width="230" height="180" rx="10" fill="#fff" stroke="#0f172a" stroke-width="2"/>
+      <rect x="290" y="20" width="230" height="30" rx="10" fill="#2563eb"/>
+      <text x="405" y="40" fill="#fff" font-size="14" font-weight="700" text-anchor="middle">products（商品）</text>
+      <text x="304" y="72" font-size="12.5">id  (PK) 🔑</text>
+      <text x="304" y="94" font-size="12.5">seller  (FK→users) →</text>
+      <text x="304" y="116" font-size="12.5">buyer  (FK→users) →</text>
+      <text x="304" y="138" font-size="12.5">sold_status</text>
+      <text x="304" y="160" font-size="12.5">status / type / title</text>
+      <text x="304" y="182" font-size="12.5">...</text>
+      <!-- orders -->
+      <rect x="290" y="230" width="250" height="140" rx="10" fill="#fff" stroke="#0f172a" stroke-width="2"/>
+      <rect x="290" y="230" width="250" height="30" rx="10" fill="#28a745"/>
+      <text x="415" y="250" fill="#fff" font-size="14" font-weight="700" text-anchor="middle">orders（订单·V2.0）</text>
+      <text x="304" y="282" font-size="12.5">id  (PK) 🔑</text>
+      <text x="304" y="304" font-size="12.5">product_id  (FK→products) ↑</text>
+      <text x="304" y="326" font-size="12.5">buyer  (FK→users) ↙</text>
+      <text x="304" y="348" font-size="12.5">seller  (FK→users) ↙</text>
+      <!-- relations -->
+      <line x1="404" y1="200" x2="404" y2="230" stroke="#0d6efd" stroke-width="2" marker-end="url(#fkey)"/>
+      <text x="410" y="218" font-size="10.5" fill="#0d6efd">product_id</text>
+      <line x1="324" y1="158" x2="324" y2="270" stroke="#0d6efd" stroke-width="2" marker-end="url(#fkey)"/>
+      <text x="150" y="220" font-size="10.5" fill="#0d6efd" transform="rotate(-90 150 220)">products.seller</text>
+      <line x1="324" y1="116" x2="230" y2="200" stroke="#0d6efd" stroke-width="2" marker-end="url(#fkey)"/>
+      <line x1="324" y1="326" x2="230" y2="250" stroke="#0d6efd" stroke-width="2" marker-end="url(#fkey)"/>
+      <text x="252" y="300" font-size="10.5" fill="#0d6efd">orders.buyer</text>
+      <line x1="324" y1="348" x2="230" y2="235" stroke="#0d6efd" stroke-width="2" marker-end="url(#fkey)"/>
+      <text x="250" y="335" font-size="10.5" fill="#0d6efd">orders.seller</text>
+    </svg>
+    <div class="cap">图 6.1　数据模型关系图：users / products / orders 三表关联</div>
+  </div>
+</section>
+
+<!-- ============ PART 7 ============ -->
+<section id="p7">
+  <h2><span class="tag">Part 7</span>非功能需求</h2>
+  <div class="grid2">
+    <div class="card"><h4>⚡ 性能</h4>
+      <ul>
+        <li>首页加载 ≤ 3 秒（2核2GB）</li>
+        <li>订单列表接口 ≤ 500ms</li>
+        <li>下单操作 ≤ 1 秒</li>
+        <li>支持 50–100 人同时在线</li>
+      </ul>
+    </div>
+    <div class="card"><h4>🔒 安全</h4>
+      <ul>
+        <li>Flask session 管理登录态</li>
+        <li>学号前后端双重校验</li>
+        <li>订单操作校验当事人，后台 admin_required</li>
+        <li>参数化查询防 SQL 注入</li>
+        <li>图片指定格式，单张 ≤ 5MB</li>
+      </ul>
+    </div>
+    <div class="card"><h4>🔄 数据一致性</h4>
+      <ul>
+        <li>下单 + 下架 同一事务</li>
+        <li>确认 + buyer 写入 同一事务</li>
+        <li>取消 + 恢复在售 同一事务</li>
+        <li>信用分更新使用事务</li>
+      </ul>
+    </div>
+    <div class="card"><h4>🛡️ 可靠性 & 扩展性</h4>
+      <ul>
+        <li>每日 2:00 备份，保留 7 天</li>
+        <li>systemd 开机自启、异常重启</li>
+        <li>待审核超 24h 自动通过</li>
+        <li>预留日志表、可平滑升级 bcrypt、图片可迁对象存储</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PART 8 ============ -->
+<section id="p8">
+  <h2><span class="tag">Part 8</span>验收标准</h2>
+  <h3>8.1 V2.0 新增功能验收</h3>
+  <table>
+    <tr><th>编号</th><th>功能</th><th>验收标准</th></tr>
+    <tr><td>TC-01</td><td>下单购买</td><td>登录可下单；未登录拦截；不能买自己/已售商品；重复下单拦截</td></tr>
+    <tr><td>TC-02</td><td>我的订单列表</td><td>展示当前用户所有相关订单；状态标签正确；按钮按规则显示</td></tr>
+    <tr><td>TC-03</td><td>卖家确认</td><td>可确认 pending；确认后 confirmed；buyer 字段写入</td></tr>
+    <tr><td>TC-04</td><td>取消订单</td><td>买卖家均可取消；取消后 cancelled；商品恢复在售</td></tr>
+    <tr><td>TC-05</td><td>评价权限升级</td><td>仅 confirmed 买家可评；非买家不可评；不可重复评；信用分自动更新</td></tr>
+    <tr><td>TC-06</td><td>导航栏入口</td><td>已登录学生可见“我的订单”；点击进入列表</td></tr>
+  </table>
+  <h3>8.2 业务流程验收</h3>
+  <table>
+    <tr><th>编号</th><th>场景</th><th>验收标准</th></tr>
+    <tr><td>TC-07</td><td>完整交易闭环</td><td>下单→确认→评价 全流程走通</td></tr>
+    <tr><td>TC-08</td><td>取消后恢复</td><td>取消后商品恢复在售，他人可下单</td></tr>
+    <tr><td>TC-09</td><td>评价权限控制</td><td>confirmed 前无入口；confirmed 后可评</td></tr>
+    <tr><td>TC-10</td><td>V1.0 数据兼容</td><td>历史已售商品仍可查看和评价</td></tr>
+  </table>
+</section>
+
+<!-- ============ PART 9 ============ -->
+<section id="p9">
+  <h2><span class="tag">Part 9</span>未来迭代方向</h2>
+  <table>
+    <tr><th>方向</th><th>说明</th><th>优先级</th></tr>
+    <tr><td>订单超时自动取消</td><td>下单后 24h 卖家未确认，自动取消，商品恢复在售</td><td>高</td></tr>
+    <tr><td>消息通知</td><td>订单状态变更时站内消息推送</td><td>高</td></tr>
+    <tr><td>双向评价</td><td>卖家评价买家，双向信用互评</td><td>中</td></tr>
+    <tr><td>举报与纠纷处理</td><td>用户举报违规，管理员后台处理</td><td>中</td></tr>
+    <tr><td>密码加密存储</td><td>引入 bcrypt 哈希加密</td><td>高</td></tr>
+    <tr><td>图片存储迁移</td><td>迁移至对象存储</td><td>中</td></tr>
+    <tr><td>多校联盟扩展</td><td>扩展至其他高校</td><td>低</td></tr>
+    <tr><td>商品推荐算法</td><td>基于行为的个性化推荐</td><td>低</td></tr>
+  </table>
+</section>
+
+<!-- ============ PART 10 ============ -->
+<section id="p10">
+  <h2><span class="tag">Part 10</span>附录</h2>
+  <h3>附录一：V1.0 → V2.0 迭代总结</h3>
+  <table>
+    <tr><th>维度</th><th>V1.0</th><th>V2.0</th></tr>
+    <tr><td>核心价值</td><td>信息展示与状态透明化</td><td>订单驱动的交易闭环</td></tr>
+    <tr><td>下单方式</td><td>点击“求购”锁定15分钟</td><td>点击“立即购买”创建订单</td></tr>
+    <tr><td>售出方式</td><td>卖家手动标记售出</td><td>卖家在订单列表确认订单</td></tr>
+    <tr><td>买家记录</td><td>locker（可能为空）</td><td>buyer（确认时写入）</td></tr>
+    <tr><td>评价权限</td><td>任意已登录用户</td><td>仅 confirmed 订单的买家</td></tr>
+    <tr><td>订单管理</td><td>无</td><td>我的订单页面</td></tr>
+    <tr><td>取消机制</td><td>15分钟自动释放</td><td>双方手动取消，恢复在售</td></tr>
+  </table>
+
+  <h3>附录二：状态枚举</h3>
+  <div class="grid2">
+    <div class="card"><h4>订单状态 orders.status</h4>
+      <p><code>pending</code> 待确认 ｜ <code>confirmed</code> 已确认 ｜ <code>cancelled</code> 已取消</p></div>
+    <div class="card"><h4>商品审核 products.status</h4>
+      <p><code>pending</code> 待审核 ｜ <code>approved</code> 已上架 ｜ <code>rejected</code> 已驳回</p></div>
+    <div class="card"><h4>商品交易 products.sold_status</h4>
+      <p><code>unsold</code> 未售出 ｜ <code>sold</code> 已售出</p></div>
+    <div class="card"><h4>商品类型 products.type</h4>
+      <p><code>1</code> 出售 ｜ <code>0</code> 求购</p></div>
+  </div>
+
+  <h3>附录三：信用等级配置（可视化）</h3>
+  <div class="diagram">
+    <svg viewBox="0 0 760 170" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system,Segoe UI,Microsoft YaHei,sans-serif">
+      <g font-size="13" text-anchor="middle">
+        <rect x="20"  y="30" width="140" height="80" rx="10" fill="#FFD700"/><text x="90"  y="62" font-size="20" font-weight="700">🌟 S</text><text x="90"  y="86" fill="#5b4700">≥150 极好</text>
+        <rect x="170" y="30" width="140" height="80" rx="10" fill="#0d6efd"/><text x="240" y="62" font-size="20" font-weight="700" fill="#fff">✅ A</text><text x="240" y="86" fill="#dbeafe">120–149 优秀</text>
+        <rect x="320" y="30" width="140" height="80" rx="10" fill="#198754"/><text x="390" y="62" font-size="20" font-weight="700" fill="#fff">👍 B</text><text x="390" y="86" fill="#d1fae5">80–119 良好</text>
+        <rect x="470" y="30" width="140" height="80" rx="10" fill="#fd7e14"/><text x="540" y="62" font-size="20" font-weight="700" fill="#fff">⚠️ C</text><text x="540" y="86" fill="#ffe8cc">40–79 一般</text>
+        <rect x="620" y="30" width="120" height="80" rx="10" fill="#dc3545"/><text x="680" y="62" font-size="20" font-weight="700" fill="#fff">❌ D</text><text x="680" y="86" fill="#f8d7da">&lt;40 较差</text>
+      </g>
+      <text x="380" y="140" font-size="12.5" fill="#64748b" text-anchor="middle">信用分区间映射：分数越高，等级越高，交易信任度越强</text>
+    </svg>
+    <div class="cap">图 10.1　信用等级五档可视化（S/A/B/C/D）</div>
+  </div>
+
+  <h3>附录四：学历层次代码映射</h3>
+  <table>
+    <tr><th>代码</th><th>学历层次</th><th>最长入学年限</th></tr>
+    <tr><td>01</td><td>博士</td><td>7 年</td></tr>
+    <tr><td>11</td><td>硕士</td><td>5 年</td></tr>
+    <tr><td>22</td><td>本科</td><td>6 年</td></tr>
+  </table>
+</section>
+
+<!-- ============ DIAGRAMS SUMMARY ============ -->
+<section id="diagrams">
+  <h2><span class="tag">★</span>核心流程图汇总</h2>
+
+  <h3>① 买家完整交易流程</h3>
+  <div class="diagram">
+    <svg viewBox="0 0 880 200" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system,Segoe UI,Microsoft YaHei,sans-serif">
+      <defs><marker id="a2" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#475569"/></marker></defs>
+      <g font-size="12.5" text-anchor="middle">
+        <rect x="10"  y="70" width="110" height="46" rx="9" fill="#eef2f7" stroke="#94a3b8"/><text x="65"  y="98">浏览商品</text>
+        <rect x="145" y="70" width="110" height="46" rx="9" fill="#eef2f7" stroke="#94a3b8"/><text x="200" y="98">商品详情</text>
+        <rect x="280" y="70" width="120" height="46" rx="9" fill="#dbeafe" stroke="#2563eb"/><text x="340" y="98">立即购买·弹窗</text>
+        <rect x="425" y="70" width="120" height="46" rx="9" fill="#fff3cd" stroke="#ffc107"/><text x="485" y="92">创建订单</text><text x="485" y="108" font-size="10.5" fill="#92700a">商品下架</text>
+        <rect x="570" y="70" width="120" height="46" rx="9" fill="#eef2f7" stroke="#94a3b8"/><text x="630" y="92">联系卖家</text><text x="630" y="108" font-size="10.5" fill="#64748b">线下交易</text>
+        <rect x="715" y="70" width="120" height="46" rx="9" fill="#d4edda" stroke="#28a745"/><text x="775" y="92">卖家确认</text><text x="775" y="108" font-size="10.5" fill="#1a7a45">confirmed</text>
+        <rect x="715" y="140" width="120" height="40" rx="9" fill="#e7f1ff" stroke="#0d6efd"/><text x="775" y="165">⭐ 买家评价</text>
+      </g>
+      <g stroke="#475569" stroke-width="2" fill="none" marker-end="url(#a2)">
+        <line x1="120" y1="93" x2="142" y2="93"/>
+        <line x1="255" y1="93" x2="277" y2="93"/>
+        <line x1="400" y1="93" x2="422" y2="93"/>
+        <line x1="545" y1="93" x2="567" y2="93"/>
+        <line x1="690" y1="93" x2="712" y2="93"/>
+        <line x1="775" y1="116" x2="775" y2="138"/>
+      </g>
+      <!-- cancel branch -->
+      <line x1="485" y1="116" x2="485" y2="160" stroke="#dc3545" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#a2)"/>
+      <rect x="420" y="150" width="130" height="34" rx="9" fill="#f8d7da" stroke="#dc3545"/>
+      <text x="485" y="172" font-size="12" fill="#842029" text-anchor="middle">取消 → 恢复在售</text>
+      <line x1="420" y1="167" x2="300" y2="167" stroke="#dc3545" stroke-width="1.5" stroke-dasharray="4 4"/>
+    </svg>
+    <div class="cap">图 S.1　买家视角：下单 → 下架 → 线下交易 → 确认 → 评价（含取消分支）</div>
+  </div>
+
+  <h3>② 卖家 & 取消 & 评价 流程对照</h3>
+  <div class="diagram">
+    <svg viewBox="0 0 880 230" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system,Segoe UI,Microsoft YaHei,sans-serif">
+      <defs><marker id="a3" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#475569"/></marker></defs>
+      <!-- 卖家流 -->
+      <text x="20" y="24" font-size="13" font-weight="700" fill="#28a745">卖家流程</text>
+      <g font-size="12" text-anchor="middle">
+        <rect x="20"  y="40" width="150" height="44" rx="9" fill="#eef2f7" stroke="#94a3b8"/><text x="95"  y="67">商品审核通过·上架</text>
+        <rect x="200" y="40" width="150" height="44" rx="9" fill="#fff3cd" stroke="#ffc107"/><text x="275" y="67">收到 pending 订单</text>
+        <rect x="380" y="40" width="150" height="44" rx="9" fill="#d4edda" stroke="#28a745"/><text x="455" y="67">点击确认 → confirmed</text>
+        <rect x="560" y="40" width="150" height="44" rx="9" fill="#e7f1ff" stroke="#0d6efd"/><text x="635" y="67">买家获得评价权</text>
+        <rect x="740" y="40" width="120" height="44" rx="9" fill="#eef2f7" stroke="#94a3b8"/><text x="800" y="67">交易完成</text>
+      </g>
+      <g stroke="#475569" stroke-width="2" fill="none" marker-end="url(#a3)">
+        <line x1="170" y1="62" x2="197" y2="62"/><line x1="350" y1="62" x2="377" y2="62"/>
+        <line x1="530" y1="62" x2="557" y2="62"/><line x1="710" y1="62" x2="737" y2="62"/>
+      </g>
+      <!-- 取消流 -->
+      <text x="20" y="130" font-size="13" font-weight="700" fill="#dc3545">任意一方取消（pending 状态）</text>
+      <g font-size="12" text-anchor="middle">
+        <rect x="20"  y="146" width="170" height="44" rx="9" fill="#fff3cd" stroke="#ffc107"/><text x="105" y="173">pending 订单</text>
+        <rect x="230" y="146" width="170" height="44" rx="9" fill="#f8d7da" stroke="#dc3545"/><text x="315" y="173">点击取消 → cancelled</text>
+        <rect x="440" y="146" width="180" height="44" rx="9" fill="#d4edda" stroke="#28a745"/><text x="530" y="173">商品恢复在售 unsold</text>
+        <rect x="650" y="146" width="160" height="44" rx="9" fill="#eef2f7" stroke="#94a3b8"/><text x="730" y="173">他人可重新下单</text>
+      </g>
+      <g stroke="#475569" stroke-width="2" fill="none" marker-end="url(#a3)">
+        <line x1="190" y1="168" x2="227" y2="168"/><line x1="400" y1="168" x2="437" y2="168"/>
+        <line x1="620" y1="168" x2="647" y2="168"/>
+      </g>
+      <!-- 评价流 -->
+      <text x="20" y="222" font-size="12" fill="#0d6efd">⭐ 评价：仅 confirmed 订单的买家可评 → 提交后自动更新卖家信用分（信用分公式见 Part 5 功能五）。</text>
+    </svg>
+    <div class="cap">图 S.2　卖家确认流 / 取消恢复流 / 评价权限说明</div>
+  </div>
+
+  <h3>③ V1.0 → V2.0 核心差异（一图速览）</h3>
+  <div class="diagram">
+    <svg viewBox="0 0 720 200" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system,Segoe UI,Microsoft YaHei,sans-serif">
+      <g font-size="13" text-anchor="middle">
+        <rect x="30"  y="30" width="200" height="50" rx="9" fill="#e2e8f0" stroke="#94a3b8"/><text x="130" y="54">V1.0：卖家手动标记售出</text><text x="130" y="71" font-size="11" fill="#64748b">买家记录易丢失</text>
+        <rect x="490" y="30" width="200" height="50" rx="9" fill="#dbeafe" stroke="#2563eb"/><text x="590" y="54">V2.0：订单确认闭环</text><text x="590" y="71" font-size="11" fill="#1e40af">买家必记录·可评价</text>
+        <line x1="230" y1="55" x2="370" y2="55" stroke="#2563eb" stroke-width="2.5" marker-end="url(#a3)"/>
+        <text x="300" y="48" font-size="11" fill="#2563eb">订单系统替代</text>
+        <rect x="30"  y="120" width="200" height="50" rx="9" fill="#e2e8f0" stroke="#94a3b8"/><text x="130" y="144">V1.0：任意用户可评</text><text x="130" y="161" font-size="11" fill="#64748b">无法校验真实购买</text>
+        <rect x="490" y="120" width="200" height="50" rx="9" fill="#dbeafe" stroke="#2563eb"/><text x="590" y="144">V2.0：仅确认买家可评</text><text x="590" y="161" font-size="11" fill="#1e40af">权限收紧·可追溯</text>
+        <line x1="230" y1="145" x2="370" y2="145" stroke="#2563eb" stroke-width="2.5" marker-end="url(#a3)"/>
+        <text x="300" y="138" font-size="11" fill="#2563eb">权限升级</text>
+      </g>
+    </svg>
+    <div class="cap">图 S.3　V1.0 → V2.0 关键差异：售出机制 & 评价权限</div>
+  </div>
+</section>
+
+<div class="footer">校园二手交易平台 · PRD V2.0 · 文档日期 2026-07-27 · 已上线 · 单文件 HTML 归档</div>
+</div>
+</main>
+</div>
+</body>
+</html>

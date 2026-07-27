@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PRD：校园足球助手（AI方向）</title>
+<style>
+  :root {
+    --green: #1a8c4a;
+    --green-light: #e8f5e9;
+    --bg: #f5f6f8;
+    --card: #fff;
+    --text: #333;
+    --text-secondary: #666;
+    --border: #e0e0e0;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif; background: var(--bg); color: var(--text); line-height: 1.7; }
+  .container { max-width: 900px; margin: 0 auto; padding: 24px; }
+  
+  /* Header */
+  .header { background: linear-gradient(135deg, #1a8c4a 0%, #2ecc71 100%); color: #fff; padding: 48px 24px 36px; text-align: center; border-radius: 0 0 24px 24px; margin-bottom: 32px; }
+  .header h1 { font-size: 32px; margin-bottom: 8px; }
+  .header .meta { font-size: 14px; opacity: 0.9; }
+  .header .meta span { margin: 0 12px; }
+  
+  /* Sections */
+  .section { background: var(--card); border-radius: 12px; padding: 28px; margin-bottom: 20px; box-shadow: 0 1px 4px rgba(0,0,0,.06); }
+  .section h2 { font-size: 22px; color: var(--green); margin-bottom: 16px; padding-bottom: 8px; border-bottom: 2px solid var(--green-light); }
+  .section h3 { font-size: 17px; color: #444; margin: 20px 0 10px; }
+  .section h4 { font-size: 15px; color: #555; margin: 14px 0 8px; }
+  .section p { margin-bottom: 10px; color: var(--text-secondary); }
+  
+  /* Tags */
+  .tag { display: inline-block; background: var(--green-light); color: var(--green); padding: 2px 10px; border-radius: 12px; font-size: 12px; font-weight: 600; margin-right: 6px; }
+  .tag-red { background: #fce4ec; color: #c62828; }
+  .tag-orange { background: #fff3e0; color: #e65100; }
+  
+  /* Tables */
+  table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 14px; }
+  th { background: var(--green-light); color: var(--green); padding: 10px 12px; text-align: left; font-weight: 600; border-bottom: 2px solid var(--green); }
+  td { padding: 10px 12px; border-bottom: 1px solid var(--border); color: var(--text-secondary); }
+  tr:hover td { background: #fafafa; }
+  
+  /* Checklist */
+  .checklist { list-style: none; }
+  .checklist li { padding: 6px 0; color: var(--text-secondary); }
+  .checklist li::before { content: '✅ '; margin-right: 8px; }
+  
+  /* Blockquote */
+  blockquote { border-left: 4px solid var(--green); background: var(--green-light); padding: 12px 16px; margin: 12px 0; border-radius: 0 8px 8px 0; font-size: 14px; color: #555; }
+  blockquote strong { color: var(--green); }
+  
+  /* Code-like block */
+  .code-block { background: #1e1e1e; color: #d4d4d4; padding: 16px 20px; border-radius: 8px; font-family: 'SF Mono', 'Consolas', 'Menlo', monospace; font-size: 13px; line-height: 1.8; margin: 12px 0; overflow-x: auto; }
+  
+  /* Highlight box */
+  .highlight { background: linear-gradient(135deg, #e8f5e9, #f1f8e9); border: 1px solid #a5d6a7; border-radius: 10px; padding: 16px 20px; margin: 12px 0; }
+  .highlight strong { color: var(--green); }
+  
+  /* Flow chart */
+  .flow { text-align: center; padding: 16px; background: #fafafa; border-radius: 8px; font-size: 13px; color: var(--text-secondary); line-height: 2; margin: 12px 0; }
+  
+  /* Footer */
+  .footer { text-align: center; padding: 32px; color: #aaa; font-size: 13px; }
+  
+  @media (max-width: 600px) {
+    .container { padding: 12px; }
+    .header { padding: 32px 16px 24px; }
+    .header h1 { font-size: 24px; }
+    .section { padding: 18px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>📋 PRD：校园足球助手</h1>
+  <div class="meta">
+    <span>版本 v1.0</span><span>|</span><span>作者：陆慧慧</span><span>|</span><span>2026-07-27</span>
+  </div>
+  <p style="margin-top:12px;opacity:.85;font-size:14px;">西南大学计信学院院队队长的自驱项目，验证 AI 在垂直场景的落地能力</p>
+</div>
+
+<div class="container">
+
+<!-- ===== 一、文档概览 ===== -->
+<div class="section">
+  <h2>一、文档概览</h2>
+  
+  <h3>1.1 修订记录</h3>
+  <table>
+    <tr><th>版本</th><th>日期</th><th>修订内容</th><th>修订人</th></tr>
+    <tr><td>v1.0</td><td>2026-07-27</td><td>初稿：产品定义、市场分析、竞品分析、原型设计、功能定义、AI能力规划</td><td>陆慧慧</td></tr>
+  </table>
+
+  <h3>1.2 产品定位</h3>
+  <p><strong>一句话定义</strong>：面向校园足球队的 AI 辅助决策与社交平台，帮助队长管人、管赛、管复盘，帮助队员约球、社交、看球。</p>
+  
+  <div class="highlight">
+    <strong>差异化</strong>：不是传统的球队管理工具，而是 <strong>"AI 队长"</strong>——在赛前预测、赛后复盘、阵容推荐等场景中嵌入 AI 能力，让数据驱动球队决策。
+  </div>
+</div>
+
+<!-- ===== 二、市场与用户分析 ===== -->
+<div class="section">
+  <h2>二、市场与用户分析</h2>
+
+  <h3>2.1 市场规模与背景</h3>
+  <p>校园足球是中国足球人口的重要组成部分。根据教育部统计数据，全国普通高校数量超过 <strong>3000 所</strong>，以平均每校 20 支院队、每队 25 人计算，全国校园足球参与者规模达到 <strong>150 万人以上</strong>。这是一个被主流体育产品忽视的长尾市场。</p>
+  
+  <p>西南大学层面：全校 40 余个学院，30+ 拥有独立球队，核心活跃用户约 <strong>500 人</strong>，泛足球爱好者约 <strong>1500-2000 人</strong>，分散在多个微信/QQ 群中，缺乏统一管理工具。</p>
+
+  <div class="highlight">
+    <strong>为什么值得做？</strong><br>
+    ① 稳定的周期性（校内联赛/友谊赛/毕业季）→ 稳定回访<br>
+    ② 用户集中、画像清晰 → 冷启动容易<br>
+    ③ 数据价值高（比分/进球/助攻/出场）→ 数据闭环<br>
+    ④ 现有工具无法满足需求
+  </div>
+
+  <h3>2.2 目标用户</h3>
+  <table>
+    <tr><th>角色</th><th>画像</th><th>核心痛点</th><th>频率</th></tr>
+    <tr><td><strong>队长</strong></td><td>大三/大四，责任心强</td><td>排阵靠经验、约人靠接龙、复盘靠感觉</td><td>每周3-4次</td></tr>
+    <tr><td><strong>队员</strong></td><td>大二/大三</td><td>状态无法及时同步、缺少个人数据</td><td>每周2-3次</td></tr>
+    <tr><td><strong>爱好者</strong></td><td>不限年级</td><td>找不到球友、不了解赛事信息</td><td>每周1-2次</td></tr>
+  </table>
+
+  <h3>2.3 用户故事</h3>
+  <ul class="checklist">
+    <li><em>作为队长，我想看到 AI 推荐的阵容和战术，让排阵有数据支撑</em></li>
+    <li><em>作为队长，我想一键发布阵容并通知全员，而不是在群里@所有人然后被刷屏</em></li>
+    <li><em>作为队员，我想一键标记状态（可上场/轻伤/缺阵），队长排阵时能看到</em></li>
+    <li><em>作为队员，我想在广场找到约球、约饭、看球的局</em></li>
+    <li><em>作为普通学生，我想看到全校各院队的排名和战绩</em></li>
+  </ul>
+
+  <h3>2.4 竞品分析</h3>
+  
+  <h4>竞品矩阵</h4>
+  <table>
+    <tr><th>产品</th><th>类型</th><th>优势</th><th>不足</th></tr>
+    <tr><td>微信/QQ群</td><td>通用社交</td><td>0迁移成本</td><td>信息碎片化，无结构化</td></tr>
+    <tr><td>懂球帝</td><td>足球资讯</td><td>专业内容</td><td>不针对校园，无管理功能</td></tr>
+    <tr><td>虎扑</td><td>体育社区</td><td>讨论氛围好</td><td>偏职业体育</td></tr>
+    <tr><td>高校体育App</td><td>校园体育</td><td>有学校背书</td><td>偏教学管理，缺社交</td></tr>
+    <tr><td>传统球队工具</td><td>工具类</td><td>排阵+统计</td><td>无AI，界面陈旧，无社交</td></tr>
+  </table>
+
+  <h4>核心竞品深度分析</h4>
+  <p><strong>① 微信/QQ群（最大竞争对手）</strong>——所有球队都在用，但问题是 <strong>信息不沉淀、不结构化、不可检索</strong>。策略：<strong>不是替代，而是补充</strong>微信群无法提供的结构化管理和AI能力。</p>
+  <p><strong>② 懂球帝</strong>——用户是"职业足球球迷"而非"校园球队队长"。策略：<strong>不走资讯路线，走工具+社交路线</strong>。</p>
+  <p><strong>③ 传统球队管理工具</strong>——界面陈旧、无AI、无社交。策略：<strong>AI能力+社交广场</strong>，差异化竞争。</p>
+
+  <h3>2.5 市场机会总结</h3>
+  <div class="highlight">
+    <strong>核心洞察</strong>：校园足球场景 = <strong>工具需求 × AI 赋能 × 社交属性</strong>，三者缺一不可。
+  </div>
+  <table>
+    <tr><th>产品</th><th>工具需求</th><th>AI赋能</th><th>社交属性</th><th>得分</th></tr>
+    <tr><td>微信/QQ群</td><td>❌</td><td>❌</td><td>✅</td><td>1/3</td></tr>
+    <tr><td>传统球队工具</td><td>✅</td><td>❌</td><td>❌</td><td>1/3</td></tr>
+    <tr><td>懂球帝/虎扑</td><td>❌</td><td>⚠️</td><td>✅</td><td>1.5/3</td></tr>
+    <tr style="background:#e8f5e9;"><td><strong>校园足球助手</strong></td><td><strong>✅</strong></td><td><strong>✅</strong></td><td><strong>✅</strong></td><td><strong>3/3</strong></td></tr>
+  </table>
+</div>
+
+<!-- ===== 三、产品功能定义 ===== -->
+<div class="section">
+  <h2>三、产品功能定义</h2>
+
+  <h3>3.1 功能全景</h3>
+  <div class="code-block">
+🏠 首页（信息聚合）<br>
+├── AI 赛前预测（置顶入口）<br>
+├── 下一场比赛（赛程+报名状态）<br>
+├── 近期战绩（横向滑动）<br>
+├── 全校球队排名（横向滑动）<br>
+├── 赛后复盘（数据+感想+AI总结）<br>
+└── 球队数据看板<br><br>
+📋 阵容管理<br>
+├── 球场阵型图（4-3-3）<br>
+├── 球员状态标识（🟢🟡🔴🚫）<br>
+├── 停赛/伤病预警<br>
+├── 替补席管理<br>
+└── 一键发布阵容<br><br>
+🏟️ 广场（社交）<br>
+├── 分类Tab（约球/约饭/看球/闲聊）<br>
+├── 结构化卡片<br>
+├── 报名/点赞互动<br>
+└── 悬浮发布按钮<br><br>
+💬 消息<br>
+├── 系统通知<br>
+└── 私聊<br><br>
+👤 个人中心<br>
+├── 状态标记<br>
+├── 个人数据统计<br>
+└── 球队信息
+  </div>
+
+  <h3>3.2 功能详情</h3>
+  
+  <h4>F1：AI赛前预测 <span class="tag">P0 MVP</span></h4>
+  <p>首页顶部置顶大卡片，渐变背景差异化视觉。输入对手历史数据+本队球员状态，输出预测比分/胜平负概率/战术建议/推荐阵容。</p>
+  <blockquote><strong>为什么是MVP功能？</strong> AI能力最直观的体现，队长决策时最需要的参考信息。</blockquote>
+
+  <h4>F2：阵容管理 <span class="tag">P0 MVP</span></h4>
+  <p>可视化球场阵型图，球员按位置排列，颜色标识状态（🟢可上场/🟡轻伤/🔴缺阵/🚫停赛），一键发布通知全员。</p>
+  <blockquote><strong>为什么是MVP核心？</strong> 队长最高频使用的功能，是产品被"用起来"的关键。</blockquote>
+
+  <h4>F3：赛后复盘 <span class="tag">P0 MVP</span> <span class="tag-orange">亮点功能</span></h4>
+  <p>三层结构：🤖AI数据复盘 → 👥队员感想 → 🎯队长总结 → 🤖AI综合总结（✅亮点/⚠️待改进/🔮下场建议）。赛后数据→录入→回传模型→改善未来预测。</p>
+  <blockquote><strong>为什么是亮点？</strong> 所有球队都在做但都做不好的事。AI自动生成结构化总结，降低队长工作量。</blockquote>
+
+  <h4>F4：广场 <span class="tag">P1</span></h4>
+  <p>分类Tab（约球/约饭/看球/闲聊），结构化卡片展示时间/地点/人数，悬浮发布按钮+底部弹窗表单。</p>
+
+  <h4>F5：个人状态标记 <span class="tag">P0 MVP</span></h4>
+  <p>队员赛前标记状态（🟢可上场/🟡轻伤/🔴缺阵），自动同步到阵容管理页。从"队长填鸭式管理"到"队员自主参与"。</p>
+</div>
+
+
+<!-- ===== 四、AI能力规划 ===== -->
+<div class="section">
+  <h2>四、AI 能力规划</h2>
+
+  <h3>4.1 为什么校园足球需要 AI？</h3>
+  <p><strong>历史比赛数据可以有效预测未来比赛结果</strong>。比赛结果与首发阵容、对手实力、主客场、近期状态高度相关，可通过AI模型学习。</p>
+  <ul>
+    <li><strong>赛前预测</strong>：从模糊的"上次交手"记忆 → 数据驱动的对手分析</li>
+    <li><strong>赛后复盘</strong>：从口头说两句 → 结构化、可追溯、可沉淀的复盘报告</li>
+    <li><strong>阵容推荐</strong>：从"多个选择"困境 → AI辅助决策参考</li>
+  </ul>
+
+  <h3>4.2 能力矩阵</h3>
+  <table>
+    <tr><th>AI能力</th><th>阶段</th><th>数据需求</th><th>技术方案</th><th>验证状态</th></tr>
+    <tr><td>赛前比分预测</td><td>P0</td><td>两队历史战绩、进球/失球</td><td>XGBoost/时序预测</td><td><span class="tag">✅ 已验证 61.4%</span></td></tr>
+    <tr><td>阵容推荐</td><td>P0</td><td>球员状态、历史表现</td><td>规则引擎+排序模型</td><td>待开发</td></tr>
+    <tr><td>赛后数据复盘</td><td>P0</td><td>控球/射门/传球</td><td>统计+规则推理</td><td>已规划</td></tr>
+    <tr><td>AI综合总结</td><td>P0</td><td>数据复盘+感想+队长总结</td><td>LLM总结</td><td>已规划</td></tr>
+    <tr><td>对手弱点分析</td><td>P1</td><td>对手历史比赛数据</td><td>特征分析+NLP</td><td>下一阶段</td></tr>
+    <tr><td>球员表现趋势</td><td>P1</td><td>球员历史出场数据</td><td>时间序列分析</td><td>下一阶段</td></tr>
+    <tr><td>智能约球匹配</td><td>P2</td><td>位置偏好+空闲时间</td><td>推荐算法</td><td>远期规划</td></tr>
+  </table>
+
+  <h3>4.3 AI能力详细说明</h3>
+  
+  <h4>能力一：赛前比分预测</h4>
+  <p><strong>输入</strong>：两队历史交锋、近期战绩、进球/失球、球员可用状态<br>
+  <strong>输出</strong>：预测比分、胜平负概率、战术建议<br>
+  <strong>技术</strong>：XGBoost多分类，15维滚动窗口特征，严格时序切分防泄露</p>
+  <blockquote><strong>已验证</strong>：QQ空间爬取6年349条记录，清洗343条，三分类准确率<strong>61.4%</strong>，主队胜预测<strong>77.1%</strong>，优于基线4.1个百分点。</blockquote>
+
+  <h4>能力二：阵容推荐</h4>
+  <p>规则引擎（位置覆盖+状态可用性）生成候选阵容 → 排序模型（球员历史表现）排序 → 输出最优+备选方案。队长有最终决定权。</p>
+
+  <h4>能力三：赛后数据复盘</h4>
+  <p>统计计算（各项vs历史均值）+ 规则推理（自动生成洞察）。示例："本场控球率46%，低于赛季均值58%，中场控制力不足"。</p>
+
+  <h4>能力四：AI综合总结</h4>
+  <p>输入：数据复盘结论 + 队员感想 + 队长总结 → LLM整合 → 三段式：✅亮点 / ⚠️待改进 / 🔮下场建议。</p>
+
+  <h3>4.4 数据闭环</h3>
+  <div class="flow">
+    赛前数据（对手分析）→ AI 预测 → 阵容推荐 → 比赛执行<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;↓<br>
+    赛果录入 ← 赛后数据复盘 ← AI综合总结 ← 队员感想 + 队长总结<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;↓<br>
+    回传模型（增量学习）→ 下一轮预测更准确 🔄
+  </div>
+  <p style="text-align:center;color:var(--green);font-weight:600;">预测越准 → 用户越信任 → 数据越多 → 模型越准 → 正反馈循环</p>
+</div>
+
+<!-- ===== 五、交互与视觉设计 ===== -->
+<div class="section">
+  <h2>五、交互与视觉设计</h2>
+  
+  <h3>5.1 设计原则</h3>
+  <ul>
+    <li><span class="tag">绿茵主题</span> 主色 #1a8c4a，活力清爽</li>
+    <li><span class="tag">卡片化</span> 圆角卡片承载内容，视觉干净</li>
+    <li><span class="tag">状态可视化</span> 🟢🟡🔴🚫 颜色+图标双重编码</li>
+    <li><span class="tag">AI差异化</span> 渐变背景/特殊边框区分AI模块</li>
+  </ul>
+
+  <h3>5.2 关键交互</h3>
+  <table>
+    <tr><th>交互</th><th>实现</th></tr>
+    <tr><td>底部导航</td><td>5个Tab，高亮态+消息Badge</td></tr>
+    <tr><td>AI入口</td><td>点击跳转AI攻略详情页，有返回导航</td></tr>
+    <tr><td>球员点击</td><td>弹出基本信息Toast</td></tr>
+    <tr><td>广场分类</td><td>横向Tab切换，激活态绿色填充</td></tr>
+    <tr><td>发布弹窗</td><td>底部滑入式，完整表单字段</td></tr>
+    <tr><td>状态选择</td><td>三选一卡片，选中态绿色边框</td></tr>
+  </table>
+</div>
+
+<!-- ===== 六、优先级规划 ===== -->
+<div class="section">
+  <h2>六、优先级规划</h2>
+
+  <h3>Phase 1：MVP <span class="tag">4周</span></h3>
+  <table>
+    <tr><th>模块</th><th>交付内容</th><th>优先级</th></tr>
+    <tr><td>首页</td><td>赛程/战绩/数据看板</td><td>P0</td></tr>
+    <tr><td>阵容管理</td><td>阵型图+状态标识+发布</td><td>P0</td></tr>
+    <tr><td>赛后复盘</td><td>数据复盘+队员感想+AI总结</td><td>P0</td></tr>
+    <tr><td>AI赛前预测</td><td>比分预测+战术建议（XGBoost）</td><td>P0</td></tr>
+    <tr><td>个人状态</td><td>三态标记</td><td>P0</td></tr>
+    <tr><td>用户体系</td><td>球队创建、球员加入</td><td>P0</td></tr>
+  </table>
+
+  <h3>Phase 2：V1.1 <span class="tag">2周</span></h3>
+  <table>
+    <tr><td>广场</td><td>结构化约球卡片+发布弹窗</td><td>P1</td></tr>
+    <tr><td>消息</td><td>通知推送</td><td>P1</td></tr>
+    <tr><td>全校排名</td><td>各院队排名榜单</td><td>P1</td></tr>
+    <tr><td>AI预测优化</td><td>加入更多特征数据</td><td>P1</td></tr>
+  </table>
+
+  <h3>Phase 3：V1.2 <span class="tag">2周</span></h3>
+  <table>
+    <tr><td>广场</td><td>分类筛选+报名互动</td><td>P2</td></tr>
+    <tr><td>个人数据</td><td>球员个人赛季统计</td><td>P2</td></tr>
+    <tr><td>赛后复盘</td><td>完整复盘详情页</td><td>P2</td></tr>
+    <tr><td>赛果录入</td><td>队长/管理员录入真实赛果</td><td>P2</td></tr>
+  </table>
+</div>
+
+<!-- ===== 七、技术可行性 ===== -->
+<div class="section">
+  <h2>七、技术可行性</h2>
+
+  <h3>7.1 当前进展</h3>
+  <ul class="checklist">
+    <li><strong>高保真可交互原型</strong>（8个页面，手机端适配）</li>
+    <li><strong>XGBoost预测模型</strong>（真实数据，343条记录，准确率61.4%）</li>
+    <li><strong>Python数据清洗与特征工程</strong>（15维滚动窗口特征）</li>
+    <li><strong>Flask后端Demo</strong>（预测→阵容→复盘完整链路）</li>
+  </ul>
+
+  <h3>7.2 技术栈建议</h3>
+  <table>
+    <tr><th>层</th><th>技术</th><th>说明</th></tr>
+    <tr><td>前端</td><td>React / Vue.js</td><td>移动端适配优先</td></tr>
+    <tr><td>后端</td><td>Flask</td><td>轻量快速，适合MVP</td></tr>
+    <tr><td>数据库</td><td>MySQL / PostgreSQL</td><td>结构化数据存储</td></tr>
+    <tr><td>AI层</td><td>XGBoost + scikit-learn</td><td>预测模型，已有实现</td></tr>
+    <tr><td>LLM</td><td>通义千问 / 智谱</td><td>AI总结能力</td></tr>
+    <tr><td>部署</td><td>Nginx + Gunicorn</td><td>生产环境</td></tr>
+  </table>
+</div>
+
+<!-- ===== 八、商业与落地 ===== -->
+<div class="section">
+  <h2>八、商业与落地</h2>
+
+  <h3>8.1 落地路线图</h3>
+  <table>
+    <tr><th>阶段</th><th>时间</th><th>目标</th><th>关键动作</th></tr>
+    <tr><td><strong>✅验证期</strong></td><td>已完成</td><td>验证AI可行性</td><td>爬取数据、训练模型、验证效果</td></tr>
+    <tr><td><strong>✅原型期</strong></td><td>已完成</td><td>验证用户体验</td><td>高保真原型、用户访谈</td></tr>
+    <tr><td><strong>✅Demo期</strong></td><td>已完成</td><td>验证技术链路</td><td>Flask+AI模型联调</td></tr>
+    <tr><td><strong>产品化</strong></td><td>4周</td><td>完成MVP</td><td>完整功能开发、内测</td></tr>
+    <tr><td><strong>推广期</strong></td><td>2周</td><td>覆盖5-8支院队</td><td>找队长试用、收集反馈</td></tr>
+    <tr><td><strong>迭代期</strong></td><td>持续</td><td>优化功能、提升留存</td><td>数据驱动迭代</td></tr>
+  </table>
+
+  <h3>8.2 项目包装建议</h3>
+  <blockquote>
+    <strong>项目名称</strong>：校园足球助手（AI产品经理方向）<br>
+    <strong>角色</strong>：产品负责人（从0到1主导）<br>
+    <strong>产出链路</strong>：竞品分析 → 用户调研 → PRD → 高保真原型 → AI能力验证 → Flask Demo<br>
+    <strong>四大差异化</strong>：<br>
+    ① 数据+产品复合背景，全链路覆盖<br>
+    ② AI能力全链路（预测/复盘/总结），垂直场景可行性验证<br>
+    ③ 真实数据驱动，模型优于基线4.1个百分点<br>
+    ④ 完整PRD+可交互原型，非空洞项目
+  </blockquote>
+</div>
+
+<!-- ===== 九、附录 ===== -->
+<div class="section">
+  <h2>九、附录</h2>
+
+  <h3>A1. 模型验证结果</h3>
+  <table>
+    <tr><th>指标</th><th>结果</th></tr>
+    <tr><td>数据来源</td><td>QQ空间历史比赛说说，6年349条</td></tr>
+    <tr><td>清洗后数据</td><td>343条有效记录</td></tr>
+    <tr><td>模型</td><td>XGBoost多分类（胜/平/负）</td></tr>
+    <tr><td>特征</td><td>15维滚动窗口特征，严格时序切分</td></tr>
+    <tr><td>三分类准确率</td><td style="color:var(--green);font-weight:700;">61.4%</td></tr>
+    <tr><td>主队胜预测</td><td style="color:var(--green);font-weight:700;">77.1%</td></tr>
+    <tr><td>对比基线</td><td>优于基线4.1个百分点</td></tr>
+    <tr><td>数据泄露防护</td><td><span class="tag">✅ 严格时序切分</span></td></tr>
+  </table>
+
+  <h3>A2. 参考文档</h3>
+  <ul>
+    <li>XGBoost模型训练代码：<code>football-predictor/</code></li>
+    <li>高保真原型：<code>football-prototype/index.html</code></li>
+    <li>Flask后端Demo：<code>football-backend/</code></li>
+  </ul>
+</div>
+
+<div class="footer">
+  📋 文档结束 &nbsp;|&nbsp; 校园足球助手 PRD v1.0 &nbsp;|&nbsp; 陆慧慧 &nbsp;|&nbsp; 2026-07-27
+</div>
+
+</div></body></html>

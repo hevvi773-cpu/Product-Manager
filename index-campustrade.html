@@ -3,11 +3,20 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>校园二手交易 App 原型</title>
+<title>校园二手交易 — 小程序版原型</title>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
 <style>
-/* ========== 全局重置 ========== */
+/* ========== CSS 变量 — 与线上网站配色一致 ========== */
+:root {
+    --blue: #aee4ff;
+    --pink: #ffccd5;
+    --blue-dark: #5b9ecf;
+    --pink-dark: #e8a0ac;
+    --bg-gradient: linear-gradient(135deg, var(--blue) 0%, var(--pink) 50%, var(--blue) 100%);
+}
+
 * { margin:0; padding:0; box-sizing:border-box; }
+
 body {
     font-family: -apple-system, 'PingFang SC', 'Helvetica Neue', sans-serif;
     background: #f0f2f5;
@@ -16,379 +25,341 @@ body {
     align-items: center;
     padding: 20px 0;
 }
+
 /* ========== 手机外壳 ========== */
 .phone {
     width: 390px;
     min-height: 844px;
-    background: #fff;
+    background: var(--bg-gradient);
     border-radius: 40px;
     box-shadow: 0 20px 60px rgba(0,0,0,0.15);
     overflow: hidden;
     position: relative;
     margin-bottom: 30px;
 }
-.phone-header {
-    height: 47px;
-    background: #fff;
+
+/* 状态栏 */
+.status-bar {
+    height: 44px;
+    background: rgba(255,255,255,0.92);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 24px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--blue-dark);
+    backdrop-filter: blur(10px);
+}
+.status-icons { display:flex; gap:6px; font-size:12px; }
+
+/* ========== 页面容器 ========== */
+.page { display: none; min-height: calc(844px - 44px); padding-bottom: 70px; }
+.page.active { display: block; animation: fadeIn 0.25s ease; }
+@keyframes fadeIn { from { opacity:0; transform:translateY(6px); } to { opacity:1; transform:translateY(0); } }
+
+/* ========== 微信小程序风格导航栏 ========== */
+.nav-header {
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: blur(10px);
+    padding: 12px 20px;
     display: flex;
     align-items: center;
     justify-content: center;
     position: relative;
-    border-bottom: 1px solid #f0f0f0;
+    border-bottom: 1px solid rgba(255,255,255,0.5);
 }
-.phone-notch {
-    width: 150px;
-    height: 30px;
-    background: #1a1a1a;
-    border-radius: 0 0 16px 16px;
+.nav-header h1 {
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--blue-dark);
 }
-.phone-time {
+.nav-header .back-btn {
     position: absolute;
-    left: 24px;
-    font-size: 14px;
+    left: 16px;
+    background: none;
+    border: none;
+    font-size: 20px;
+    color: var(--blue-dark);
+    cursor: pointer;
+    padding: 4px;
+}
+.nav-header .nav-action {
+    position: absolute;
+    right: 16px;
+    font-size: 15px;
+    color: var(--pink-dark);
     font-weight: 600;
-    color: #1a1a1a;
+    cursor: pointer;
+    background: none;
+    border: none;
 }
-.phone-battery {
-    position: absolute;
-    right: 20px;
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    font-size: 12px;
-    color: #1a1a1a;
-}
-/* ========== 页面容器 ========== */
-.page {
-    display: none;
-    min-height: calc(844px - 47px - 64px);
-    padding-bottom: 64px;
-}
-.page.active { display: block; }
 
-/* ========== 底部导航 ========== */
-.bottom-nav {
+/* ========== 底部 TabBar ========== */
+.tabbar {
     position: absolute;
     bottom: 0; left: 0; right: 0;
     height: 64px;
-    background: #fff;
-    border-top: 1px solid #eee;
+    background: rgba(255,255,255,0.95);
+    backdrop-filter: blur(10px);
+    border-top: 1px solid rgba(255,255,255,0.6);
     display: flex;
     justify-content: space-around;
     align-items: center;
-    padding: 4px 0;
+    padding-bottom: 4px;
     z-index: 100;
 }
-.nav-item {
+.tabbar-item {
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 2px;
     cursor: pointer;
-    color: #999;
-    font-size: 11px;
+    color: #aaa;
+    font-size: 10px;
     padding: 4px 8px;
     transition: 0.2s;
     border: none;
     background: none;
+    position: relative;
 }
-.nav-item i { font-size: 22px; }
-.nav-item.active { color: #0d6efd; }
-.nav-item .badge-nav {
+.tabbar-item i { font-size: 22px; }
+.tabbar-item.active { color: var(--pink-dark); }
+.tabbar-badge {
     position: absolute;
-    top: -2px;
-    right: -4px;
-    background: #dc3545;
+    top: 0;
+    right: -2px;
+    background: var(--pink-dark);
     color: #fff;
     font-size: 10px;
     padding: 1px 5px;
     border-radius: 10px;
-}
-.nav-item-wrap { position: relative; }
-
-/* ========== 通用组件 ========== */
-.page-title {
-    font-size: 18px;
-    font-weight: 700;
-    padding: 16px 20px 12px;
-}
-.section-title {
-    font-size: 15px;
-    font-weight: 600;
-    padding: 16px 20px 10px;
-    color: #1a1a1a;
-}
-/* 顶部操作栏 */
-.top-bar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 12px 20px;
-    border-bottom: 1px solid #f0f0f0;
-}
-.top-bar h1 {
-    font-size: 20px;
-    font-weight: 700;
-}
-.top-bar-actions {
-    display: flex;
-    gap: 16px;
-    color: #666;
-    font-size: 20px;
-}
-/* 卡片 */
-.card-item {
-    background: #fff;
-    border-radius: 12px;
-    margin: 0 16px 12px;
-    padding: 14px;
-    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
-    display: flex;
-    gap: 12px;
-    cursor: pointer;
-    transition: 0.2s;
-}
-.card-item:active { background: #f8f9fa; }
-.card-img {
-    width: 80px;
-    height: 80px;
-    border-radius: 10px;
-    background: linear-gradient(135deg, #e3f2fd, #bbdefb);
-    flex-shrink: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 28px;
-    color: #0d6efd;
-}
-.card-img.buy { background: linear-gradient(135deg, #fff3e0, #ffe0b2); color: #fd7e14; }
-.card-body { flex: 1; min-width: 0; }
-.card-body h4 {
-    font-size: 15px;
-    font-weight: 600;
-    margin-bottom: 4px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-.card-body .price {
-    font-size: 17px;
-    font-weight: 700;
-    color: #e74c3c;
-}
-.card-body .meta {
-    font-size: 12px;
-    color: #999;
-    margin-top: 4px;
-    display: flex;
-    gap: 10px;
-    align-items: center;
-}
-/* 信用徽章 */
-.credit-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 3px;
-    padding: 2px 8px;
-    border-radius: 12px;
-    font-size: 11px;
-    font-weight: 600;
-}
-.credit-badge.S { background: #fff8e1; color: #f9a825; }
-.credit-badge.A { background: #e3f2fd; color: #0d6efd; }
-.credit-badge.B { background: #e8f5e9; color: #2e7d32; }
-.credit-badge.C { background: #fff3e0; color: #ef6c00; }
-.credit-badge.D { background: #fce4ec; color: #c62828; }
-
-/* 输入框 */
-.input-group {
-    padding: 0 20px;
-    margin-bottom: 16px;
-}
-.input-group label {
-    font-size: 13px;
-    font-weight: 600;
-    color: #666;
-    margin-bottom: 6px;
-    display: block;
-}
-.input-group input,
-.input-group select,
-.input-group textarea {
-    width: 100%;
-    padding: 12px 14px;
-    border: 1.5px solid #e0e0e0;
-    border-radius: 10px;
-    font-size: 15px;
-    outline: none;
-    transition: 0.2s;
-    font-family: inherit;
-}
-.input-group input:focus,
-.input-group textarea:focus {
-    border-color: #0d6efd;
-    box-shadow: 0 0 0 3px rgba(13,110,253,0.1);
-}
-.input-group textarea { min-height: 100px; resize: vertical; }
-
-/* 按钮 */
-.btn-primary {
-    background: #0d6efd;
-    color: #fff;
-    border: none;
-    padding: 14px 24px;
-    border-radius: 12px;
-    font-size: 16px;
-    font-weight: 600;
-    cursor: pointer;
-    width: calc(100% - 40px);
-    margin: 8px 20px;
-    transition: 0.2s;
-}
-.btn-primary:active { background: #0b5ed7; }
-.btn-outline {
-    background: #fff;
-    color: #0d6efd;
-    border: 1.5px solid #0d6efd;
-    padding: 10px 20px;
-    border-radius: 10px;
-    font-size: 14px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: 0.2s;
-}
-.btn-outline:active { background: #e3f2fd; }
-
-/* 空状态 */
-.empty-state {
+    min-width: 16px;
     text-align: center;
-    padding: 60px 20px;
-    color: #ccc;
-}
-.empty-state i { font-size: 48px; margin-bottom: 12px; display: block; }
-.empty-state p { font-size: 14px; }
-
-/* 分隔线 */
-.divider {
-    height: 8px;
-    background: #f5f5f5;
-    margin: 0;
 }
 
-/* 搜索框 */
-.search-bar {
-    margin: 0 16px 12px;
-    position: relative;
+/* ========== 搜索栏 ========== */
+.search-box {
+    display: flex;
+    margin: 12px 16px;
+    gap: 0;
 }
-.search-bar input {
-    width: 100%;
-    padding: 10px 16px 10px 40px;
+.search-box input {
+    flex: 1;
+    padding: 10px 16px;
     border: none;
-    background: #f5f5f5;
-    border-radius: 10px;
+    border-radius: 20px 0 0 20px;
+    background: rgba(255,255,255,0.7);
     font-size: 14px;
     outline: none;
+    backdrop-filter: blur(4px);
+    color: #444;
 }
-.search-bar i {
-    position: absolute;
-    left: 14px;
-    top: 50%;
-    transform: translateY(-50%);
-    color: #999;
+.search-box input::placeholder { color: #aaa; }
+.search-box .search-btn {
+    padding: 10px 18px;
+    border: none;
+    border-radius: 0 20px 20px 0;
+    background: var(--blue-dark);
+    color: #fff;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
 }
 
-/* 标签筛选 */
-.filter-tabs {
+/* ========== 分类标签 ========== */
+.category-tabs {
     display: flex;
     gap: 8px;
     padding: 0 16px 12px;
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
 }
-.filter-tab {
+.category-tab {
     padding: 6px 16px;
-    border-radius: 20px;
+    border-radius: 18px;
     font-size: 13px;
-    background: #f0f0f0;
-    color: #666;
+    background: rgba(255,255,255,0.5);
+    color: var(--blue-dark);
     white-space: nowrap;
     cursor: pointer;
     border: none;
+    font-weight: 500;
     transition: 0.2s;
 }
-.filter-tab.active { background: #0d6efd; color: #fff; }
+.category-tab.active {
+    background: #fff;
+    color: var(--pink-dark);
+    font-weight: 600;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
 
-/* 详情页 */
-.detail-img {
+/* ========== 商品类型Tab（出售中/求购中/已售出） ========== */
+.type-tabs {
+    display: flex;
+    gap: 8px;
+    margin: 0 16px 12px;
+}
+.type-tab {
+    flex: 1;
+    padding: 10px 0;
+    border-radius: 20px;
+    border: 1.5px solid rgba(255,255,255,0.6);
+    font-weight: 600;
+    font-size: 13px;
+    cursor: pointer;
+    background: rgba(255,255,255,0.4);
+    color: var(--blue-dark);
+    backdrop-filter: blur(4px);
+    text-align: center;
+    transition: 0.25s;
+}
+.type-tab.active {
+    background: #fff;
+    color: var(--pink-dark);
+    border-color: #fff;
+    box-shadow: 0 3px 12px rgba(0,0,0,0.1);
+}
+.type-tab .count {
+    background: rgba(0,0,0,0.08);
+    padding: 1px 8px;
+    border-radius: 10px;
+    font-size: 11px;
+    margin-left: 4px;
+}
+.type-tab.active .count { background: var(--pink); color: var(--pink-dark); }
+
+/* ========== 商品卡片 ========== */
+.product-list {
+    padding: 0 16px;
+}
+.product-card {
+    background: #fff;
+    border-radius: 14px;
+    padding: 14px;
+    margin-bottom: 12px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    display: flex;
+    gap: 12px;
+    cursor: pointer;
+    transition: 0.2s;
+    position: relative;
+    border: 1px solid rgba(0,0,0,0.03);
+}
+.product-card:active { background: #fafafa; }
+.product-card .type-badge {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    padding: 2px 10px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 700;
+    color: #fff;
+}
+.type-badge.sell { background: var(--blue-dark); }
+.type-badge.buy { background: var(--pink-dark); }
+.type-badge.sold { background: #bbb; }
+
+.product-card .card-pic {
+    width: 80px;
+    height: 80px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, rgba(174,228,255,0.3), rgba(255,204,213,0.3));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 32px;
+    flex-shrink: 0;
+}
+
+.product-card .card-info { flex:1; min-width:0; }
+.product-card .card-name {
+    font-size: 15px;
+    font-weight: 700;
+    color: #444;
+    margin-bottom: 4px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.product-card .card-price {
+    font-size: 18px;
+    font-weight: 800;
+    color: var(--pink-dark);
+    margin-bottom: 4px;
+}
+.product-card .card-meta {
+    font-size: 12px;
+    color: #999;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+.credit-badge {
+    padding: 1px 8px;
+    border-radius: 10px;
+    font-size: 11px;
+    font-weight: 600;
+}
+.credit-S { color: #ff6d3a; }
+.credit-A { color: #4caf50; }
+.credit-B { color: #2196f3; }
+.credit-C { color: #ff9800; }
+.credit-D { color: #e91e63; }
+
+/* ========== 空状态 ========== */
+.empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: rgba(91,158,207,0.5);
+}
+.empty-state i { font-size: 48px; margin-bottom: 12px; display: block; }
+.empty-state p { font-size: 14px; }
+
+/* ========== 详情页 ========== */
+.detail-pic {
     width: 100%;
-    height: 280px;
-    background: linear-gradient(135deg, #e3f2fd, #90caf9);
+    height: 240px;
+    background: linear-gradient(135deg, rgba(174,228,255,0.4), rgba(255,204,213,0.4));
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 64px;
-    color: #0d6efd;
-    position: relative;
 }
-.detail-img .back-btn {
-    position: absolute;
-    top: 16px;
-    left: 16px;
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    background: rgba(0,0,0,0.3);
-    color: #fff;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    border: none;
-    font-size: 18px;
-}
-.detail-info { padding: 20px; }
-.detail-info h2 { font-size: 20px; font-weight: 700; margin-bottom: 8px; }
-.detail-info .price-big { font-size: 24px; font-weight: 800; color: #e74c3c; }
-.detail-tags { display: flex; gap: 8px; margin: 10px 0; flex-wrap: wrap; }
-.detail-tags .tag {
-    padding: 4px 12px;
-    border-radius: 16px;
+.detail-body { padding: 16px 20px; }
+.detail-body h2 { font-size: 19px; font-weight: 700; color: #333; margin-bottom: 8px; }
+.detail-body .price-big { font-size: 26px; font-weight: 800; color: var(--pink-dark); margin-bottom: 8px; }
+.detail-body .tags { display: flex; gap: 8px; margin: 8px 0; }
+.detail-body .tag {
+    padding: 4px 10px;
+    border-radius: 12px;
     font-size: 12px;
-    background: #f0f0f0;
-    color: #666;
+    background: rgba(255,255,255,0.6);
+    color: var(--blue-dark);
 }
 .detail-desc {
-    margin: 16px 0;
-    padding: 16px;
-    background: #f9f9f9;
+    margin: 14px 0;
+    padding: 14px;
+    background: rgba(255,255,255,0.7);
     border-radius: 10px;
     font-size: 14px;
     line-height: 1.7;
-    color: #444;
+    color: #555;
 }
 .detail-seller {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    padding: 12px 0;
-    border-top: 1px solid #f0f0f0;
-    margin-top: 12px;
-}
-.detail-seller .seller-info {
-    display: flex;
-    align-items: center;
     gap: 10px;
+    padding: 14px 0;
+    border-top: 1px solid rgba(255,255,255,0.6);
 }
 .detail-seller .avatar {
-    width: 40px;
-    height: 40px;
+    width: 42px; height: 42px;
     border-radius: 50%;
-    background: #e3f2fd;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #0d6efd;
-    font-weight: 600;
+    background: linear-gradient(135deg, var(--blue), var(--pink));
+    display: flex; align-items: center; justify-content: center;
+    color: var(--blue-dark); font-weight: 700; font-size: 18px;
 }
 .detail-actions {
     display: flex;
@@ -398,46 +369,87 @@ body {
 .detail-actions button {
     flex: 1;
     padding: 12px;
-    border-radius: 10px;
+    border-radius: 12px;
     font-size: 15px;
     font-weight: 600;
     cursor: pointer;
     border: none;
+}
+.btn-fav { background: rgba(255,255,255,0.6); color: #999; }
+.btn-chat { background: var(--blue-dark); color: #fff; }
+.btn-buy { background: var(--pink-dark); color: #fff; }
+
+/* ========== 发布页 ========== */
+.form-group {
+    padding: 0 20px;
+    margin-bottom: 14px;
+}
+.form-group label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--blue-dark);
+    margin-bottom: 6px;
+    display: block;
+}
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 11px 14px;
+    border: 1.5px solid rgba(255,255,255,0.6);
+    border-radius: 10px;
+    font-size: 14px;
+    outline: none;
+    background: rgba(255,255,255,0.6);
+    font-family: inherit;
     transition: 0.2s;
 }
-.btn-chat { background: #0d6efd; color: #fff; }
-.btn-buy { background: #e74c3c; color: #fff; }
-.btn-fav { background: #f0f0f0; color: #666; }
+.form-group input:focus,
+.form-group textarea:focus {
+    border-color: var(--blue-dark);
+    background: #fff;
+}
+.form-group textarea { min-height: 90px; resize: vertical; }
+.btn-submit {
+    background: var(--pink-dark);
+    color: #fff;
+    border: none;
+    padding: 14px;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    width: calc(100% - 40px);
+    margin: 8px 20px;
+    box-shadow: 0 4px 12px rgba(232,160,172,0.4);
+}
 
-/* 聊天 */
-.chat-list-item {
+/* ========== 消息列表 ========== */
+.msg-item {
     display: flex;
     padding: 14px 20px;
     gap: 12px;
     align-items: center;
-    border-bottom: 1px solid #f5f5f5;
     cursor: pointer;
+    border-bottom: 1px solid rgba(255,255,255,0.5);
+    transition: 0.2s;
 }
-.chat-list-item:active { background: #f8f9fa; }
-.chat-avatar {
-    width: 48px;
-    height: 48px;
+.msg-item:active { background: rgba(255,255,255,0.3); }
+.msg-avatar {
+    width: 48px; height: 48px;
     border-radius: 50%;
-    background: #e3f2fd;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 600;
-    color: #0d6efd;
-    font-size: 18px;
+    background: linear-gradient(135deg, var(--blue), var(--pink));
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; color: var(--blue-dark); font-size: 18px;
     flex-shrink: 0;
 }
-.chat-info { flex: 1; min-width: 0; }
-.chat-info h4 { font-size: 15px; font-weight: 600; margin-bottom: 4px; }
-.chat-info p { font-size: 13px; color: #999; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.chat-time { font-size: 11px; color: #ccc; text-align: right; flex-shrink: 0; }
-.chat-unread {
-    background: #dc3545;
+.msg-info { flex: 1; min-width: 0; }
+.msg-info h4 { font-size: 15px; font-weight: 600; color: #333; margin-bottom: 4px; }
+.msg-info p { font-size: 13px; color: #999; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.msg-extra { text-align: right; flex-shrink: 0; }
+.msg-extra .time { font-size: 11px; color: #bbb; }
+.msg-extra .unread {
+    background: var(--pink-dark);
     color: #fff;
     font-size: 11px;
     padding: 1px 6px;
@@ -446,109 +458,200 @@ body {
     display: inline-block;
 }
 
-/* 聊天详情 */
-.chat-detail-header {
+/* ========== 聊天 ========== */
+.chat-header {
     display: flex;
     align-items: center;
     padding: 12px 16px;
-    border-bottom: 1px solid #f0f0f0;
-    gap: 12px;
+    gap: 10px;
+    background: rgba(255,255,255,0.6);
+    border-bottom: 1px solid rgba(255,255,255,0.5);
 }
-.chat-detail-header .back-btn {
-    font-size: 20px;
-    cursor: pointer;
-    background: none;
-    border: none;
-    color: #333;
+.chat-header .chat-avatar {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--blue), var(--pink));
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; color: var(--blue-dark); font-size: 14px;
 }
-.chat-detail-header h3 { font-size: 17px; font-weight: 600; }
-.chat-messages {
-    padding: 16px;
-    min-height: 400px;
-}
-.msg {
-    margin-bottom: 16px;
-    display: flex;
-}
-.msg.mine { justify-content: flex-end; }
-.msg .bubble {
-    max-width: 75%;
+.chat-header h3 { font-size: 15px; font-weight: 600; color: #333; }
+.chat-msgs { padding: 16px; min-height: 350px; }
+.msg-row { margin-bottom: 14px; display: flex; }
+.msg-row.mine { justify-content: flex-end; }
+.msg-row .bubble {
+    max-width: 72%;
     padding: 10px 14px;
     border-radius: 14px;
     font-size: 14px;
     line-height: 1.5;
 }
-.msg.mine .bubble {
-    background: #0d6efd;
+.msg-row.mine .bubble {
+    background: var(--blue-dark);
     color: #fff;
     border-bottom-right-radius: 4px;
 }
-.msg.other .bubble {
-    background: #f0f0f0;
+.msg-row.other .bubble {
+    background: rgba(255,255,255,0.8);
     color: #333;
     border-bottom-left-radius: 4px;
 }
-.chat-input-bar {
+.chat-input {
     display: flex;
-    gap: 10px;
-    padding: 12px 16px;
-    border-top: 1px solid #f0f0f0;
+    gap: 8px;
+    padding: 10px 16px;
+    position: absolute;
+    bottom: 64px;
+    left: 0; right: 0;
 }
-.chat-input-bar input {
+.chat-input input {
     flex: 1;
     padding: 10px 16px;
-    border: 1.5px solid #e0e0e0;
+    border: none;
     border-radius: 20px;
+    background: rgba(255,255,255,0.7);
     outline: none;
     font-size: 14px;
 }
-.chat-input-bar button {
-    width: 40px;
-    height: 40px;
+.chat-input button {
+    width: 38px; height: 38px;
     border-radius: 50%;
     border: none;
-    background: #0d6efd;
+    background: var(--pink-dark);
     color: #fff;
     cursor: pointer;
     font-size: 16px;
 }
-/* 评价 */
-.star-display { font-size: 24px; color: #ffc107; letter-spacing: 4px; }
+
+/* ========== 个人中心 ========== */
+.profile-top {
+    background: linear-gradient(135deg, var(--blue-dark), var(--pink-dark));
+    padding: 28px 20px 32px;
+    text-align: center;
+    color: #fff;
+}
+.profile-top .pfp {
+    width: 68px; height: 68px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.25);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 28px;
+    margin: 0 auto 10px;
+}
+.profile-top h2 { font-size: 20px; margin-bottom: 4px; }
+.profile-top .id { font-size: 13px; opacity: 0.85; }
+.profile-stats {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    margin-top: 14px;
+}
+.profile-stats div { text-align: center; }
+.profile-stats .num { font-size: 20px; font-weight: 700; }
+.profile-stats .label { font-size: 11px; opacity: 0.75; }
+
+.credit-card {
+    margin: -18px 16px 16px;
+    padding: 18px;
+    border-radius: 14px;
+    background: linear-gradient(135deg, #fff8e1, #ffe082);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    position: relative;
+    z-index: 10;
+}
+.credit-card .cc-icon { font-size: 36px; }
+.credit-card .cc-score { font-size: 26px; font-weight: 800; color: #f9a825; }
+.credit-card .cc-level { font-size: 14px; font-weight: 600; color: #666; }
+.credit-card .cc-rank { font-size: 11px; color: #999; margin-top: 2px; }
+
+.menu-list { margin: 0 16px; }
+.menu-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.5);
+    cursor: pointer;
+    font-size: 14px;
+    color: #444;
+}
+.menu-item i { font-size: 20px; width: 24px; text-align: center; }
+.menu-item .menu-badge { margin-left: auto; font-size: 12px; color: var(--pink-dark); }
+.menu-item .menu-arrow { margin-left: 4px; color: #ccc; }
+
+/* ========== 评价页 ========== */
+.eval-card {
+    background: rgba(255,255,255,0.7);
+    border-radius: 12px;
+    padding: 14px;
+    margin: 0 20px 16px;
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+.eval-card .eval-pic {
+    width: 50px; height: 50px;
+    border-radius: 8px;
+    background: linear-gradient(135deg, rgba(174,228,255,0.3), rgba(255,204,213,0.3));
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px;
+    flex-shrink: 0;
+}
+.eval-info h4 { font-size: 14px; font-weight: 600; color: #333; }
+.eval-info .eval-user { font-size: 12px; color: #999; }
+.stars { display: flex; gap: 4px; font-size: 28px; padding: 0 20px; margin-bottom: 12px; }
+.stars span { cursor: pointer; color: #e0e0e0; transition: 0.15s; }
+.stars span.active { color: #ffc107; }
+
+/* ========== 登录页 ========== */
+.login-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: calc(844px - 44px - 70px);
+    padding: 40px 20px;
+}
+.login-logo { font-size: 56px; margin-bottom: 16px; }
+.login-title { font-size: 22px; font-weight: 800; color: var(--blue-dark); margin-bottom: 4px; }
+.login-sub { font-size: 13px; color: #999; margin-bottom: 30px; }
+.login-container .form-group { width: 100%; max-width: 300px; }
 
 /* 管理后台 */
-.admin-header {
-    background: #1a1a2e;
+.admin-header-bar {
+    background: var(--blue-dark);
     color: #fff;
-    padding: 16px 20px;
+    padding: 14px 20px;
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
-.admin-header h2 { font-size: 18px; }
+.admin-header-bar h2 { font-size: 17px; font-weight: 700; }
 .admin-stats {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 10px;
-    padding: 16px;
+    padding: 14px 16px;
 }
-.admin-stat-card {
-    background: #fff;
+.admin-stat {
+    background: rgba(255,255,255,0.7);
     border-radius: 12px;
     padding: 14px;
-    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
     text-align: center;
 }
-.admin-stat-card h3 { font-size: 22px; font-weight: 700; margin-bottom: 2px; }
-.admin-stat-card p { font-size: 12px; color: #999; }
+.admin-stat h3 { font-size: 22px; font-weight: 700; color: var(--blue-dark); }
+.admin-stat p { font-size: 12px; color: #999; margin-top: 2px; }
 .admin-tabs {
     display: flex;
-    padding: 0 16px;
-    gap: 4px;
-    border-bottom: 1px solid #eee;
+    gap: 0;
+    border-bottom: 1px solid rgba(255,255,255,0.5);
     overflow-x: auto;
+    padding: 0 16px;
 }
 .admin-tab {
-    padding: 10px 16px;
+    padding: 10px 14px;
     font-size: 13px;
     cursor: pointer;
     border: none;
@@ -556,734 +659,612 @@ body {
     color: #999;
     border-bottom: 2px solid transparent;
     white-space: nowrap;
+    transition: 0.2s;
 }
-.admin-tab.active { color: #0d6efd; border-bottom-color: #0d6efd; font-weight: 600; }
-.admin-table { width: 100%; border-collapse: collapse; font-size: 13px; }
-.admin-table th { background: #f8f9fa; padding: 10px 12px; text-align: left; font-weight: 600; font-size: 12px; }
-.admin-table td { padding: 10px 12px; border-bottom: 1px solid #f0f0f0; }
-.status-tag { padding: 2px 10px; border-radius: 12px; font-size: 11px; }
+.admin-tab.active { color: var(--pink-dark); border-bottom-color: var(--pink-dark); font-weight: 600; }
+.admin-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 20px;
+    border-bottom: 1px solid rgba(255,255,255,0.4);
+    font-size: 14px;
+}
+.admin-item .status-tag {
+    padding: 2px 10px;
+    border-radius: 10px;
+    font-size: 11px;
+}
 .status-tag.green { background: #e8f5e9; color: #2e7d32; }
 .status-tag.orange { background: #fff3e0; color: #ef6c00; }
 .status-tag.red { background: #fce4ec; color: #c62828; }
-.admin-content { padding: 0 0 16px; }
-.admin-table-wrap { overflow-x: auto; }
-.page-nav { display: flex; justify-content: space-between; padding: 12px 20px; }
-.page-nav .btn-sm { padding: 6px 14px; border-radius: 8px; border: 1px solid #ddd; background: #fff; cursor: pointer; font-size: 13px; }
 
-/* 个人中心 */
-.profile-header {
-    background: linear-gradient(135deg, #0d6efd, #6610f2);
-    color: #fff;
-    padding: 30px 20px 24px;
-    text-align: center;
-}
-.profile-avatar {
-    width: 72px;
-    height: 72px;
-    border-radius: 50%;
-    background: rgba(255,255,255,0.2);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 32px;
-    margin: 0 auto 12px;
-}
-.profile-header h2 { font-size: 20px; margin-bottom: 4px; }
-.profile-header p { font-size: 13px; opacity: 0.85; }
-.profile-stats {
-    display: flex;
-    justify-content: center;
-    gap: 30px;
-    margin-top: 16px;
-}
-.profile-stats div { text-align: center; }
-.profile-stats .num { font-size: 20px; font-weight: 700; }
-.profile-stats .label { font-size: 11px; opacity: 0.75; }
-.credit-card-profile {
-    margin: -20px 16px 16px;
-    padding: 20px;
-    border-radius: 16px;
-    background: linear-gradient(135deg, #fff8e1, #ffe082);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    position: relative;
-    z-index: 10;
-    display: flex;
-    align-items: center;
-    gap: 16px;
-}
-.credit-card-profile .credit-icon-big { font-size: 40px; }
-.credit-card-profile .credit-text { flex: 1; }
-.credit-card-profile .credit-score { font-size: 28px; font-weight: 800; }
-.credit-card-profile .credit-level { font-size: 14px; color: #666; }
-
-/* 页面切换动画 */
-.page { animation: fadeIn 0.25s ease; }
-@keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
-
-/* 返回按钮通用 */
-.back-top {
-    position: fixed;
-    top: 12px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: rgba(0,0,0,0.5);
-    color: #fff;
-    padding: 6px 16px;
-    border-radius: 20px;
-    font-size: 12px;
-    z-index: 9999;
-    cursor: pointer;
-    border: none;
-}
-/* 小标签 - 信用等级列表 */
-.credit-list-item {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 10px 20px;
-    border-bottom: 1px solid #f5f5f5;
-}
+.hidden { display: none !important; }
 </style>
 </head>
 <body>
 
-<div class="back-top" onclick="goHome()">← 返回原型首页</div>
-
 <!-- ============================================================ -->
-<!-- 首页 -->
+<!-- 页面 0: 登录页 -->
 <!-- ============================================================ -->
-<div class="phone" id="phone-home">
-    <div class="phone-header">
-        <span class="phone-time">9:41</span>
-        <div class="phone-notch"></div>
-        <span class="phone-battery"><i class="bi bi-wifi"></i> <i class="bi bi-battery-full"></i></span>
+<div class="phone" id="phone-login">
+    <div class="status-bar">
+        <span>9:41</span>
+        <span class="status-icons"><i class="bi bi-wifi"></i> <i class="bi bi-battery-full"></i></span>
     </div>
-    <div class="page active" id="page-home">
-        <div class="top-bar">
-            <h1>🏫 校园二手</h1>
-            <div class="top-bar-actions">
-                <i class="bi bi-bell"></i>
-                <i class="bi bi-person-circle"></i>
+    <div class="page active" id="page-login">
+        <div class="login-container">
+            <div class="login-logo">🏫</div>
+            <div class="login-title">校园二手交易</div>
+            <div class="login-sub">微信一键登录，安全便捷</div>
+            <div class="form-group">
+                <label>用户名 / 学号</label>
+                <input type="text" placeholder="请输入用户名" value="hevi1245689">
+            </div>
+            <div class="form-group">
+                <label>密码</label>
+                <input type="password" placeholder="请输入密码" value="123456">
+            </div>
+            <button class="btn-submit" onclick="doLogin()">登录</button>
+            <div style="text-align:center;margin-top:16px;font-size:13px;color:#999;">
+                还没有账号？<span style="color:var(--pink-dark);cursor:pointer;font-weight:600;" onclick="showPage('register')">立即注册</span>
             </div>
         </div>
-
-        <div class="search-bar">
-            <i class="bi bi-search"></i>
-            <input type="text" placeholder="搜索商品名称...">
-        </div>
-
-        <div class="filter-tabs">
-            <button class="filter-tab active">推荐</button>
-            <button class="filter-tab">手机数码</button>
-            <button class="filter-tab">书籍教材</button>
-            <button class="filter-tab">生活用品</button>
-            <button class="filter-tab">服饰鞋包</button>
-            <button class="filter-tab">其他</button>
-        </div>
-
-        <!-- 商品卡片 -->
-        <div class="card-item" onclick="showPage('detail')">
-            <div class="card-img">📱</div>
-            <div class="card-body">
-                <h4>iPhone 14 Pro 暗紫色 256G</h4>
-                <div class="price">¥6,800</div>
-                <div class="meta">
-                    <span>张同学</span>
-                    <span class="credit-badge S">🌟 S级</span>
-                    <span>2小时前</span>
-                </div>
-            </div>
-        </div>
-
-        <div class="card-item" onclick="showPage('detail')">
-            <div class="card-img buy">📚</div>
-            <div class="card-body">
-                <h4>【求购】计算机组成原理 第四版</h4>
-                <div class="price">¥30</div>
-                <div class="meta">
-                    <span>李同学</span>
-                    <span class="credit-badge A">✅ A级</span>
-                    <span>昨天</span>
-                </div>
-            </div>
-        </div>
-
-        <div class="card-item" onclick="showPage('detail')">
-            <div class="card-img">🎧</div>
-            <div class="card-body">
-                <h4>AirPods Pro 2 使用3个月</h4>
-                <div class="price">¥1,200</div>
-                <div class="meta">
-                    <span>王同学</span>
-                    <span class="credit-badge B">👍 B级</span>
-                    <span>3天前</span>
-                </div>
-            </div>
-        </div>
-
-        <div class="card-item" onclick="showPage('detail')">
-            <div class="card-img">🖥️</div>
-            <div class="card-body">
-                <h4>戴尔 27寸 4K 显示器</h4>
-                <div class="price">¥1,500</div>
-                <div class="meta">
-                    <span>陈同学</span>
-                    <span class="credit-badge A">✅ A级</span>
-                    <span>5天前</span>
-                </div>
-            </div>
-        </div>
-
-        <div class="card-item" onclick="showPage('detail')">
-            <div class="card-img buy">🎮</div>
-            <div class="card-body">
-                <h4>【求购】PS5 光驱版</h4>
-                <div class="price">¥2,800</div>
-                <div class="meta">
-                    <span>赵同学</span>
-                    <span class="credit-badge S">🌟 S级</span>
-                    <span>1周前</span>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="bottom-nav">
-        <button class="nav-item active" onclick="showPage('home')">
-            <i class="bi bi-house-fill"></i>
-            <span>首页</span>
-        </button>
-        <button class="nav-item" onclick="showPage('messages')">
-            <div class="nav-item-wrap">
-                <i class="bi bi-chat-dots-fill"></i>
-                <span class="badge-nav">3</span>
-            </div>
-            <span>消息</span>
-        </button>
-        <button class="nav-item" onclick="showPage('publish')">
-            <i class="bi bi-plus-circle-fill" style="font-size:28px;color:#0d6efd;"></i>
-            <span>发布</span>
-        </button>
-        <button class="nav-item" onclick="showPage('profile')">
-            <i class="bi bi-person-fill"></i>
-            <span>我的</span>
-        </button>
-        <button class="nav-item" onclick="showPage('admin')">
-            <i class="bi bi-shield-fill"></i>
-            <span>管理</span>
-        </button>
     </div>
 </div>
 
 <!-- ============================================================ -->
-<!-- 商品详情页 -->
+<!-- 页面 1: 首页 -->
 <!-- ============================================================ -->
-<div class="phone" id="phone-detail" style="display:none;">
-    <div class="phone-header">
-        <span class="phone-time">9:41</span>
-        <div class="phone-notch"></div>
-        <span class="phone-battery"><i class="bi bi-wifi"></i> <i class="bi bi-battery-full"></i></span>
+<div class="phone hidden" id="phone-home">
+    <div class="status-bar">
+        <span>9:41</span>
+        <span class="status-icons"><i class="bi bi-wifi"></i> <i class="bi bi-battery-full"></i></span>
+    </div>
+    <div class="nav-header">
+        <h1>🏫 校园二手</h1>
+        <button class="nav-action" onclick="showPage('notifications')"><i class="bi bi-bell"></i></button>
+    </div>
+    <div class="page active" id="page-home">
+        <div class="search-box">
+            <input type="text" placeholder="🔍 搜索商品名称或描述...">
+            <button class="search-btn">搜索</button>
+        </div>
+
+        <div class="category-tabs">
+            <button class="category-tab active">全部</button>
+            <button class="category-tab" onclick="filterCategory(this)">手机数码</button>
+            <button class="category-tab" onclick="filterCategory(this)">书籍教材</button>
+            <button class="category-tab" onclick="filterCategory(this)">生活用品</button>
+            <button class="category-tab" onclick="filterCategory(this)">服饰鞋包</button>
+            <button class="category-tab" onclick="filterCategory(this)">其他</button>
+        </div>
+
+        <div class="type-tabs">
+            <button class="type-tab active" onclick="switchTab(this,'sell')">🛒 出售中 <span class="count">9</span></button>
+            <button class="type-tab" onclick="switchTab(this,'buy')">📋 求购中 <span class="count">2</span></button>
+            <button class="type-tab" onclick="switchTab(this,'sold')">✅ 已售出 <span class="count">8</span></button>
+        </div>
+
+        <div class="product-list" id="productList"></div>
+    </div>
+    <div class="tabbar">
+        <button class="tabbar-item active" onclick="switchMainPage('home')"><i class="bi bi-house-fill"></i><span>首页</span></button>
+        <button class="tabbar-item" onclick="switchMainPage('messages')">
+            <i class="bi bi-chat-dots-fill"></i><span>消息</span><span class="tabbar-badge">3</span>
+        </button>
+        <button class="tabbar-item" onclick="switchMainPage('publish')"><i class="bi bi-plus-circle-fill" style="font-size:26px;color:var(--pink-dark);"></i><span>发布</span></button>
+        <button class="tabbar-item" onclick="switchMainPage('profile')"><i class="bi bi-person-fill"></i><span>我的</span></button>
+        <button class="tabbar-item" onclick="switchMainPage('admin')"><i class="bi bi-shield-fill"></i><span>管理</span></button>
+    </div>
+</div>
+</div>
+
+<!-- ============================================================ -->
+<!-- 页面 2: 商品详情 -->
+<!-- ============================================================ -->
+<div class="phone hidden" id="phone-detail">
+    <div class="status-bar">
+        <span>9:41</span>
+        <span class="status-icons"><i class="bi bi-wifi"></i> <i class="bi bi-battery-full"></i></span>
+    </div>
+    <div class="nav-header">
+        <button class="back-btn" onclick="backToHome()"><i class="bi bi-chevron-left"></i></button>
+        <h1>商品详情</h1>
     </div>
     <div class="page active" id="page-detail">
-        <div class="detail-img">
-            <button class="back-btn" onclick="showPage('home')"><i class="bi bi-chevron-left"></i></button>
-            <span>📱</span>
-        </div>
-        <div class="detail-info">
-            <h2>iPhone 14 Pro 暗紫色 256G</h2>
-            <div class="price-big">¥6,800</div>
-            <div class="detail-tags">
-                <span class="tag">手机数码</span>
-                <span class="tag">九成新</span>
-                <span class="tag">可小刀</span>
-            </div>
-            <div class="detail-desc">
-                iPhone 14 Pro 256G 暗紫色，2024年1月购入，国行正品。<br>
-                一直戴壳贴膜使用，外观无划痕，电池健康度92%。<br>
-                配件齐全（充电器、数据线、包装盒），送两个手机壳。<br>
-                支持面交验机。
-            </div>
+        <div class="detail-pic" id="detailPic">📱</div>
+        <div class="detail-body">
+            <h2 id="detailName">iPhone 14 Pro 暗紫色 256G</h2>
+            <div class="price-big" id="detailPrice">¥6,800</div>
+            <div class="tags"><span class="tag">手机数码</span><span class="tag" id="detailType">出售</span></div>
+            <div class="detail-desc" id="detailDesc">商品描述加载中...</div>
             <div class="detail-seller">
-                <div class="seller-info">
-                    <div class="avatar">张</div>
-                    <div>
-                        <strong>张同学</strong>
-                        <span class="credit-badge S" style="margin-left:6px;">🌟 S级</span>
-                        <div style="font-size:12px;color:#999;margin-top:2px;">已交易 12 笔 · 5.0 分</div>
-                    </div>
+                <div class="avatar" id="detailSellerAvatar">张</div>
+                <div>
+                    <strong id="detailSeller">张同学</strong>
+                    <span class="credit-badge credit-B" id="detailCredit">👍 B级</span>
                 </div>
-                <button class="btn-outline" onclick="showPage('chat')">私信</button>
             </div>
             <div class="detail-actions">
                 <button class="btn-fav"><i class="bi bi-heart"></i> 收藏</button>
-                <button class="btn-chat" onclick="showPage('chat')">💬 联系卖家</button>
-                <button class="btn-buy">立即购买</button>
-            </div>
-            <div style="margin-top:16px;border-top:1px solid #f0f0f0;padding-top:12px;">
-                <h4 style="font-size:15px;font-weight:600;margin-bottom:10px;">📝 买家评价</h4>
-                <div style="display:flex;gap:8px;margin-bottom:10px;">
-                    <div style="font-size:13px;color:#999;">综合评分</div>
-                    <div class="star-display">★★★★★</div>
-                    <div style="font-size:13px;font-weight:600;color:#333;">5.0</div>
-                </div>
-                <div style="font-size:13px;color:#666;padding:8px 12px;background:#f9f9f9;border-radius:8px;margin-bottom:8px;">
-                    <strong>李同学：</strong> 手机很新，和描述一致，交易很愉快！👍
-                </div>
-                <div style="font-size:13px;color:#666;padding:8px 12px;background:#f9f9f9;border-radius:8px;margin-bottom:8px;">
-                    <strong>王同学：</strong> 包装很仔细，价格也合理，推荐。
-                </div>
+                <button class="btn-chat" onclick="switchMainPage('chat')">💬 联系卖家</button>
+                <button class="btn-buy" onclick="alert('已发起购买请求，请等待卖家确认')">立即购买</button>
             </div>
         </div>
     </div>
-    <div class="bottom-nav">
-        <button class="nav-item" onclick="showPage('home')"><i class="bi bi-house-fill"></i><span>首页</span></button>
-        <button class="nav-item" onclick="showPage('messages')">
-            <div class="nav-item-wrap"><i class="bi bi-chat-dots-fill"></i><span class="badge-nav">3</span></div>
-            <span>消息</span>
-        </button>
-        <button class="nav-item" onclick="showPage('publish')"><i class="bi bi-plus-circle-fill" style="font-size:28px;color:#0d6efd;"></i><span>发布</span></button>
-        <button class="nav-item" onclick="showPage('profile')"><i class="bi bi-person-fill"></i><span>我的</span></button>
-        <button class="nav-item" onclick="showPage('admin')"><i class="bi bi-shield-fill"></i><span>管理</span></button>
+    <div class="tabbar">
+        <button class="tabbar-item active" onclick="backToHome()"><i class="bi bi-house-fill"></i><span>首页</span></button>
+        <button class="tabbar-item" onclick="switchMainPage('messages')"><i class="bi bi-chat-dots-fill"></i><span>消息</span></button>
+        <button class="tabbar-item" onclick="switchMainPage('publish')"><i class="bi bi-plus-circle-fill" style="font-size:26px;color:var(--pink-dark);"></i><span>发布</span></button>
+        <button class="tabbar-item" onclick="switchMainPage('profile')"><i class="bi bi-person-fill"></i><span>我的</span></button>
+        <button class="tabbar-item" onclick="switchMainPage('admin')"><i class="bi bi-shield-fill"></i><span>管理</span></button>
     </div>
 </div>
 
 <!-- ============================================================ -->
-<!-- 消息列表页 -->
+<!-- 页面 3: 消息列表 -->
 <!-- ============================================================ -->
-<div class="phone" id="phone-messages" style="display:none;">
-    <div class="phone-header">
-        <span class="phone-time">9:41</span>
-        <div class="phone-notch"></div>
-        <span class="phone-battery"><i class="bi bi-wifi"></i> <i class="bi bi-battery-full"></i></span>
+<div class="phone hidden" id="phone-messages">
+    <div class="status-bar">
+        <span>9:41</span>
+        <span class="status-icons"><i class="bi bi-wifi"></i> <i class="bi bi-battery-full"></i></span>
+    </div>
+    <div class="nav-header">
+        <h1>💬 消息</h1>
     </div>
     <div class="page active" id="page-messages">
-        <div class="page-title">💬 消息</div>
-        <div class="chat-list-item" onclick="showPage('chat')">
-            <div class="chat-avatar">李</div>
-            <div class="chat-info">
+        <div class="msg-item" onclick="switchMainPage('chat')">
+            <div class="msg-avatar">李</div>
+            <div class="msg-info">
                 <h4>李同学</h4>
-                <p>你好，手机还在吗？我想看看实物</p>
-            </div>
-            <div>
-                <div class="chat-time">刚刚</div>
-                <div class="chat-unread">2</div>
-            </div>
-        </div>
-        <div class="chat-list-item" onclick="showPage('chat')">
-            <div class="chat-avatar">王</div>
-            <div class="chat-info">
-                <h4>王同学</h4>
                 <p>好的，明天中午图书馆见？</p>
             </div>
-            <div>
-                <div class="chat-time">昨天</div>
-                <div class="chat-unread">1</div>
+            <div class="msg-extra">
+                <div class="time">刚刚</div>
+                <div class="unread">2</div>
             </div>
         </div>
-        <div class="chat-list-item" onclick="showPage('chat')">
-            <div class="chat-avatar">赵</div>
-            <div class="chat-info">
+        <div class="msg-item" onclick="switchMainPage('chat')">
+            <div class="msg-avatar">王</div>
+            <div class="msg-info">
+                <h4>王同学</h4>
+                <p>充电宝还在吗？</p>
+            </div>
+            <div class="msg-extra">
+                <div class="time">昨天</div>
+                <div class="unread">1</div>
+            </div>
+        </div>
+        <div class="msg-item" onclick="switchMainPage('chat')">
+            <div class="msg-avatar">赵</div>
+            <div class="msg-info">
                 <h4>赵同学</h4>
                 <p>谢谢！已经收到了，很好用</p>
             </div>
-            <div>
-                <div class="chat-time">3天前</div>
-            </div>
+            <div class="msg-extra"><div class="time">3天前</div></div>
         </div>
-        <div class="chat-list-item" onclick="showPage('chat')">
-            <div class="chat-avatar">陈</div>
-            <div class="chat-info">
-                <h4>陈同学</h4>
-                <p>价格还能再低一点吗？😊</p>
+        <div class="msg-item" onclick="switchMainPage('chat')">
+            <div class="msg-avatar">系</div>
+            <div class="msg-info">
+                <h4>系统通知</h4>
+                <p>您的商品「陶瓷杯A」审核已通过</p>
             </div>
-            <div>
-                <div class="chat-time">5天前</div>
-            </div>
+            <div class="msg-extra"><div class="time">4天前</div></div>
         </div>
     </div>
-    <div class="bottom-nav">
-        <button class="nav-item" onclick="showPage('home')"><i class="bi bi-house-fill"></i><span>首页</span></button>
-        <button class="nav-item active" onclick="showPage('messages')">
-            <div class="nav-item-wrap"><i class="bi bi-chat-dots-fill"></i><span class="badge-nav">3</span></div>
-            <span>消息</span>
-        </button>
-        <button class="nav-item" onclick="showPage('publish')"><i class="bi bi-plus-circle-fill" style="font-size:28px;color:#0d6efd;"></i><span>发布</span></button>
-        <button class="nav-item" onclick="showPage('profile')"><i class="bi bi-person-fill"></i><span>我的</span></button>
-        <button class="nav-item" onclick="showPage('admin')"><i class="bi bi-shield-fill"></i><span>管理</span></button>
+    <div class="tabbar">
+        <button class="tabbar-item" onclick="switchMainPage('home')"><i class="bi bi-house-fill"></i><span>首页</span></button>
+        <button class="tabbar-item active" onclick="switchMainPage('messages')"><i class="bi bi-chat-dots-fill"></i><span>消息</span><span class="tabbar-badge">3</span></button>
+        <button class="tabbar-item" onclick="switchMainPage('publish')"><i class="bi bi-plus-circle-fill" style="font-size:26px;color:var(--pink-dark);"></i><span>发布</span></button>
+        <button class="tabbar-item" onclick="switchMainPage('profile')"><i class="bi bi-person-fill"></i><span>我的</span></button>
+        <button class="tabbar-item" onclick="switchMainPage('admin')"><i class="bi bi-shield-fill"></i><span>管理</span></button>
     </div>
 </div>
 
 <!-- ============================================================ -->
-<!-- 聊天详情页 -->
+<!-- 页面 4: 聊天详情 -->
 <!-- ============================================================ -->
-<div class="phone" id="phone-chat" style="display:none;">
-    <div class="phone-header">
-        <span class="phone-time">9:41</span>
-        <div class="phone-notch"></div>
-        <span class="phone-battery"><i class="bi bi-wifi"></i> <i class="bi bi-battery-full"></i></span>
+<div class="phone hidden" id="phone-chat" style="position:relative;">
+    <div class="status-bar">
+        <span>9:41</span>
+        <span class="status-icons"><i class="bi bi-wifi"></i> <i class="bi bi-battery-full"></i></span>
+    </div>
+    <div class="chat-header">
+        <button class="back-btn" onclick="switchMainPage('messages')" style="position:static;"><i class="bi bi-chevron-left"></i></button>
+        <div class="chat-avatar">李</div>
+        <h3>李同学</h3>
+        <span class="credit-badge credit-A" style="margin-left:auto;">✅ A级</span>
     </div>
     <div class="page active" id="page-chat">
-        <div class="chat-detail-header">
-            <button class="back-btn" onclick="showPage('messages')"><i class="bi bi-chevron-left"></i></button>
-            <div class="chat-avatar" style="width:36px;height:36px;font-size:14px;">李</div>
-            <h3>李同学</h3>
-            <span class="credit-badge A" style="margin-left:auto;">✅ A级</span>
-        </div>
-        <div class="chat-messages">
-            <div class="msg other"><div class="bubble">你好，请问那个 iPhone 14 Pro 还在吗？</div></div>
-            <div class="msg mine"><div class="bubble">在的，一直有人问但还没出 😄</div></div>
-            <div class="msg other"><div class="bubble">可以看看实物吗？我就在学校</div></div>
-            <div class="msg other"><div class="bubble">方便的话明天中午图书馆见？</div></div>
-            <div class="msg mine"><div class="bubble">可以的，明天中午12点图书馆一楼大厅？</div></div>
-            <div class="msg other"><div class="bubble">OK，到时候联系！</div></div>
-        </div>
-        <div class="chat-input-bar">
-            <input type="text" placeholder="输入消息..." value="好的，明天见！">
-            <button><i class="bi bi-send-fill"></i></button>
+        <div class="chat-msgs">
+            <div class="msg-row other"><div class="bubble">你好，请问 iPhone 14 Pro 还在吗？</div></div>
+            <div class="msg-row mine"><div class="bubble">在的，一直有人问但还没出 😄</div></div>
+            <div class="msg-row other"><div class="bubble">可以看看实物吗？我就在学校</div></div>
+            <div class="msg-row other"><div class="bubble">方便的话明天中午?</div></div>
+            <div class="msg-row mine"><div class="bubble">好的，明天中午12点图书馆见</div></div>
+            <div class="msg-row other"><div class="bubble">OK！到时候联系 👍</div></div>
         </div>
     </div>
-    <div class="bottom-nav">
-        <button class="nav-item" onclick="showPage('home')"><i class="bi bi-house-fill"></i><span>首页</span></button>
-        <button class="nav-item active" onclick="showPage('messages')">
-            <div class="nav-item-wrap"><i class="bi bi-chat-dots-fill"></i><span class="badge-nav">3</span></div>
-            <span>消息</span>
-        </button>
-        <button class="nav-item" onclick="showPage('publish')"><i class="bi bi-plus-circle-fill" style="font-size:28px;color:#0d6efd;"></i><span>发布</span></button>
-        <button class="nav-item" onclick="showPage('profile')"><i class="bi bi-person-fill"></i><span>我的</span></button>
-        <button class="nav-item" onclick="showPage('admin')"><i class="bi bi-shield-fill"></i><span>管理</span></button>
+    <div class="chat-input">
+        <input type="text" placeholder="输入消息..." value="好的，明天见！">
+        <button><i class="bi bi-send-fill"></i></button>
+    </div>
+    <div class="tabbar">
+        <button class="tabbar-item" onclick="switchMainPage('home')"><i class="bi bi-house-fill"></i><span>首页</span></button>
+        <button class="tabbar-item active" onclick="switchMainPage('messages')"><i class="bi bi-chat-dots-fill"></i><span>消息</span></button>
+        <button class="tabbar-item" onclick="switchMainPage('publish')"><i class="bi bi-plus-circle-fill" style="font-size:26px;color:var(--pink-dark);"></i><span>发布</span></button>
+        <button class="tabbar-item" onclick="switchMainPage('profile')"><i class="bi bi-person-fill"></i><span>我的</span></button>
+        <button class="tabbar-item" onclick="switchMainPage('admin')"><i class="bi bi-shield-fill"></i><span>管理</span></button>
     </div>
 </div>
 
 <!-- ============================================================ -->
-<!-- 发布商品页 -->
+<!-- 页面 5: 发布商品 -->
 <!-- ============================================================ -->
-<div class="phone" id="phone-publish" style="display:none;">
-    <div class="phone-header">
-        <span class="phone-time">9:41</span>
-        <div class="phone-notch"></div>
-        <span class="phone-battery"><i class="bi bi-wifi"></i> <i class="bi bi-battery-full"></i></span>
+<div class="phone hidden" id="phone-publish">
+    <div class="status-bar">
+        <span>9:41</span>
+        <span class="status-icons"><i class="bi bi-wifi"></i> <i class="bi bi-battery-full"></i></span>
+    </div>
+    <div class="nav-header">
+        <h1>📦 发布商品</h1>
     </div>
     <div class="page active" id="page-publish">
-        <div class="top-bar">
-            <h1>📦 发布商品</h1>
-            <button class="btn-outline" style="padding:6px 14px;font-size:12px;" onclick="showPage('home')">取消</button>
-        </div>
-        <div style="height:12px;"></div>
-        <div class="input-group">
+        <div class="form-group">
             <label>商品名称</label>
-            <input type="text" placeholder="例如：iPhone 14 Pro 256G" value="iPhone 14 Pro 暗紫色 256G">
+            <input type="text" placeholder="例如：二手教材、闲置手机...">
         </div>
-        <div class="input-group">
-            <label>商品分类</label>
+        <div class="form-group">
+            <label>分类</label>
             <select>
                 <option>手机数码</option><option>书籍教材</option><option>生活用品</option><option>服饰鞋包</option><option>其他</option>
             </select>
         </div>
-        <div class="input-group">
+        <div class="form-group">
             <label>价格（元）</label>
-            <input type="number" placeholder="请输入价格" value="6800">
+            <input type="number" placeholder="请输入价格">
         </div>
-        <div class="input-group">
+        <div class="form-group">
             <label>交易类型</label>
             <select><option>出售</option><option>求购</option></select>
         </div>
-        <div class="input-group">
+        <div class="form-group">
             <label>商品图片</label>
             <div style="display:flex;gap:8px;">
-                <div style="width:72px;height:72px;border-radius:10px;background:#f0f0f0;display:flex;align-items:center;justify-content:center;font-size:24px;color:#999;border:1.5px dashed #ddd;cursor:pointer;">+</div>
-                <div style="width:72px;height:72px;border-radius:10px;background:linear-gradient(135deg,#e3f2fd,#90caf9);display:flex;align-items:center;justify-content:center;font-size:28px;color:#0d6efd;">📱</div>
-                <div style="width:72px;height:72px;border-radius:10px;background:linear-gradient(135deg,#e3f2fd,#90caf9);display:flex;align-items:center;justify-content:center;font-size:28px;color:#0d6efd;">📦</div>
+                <div style="width:70px;height:70px;border-radius:10px;background:rgba(255,255,255,0.5);display:flex;align-items:center;justify-content:center;font-size:28px;color:#bbb;border:1.5px dashed rgba(255,255,255,0.8);cursor:pointer;">+</div>
             </div>
         </div>
-        <div class="input-group">
+        <div class="form-group">
             <label>商品描述</label>
-            <textarea placeholder="请详细描述商品成色、购买时间、配件等...">iPhone 14 Pro 256G 暗紫色，2024年1月购入，国行正品。一直戴壳贴膜使用，外观无划痕，电池健康度92%。配件齐全，送两个手机壳。</textarea>
+            <textarea placeholder="请描述商品成色、购买时间、配件等信息..."></textarea>
         </div>
-        <div class="input-group">
+        <div class="form-group">
             <label>联系方式</label>
-            <input type="text" placeholder="微信 / QQ / 手机号" value="wx: zhang123456">
+            <input type="text" placeholder="微信号 / QQ号（选填）">
         </div>
-        <button class="btn-primary" onclick="alert('发布成功！等待管理员审核')">📤 提交审核</button>
-        <div style="text-align:center;font-size:12px;color:#999;margin:8px 20px;">提交后由管理员审核，审核通过后上架展示</div>
+        <button class="btn-submit" onclick="alert('发布成功！等待管理员审核通过后即可上架')">📤 提交审核</button>
+        <div style="text-align:center;font-size:12px;color:#999;margin:4px 20px 20px;">提交后由管理员审核，通过后公开展示</div>
     </div>
-    <div class="bottom-nav">
-        <button class="nav-item" onclick="showPage('home')"><i class="bi bi-house-fill"></i><span>首页</span></button>
-        <button class="nav-item" onclick="showPage('messages')">
-            <div class="nav-item-wrap"><i class="bi bi-chat-dots-fill"></i><span class="badge-nav">3</span></div>
-            <span>消息</span>
-        </button>
-        <button class="nav-item active" onclick="showPage('publish')"><i class="bi bi-plus-circle-fill" style="font-size:28px;color:#0d6efd;"></i><span>发布</span></button>
-        <button class="nav-item" onclick="showPage('profile')"><i class="bi bi-person-fill"></i><span>我的</span></button>
-        <button class="nav-item" onclick="showPage('admin')"><i class="bi bi-shield-fill"></i><span>管理</span></button>
+    <div class="tabbar">
+        <button class="tabbar-item" onclick="switchMainPage('home')"><i class="bi bi-house-fill"></i><span>首页</span></button>
+        <button class="tabbar-item" onclick="switchMainPage('messages')"><i class="bi bi-chat-dots-fill"></i><span>消息</span></button>
+        <button class="tabbar-item active" onclick="switchMainPage('publish')"><i class="bi bi-plus-circle-fill" style="font-size:26px;color:var(--pink-dark);"></i><span>发布</span></button>
+        <button class="tabbar-item" onclick="switchMainPage('profile')"><i class="bi bi-person-fill"></i><span>我的</span></button>
+        <button class="tabbar-item" onclick="switchMainPage('admin')"><i class="bi bi-shield-fill"></i><span>管理</span></button>
     </div>
 </div>
 
 <!-- ============================================================ -->
-<!-- 个人中心页 -->
+<!-- 页面 6: 个人中心 -->
 <!-- ============================================================ -->
-<div class="phone" id="phone-profile" style="display:none;">
-    <div class="phone-header">
-        <span class="phone-time">9:41</span>
-        <div class="phone-notch"></div>
-        <span class="phone-battery"><i class="bi bi-wifi"></i> <i class="bi bi-battery-full"></i></span>
+<div class="phone hidden" id="phone-profile">
+    <div class="status-bar">
+        <span>9:41</span>
+        <span class="status-icons"><i class="bi bi-wifi"></i> <i class="bi bi-battery-full"></i></span>
     </div>
     <div class="page active" id="page-profile">
-        <div class="profile-header">
-            <div class="profile-avatar">张</div>
-            <h2>张同学</h2>
-            <p>学号：2023060101 · 计算机学院</p>
+        <div class="profile-top">
+            <div class="pfp">😎</div>
+            <h2>hevier</h2>
+            <div class="id">学号：2023060101 · 大数据学院</div>
             <div class="profile-stats">
-                <div><div class="num">12</div><div class="label">已卖出</div></div>
-                <div><div class="num">8</div><div class="label">已买入</div></div>
-                <div><div class="num">5.0</div><div class="label">综合评分</div></div>
+                <div><div class="num">7</div><div class="label">已卖出</div></div>
+                <div><div class="num">3</div><div class="label">已买入</div></div>
+                <div><div class="num">5.0</div><div class="label">评分</div></div>
             </div>
         </div>
-        <div class="credit-card-profile">
-            <div class="credit-icon-big">🌟</div>
-            <div class="credit-text">
-                <div class="credit-score">158</div>
-                <div style="font-size:15px;font-weight:600;">S级 · 信用极好</div>
-                <div style="font-size:12px;color:#999;">共 10 条评价 · 高于全校 95% 用户</div>
+        <div class="credit-card">
+            <div class="cc-icon">🌟</div>
+            <div>
+                <div class="cc-score">158</div>
+                <div class="cc-level">S级 · 信用极好</div>
+                <div class="cc-rank">共10条评价 · 高于全校95%用户</div>
             </div>
         </div>
-        <div style="margin:8px 16px;">
-            <div class="credit-list-item" onclick="alert('我的商品列表')">
-                <i class="bi bi-box-seam" style="font-size:20px;color:#0d6efd;"></i>
-                <span style="flex:1;font-size:14px;">我的商品</span>
-                <i class="bi bi-chevron-right" style="color:#ccc;"></i>
+        <div class="menu-list">
+            <div class="menu-item" onclick="alert('我的商品列表')">
+                <i class="bi bi-box-seam" style="color:var(--blue-dark);"></i> 我的商品 <span class="menu-badge">9件</span><i class="bi bi-chevron-right menu-arrow"></i>
             </div>
-            <div class="credit-list-item" onclick="showPage('evaluate')">
-                <i class="bi bi-star-fill" style="font-size:20px;color:#ffc107;"></i>
-                <span style="flex:1;font-size:14px;">我的评价</span>
-                <span style="font-size:12px;color:#999;">5条待评价</span>
-                <i class="bi bi-chevron-right" style="color:#ccc;"></i>
+            <div class="menu-item" onclick="switchMainPage('evaluate')">
+                <i class="bi bi-star-fill" style="color:#ffc107;"></i> 待评价 <span class="menu-badge">3笔</span><i class="bi bi-chevron-right menu-arrow"></i>
             </div>
-            <div class="credit-list-item" onclick="alert('收藏列表')">
-                <i class="bi bi-heart-fill" style="font-size:20px;color:#e74c3c;"></i>
-                <span style="flex:1;font-size:14px;">我的收藏</span>
-                <i class="bi bi-chevron-right" style="color:#ccc;"></i>
+            <div class="menu-item" onclick="alert('收藏列表')">
+                <i class="bi bi-heart-fill" style="color:var(--pink-dark);"></i> 我的收藏 <span class="menu-badge">5件</span><i class="bi bi-chevron-right menu-arrow"></i>
             </div>
-            <div class="credit-list-item" onclick="alert('设置页面')">
-                <i class="bi bi-gear-fill" style="font-size:20px;color:#666;"></i>
-                <span style="flex:1;font-size:14px;">设置</span>
-                <i class="bi bi-chevron-right" style="color:#ccc;"></i>
+            <div class="menu-item" onclick="alert('购买历史')">
+                <i class="bi bi-clock-history" style="color:#666;"></i> 购买记录<i class="bi bi-chevron-right menu-arrow"></i>
             </div>
-        </div>
-        <div class="section-title">📊 交易统计</div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:0 16px 16px;">
-            <div style="background:#f5f5f5;border-radius:10px;padding:12px;text-align:center;">
-                <div style="font-size:12px;color:#999;">本月卖出</div>
-                <div style="font-size:20px;font-weight:700;color:#0d6efd;">3 单</div>
+            <div class="menu-item" onclick="alert('设置页面')">
+                <i class="bi bi-gear-fill" style="color:#999;"></i> 设置<i class="bi bi-chevron-right menu-arrow"></i>
             </div>
-            <div style="background:#f5f5f5;border-radius:10px;padding:12px;text-align:center;">
-                <div style="font-size:12px;color:#999;">本月买入</div>
-                <div style="font-size:20px;font-weight:700;color:#198754;">2 单</div>
+            <div class="menu-item" onclick="doLogout()">
+                <i class="bi bi-box-arrow-right" style="color:#ccc;"></i> 退出登录<i class="bi bi-chevron-right menu-arrow"></i>
             </div>
         </div>
     </div>
-    <div class="bottom-nav">
-        <button class="nav-item" onclick="showPage('home')"><i class="bi bi-house-fill"></i><span>首页</span></button>
-        <button class="nav-item" onclick="showPage('messages')">
-            <div class="nav-item-wrap"><i class="bi bi-chat-dots-fill"></i><span class="badge-nav">3</span></div>
-            <span>消息</span>
-        </button>
-        <button class="nav-item" onclick="showPage('publish')"><i class="bi bi-plus-circle-fill" style="font-size:28px;color:#0d6efd;"></i><span>发布</span></button>
-        <button class="nav-item active" onclick="showPage('profile')"><i class="bi bi-person-fill"></i><span>我的</span></button>
-        <button class="nav-item" onclick="showPage('admin')"><i class="bi bi-shield-fill"></i><span>管理</span></button>
+    <div class="tabbar">
+        <button class="tabbar-item" onclick="switchMainPage('home')"><i class="bi bi-house-fill"></i><span>首页</span></button>
+        <button class="tabbar-item" onclick="switchMainPage('messages')"><i class="bi bi-chat-dots-fill"></i><span>消息</span></button>
+        <button class="tabbar-item" onclick="switchMainPage('publish')"><i class="bi bi-plus-circle-fill" style="font-size:26px;color:var(--pink-dark);"></i><span>发布</span></button>
+        <button class="tabbar-item active" onclick="switchMainPage('profile')"><i class="bi bi-person-fill"></i><span>我的</span></button>
+        <button class="tabbar-item" onclick="switchMainPage('admin')"><i class="bi bi-shield-fill"></i><span>管理</span></button>
     </div>
 </div>
 
 <!-- ============================================================ -->
-<!-- 评价页 -->
+<!-- 页面 7: 评价 -->
 <!-- ============================================================ -->
-<div class="phone" id="phone-evaluate" style="display:none;">
-    <div class="phone-header">
-        <span class="phone-time">9:41</span>
-        <div class="phone-notch"></div>
-        <span class="phone-battery"><i class="bi bi-wifi"></i> <i class="bi bi-battery-full"></i></span>
+<div class="phone hidden" id="phone-evaluate">
+    <div class="status-bar">
+        <span>9:41</span>
+        <span class="status-icons"><i class="bi bi-wifi"></i> <i class="bi bi-battery-full"></i></span>
+    </div>
+    <div class="nav-header">
+        <button class="back-btn" onclick="switchMainPage('profile')"><i class="bi bi-chevron-left"></i></button>
+        <h1>⭐ 评价交易</h1>
     </div>
     <div class="page active" id="page-evaluate">
-        <div class="top-bar">
-            <h1>⭐ 信用评价</h1>
-            <button class="btn-outline" style="padding:6px 14px;font-size:12px;" onclick="showPage('profile')">关闭</button>
+        <div class="eval-card">
+            <div class="eval-pic">📱</div>
+            <div class="eval-info">
+                <h4>iPhone 14 Pro 256G</h4>
+                <div class="eval-user">卖家：张同学 · 7月14日</div>
+            </div>
         </div>
-        <div style="padding:20px;">
-            <div style="display:flex;gap:12px;padding:14px;background:#f9f9f9;border-radius:12px;margin-bottom:20px;">
-                <div style="width:50px;height:50px;border-radius:8px;background:linear-gradient(135deg,#e3f2fd,#90caf9);display:flex;align-items:center;justify-content:center;font-size:22px;">📱</div>
-                <div>
-                    <div style="font-weight:600;font-size:14px;">iPhone 14 Pro 暗紫色 256G</div>
-                    <div style="font-size:12px;color:#999;">卖家：张同学 · 交易于 2026-07-14</div>
-                </div>
+        <div class="form-group">
+            <label>评分</label>
+            <div class="stars" id="starRating">
+                <span onclick="setStars(1)">★</span>
+                <span onclick="setStars(2)">★</span>
+                <span onclick="setStars(3)">★</span>
+                <span onclick="setStars(4)">★</span>
+                <span onclick="setStars(5)">★</span>
             </div>
-            <div class="input-group">
-                <label>你的评分</label>
-                <div style="display:flex;gap:8px;font-size:32px;">
-                    <span style="cursor:pointer;color:#ffc107;">★</span>
-                    <span style="cursor:pointer;color:#ffc107;">★</span>
-                    <span style="cursor:pointer;color:#ffc107;">★</span>
-                    <span style="cursor:pointer;color:#ffc107;">★</span>
-                    <span style="cursor:pointer;color:#e0e0e0;">★</span>
-                </div>
-            </div>
-            <div class="input-group">
-                <label>评价内容</label>
-                <textarea placeholder="分享你的交易体验..." style="min-height:100px;">手机很新，和描述完全一致，卖家也很耐心，推荐！</textarea>
-            </div>
-            <div class="input-group">
-                <label>交易确认码</label>
-                <input type="text" placeholder="请输入卖家提供的确认码" value="8A3F">
-                <div style="font-size:12px;color:#999;margin-top:4px;">💡 交易完成后向卖家索要确认码</div>
-            </div>
-            <button class="btn-primary" onclick="alert('评价成功！卖家信用分已更新')">📝 提交评价</button>
         </div>
+        <div class="form-group">
+            <label>评价内容</label>
+            <textarea placeholder="分享你的交易体验...">手机很新，和描述完全一致，卖家也很耐心！</textarea>
+        </div>
+        <div class="form-group">
+            <label>交易确认码</label>
+            <input type="text" placeholder="卖家提供的4位确认码" value="8A3F">
+        </div>
+        <button class="btn-submit" onclick="alert('评价成功！卖家信用分已更新')">📝 提交评价</button>
     </div>
-    <div class="bottom-nav">
-        <button class="nav-item" onclick="showPage('home')"><i class="bi bi-house-fill"></i><span>首页</span></button>
-        <button class="nav-item" onclick="showPage('messages')">
-            <div class="nav-item-wrap"><i class="bi bi-chat-dots-fill"></i><span class="badge-nav">3</span></div>
-            <span>消息</span>
-        </button>
-        <button class="nav-item" onclick="showPage('publish')"><i class="bi bi-plus-circle-fill" style="font-size:28px;color:#0d6efd;"></i><span>发布</span></button>
-        <button class="nav-item active" onclick="showPage('profile')"><i class="bi bi-person-fill"></i><span>我的</span></button>
-        <button class="nav-item" onclick="showPage('admin')"><i class="bi bi-shield-fill"></i><span>管理</span></button>
+    <div class="tabbar">
+        <button class="tabbar-item" onclick="switchMainPage('home')"><i class="bi bi-house-fill"></i><span>首页</span></button>
+        <button class="tabbar-item" onclick="switchMainPage('messages')"><i class="bi bi-chat-dots-fill"></i><span>消息</span></button>
+        <button class="tabbar-item" onclick="switchMainPage('publish')"><i class="bi bi-plus-circle-fill" style="font-size:26px;color:var(--pink-dark);"></i><span>发布</span></button>
+        <button class="tabbar-item active" onclick="switchMainPage('profile')"><i class="bi bi-person-fill"></i><span>我的</span></button>
+        <button class="tabbar-item" onclick="switchMainPage('admin')"><i class="bi bi-shield-fill"></i><span>管理</span></button>
     </div>
 </div>
 
 <!-- ============================================================ -->
-<!-- 管理后台页 -->
+<!-- 页面 8: 管理后台 -->
 <!-- ============================================================ -->
-<div class="phone" id="phone-admin" style="display:none;">
-    <div class="phone-header">
-        <span class="phone-time">9:41</span>
-        <div class="phone-notch"></div>
-        <span class="phone-battery"><i class="bi bi-wifi"></i> <i class="bi bi-battery-full"></i></span>
+<div class="phone hidden" id="phone-admin">
+    <div class="status-bar">
+        <span>9:41</span>
+        <span class="status-icons"><i class="bi bi-wifi"></i> <i class="bi bi-battery-full"></i></span>
     </div>
     <div class="page active" id="page-admin">
-        <div class="admin-header">
-            <h2><i class="bi bi-shield-fill"></i> 管理后台</h2>
-            <button class="btn-outline" style="padding:4px 12px;font-size:11px;color:#fff;border-color:rgba(255,255,255,0.3);" onclick="showPage('home')">退出</button>
+        <div class="admin-header-bar">
+            <h2>⚙️ 管理后台</h2>
+            <span style="font-size:13px;">admin</span>
         </div>
         <div class="admin-stats">
-            <div class="admin-stat-card"><h3>128</h3><p>📦 商品总数</p></div>
-            <div class="admin-stat-card"><h3 style="color:#fd7e14;">8</h3><p>⏳ 待审核</p></div>
-            <div class="admin-stat-card"><h3>256</h3><p>👥 注册用户</p></div>
-            <div class="admin-stat-card"><h3 style="color:#198754;">86</h3><p>📊 今日访问</p></div>
+            <div class="admin-stat"><h3>10</h3><p>注册用户</p></div>
+            <div class="admin-stat"><h3>19</h3><p>商品总数</p></div>
+            <div class="admin-stat"><h3>11</h3><p>已售出</p></div>
+            <div class="admin-stat"><h3>3</h3><p>待审核</p></div>
         </div>
         <div class="admin-tabs">
-            <button class="admin-tab active" onclick="switchAdminTab(this, 'admin-goods')">商品管理</button>
-            <button class="admin-tab" onclick="switchAdminTab(this, 'admin-users')">用户管理</button>
-            <button class="admin-tab" onclick="switchAdminTab(this, 'admin-feedback')">反馈管理</button>
+            <button class="admin-tab active">待审核</button>
+            <button class="admin-tab">全部商品</button>
+            <button class="admin-tab">用户管理</button>
+            <button class="admin-tab">反馈</button>
         </div>
-        <!-- 商品管理 -->
-        <div class="admin-content" id="admin-goods">
-            <div class="admin-table-wrap">
-                <table class="admin-table">
-                    <thead><tr><th>ID</th><th>图片</th><th>名称</th><th>卖家</th><th>价格</th><th>状态</th><th>操作</th></tr></thead>
-                    <tbody>
-                        <tr><td>1</td><td>📱</td><td>iPhone 14 Pro</td><td>张同学</td><td>¥6,800</td><td><span class="status-tag orange">待审核</span></td><td><button class="btn-outline" style="padding:2px 8px;font-size:11px;" onclick="alert('已通过审核')">通过</button> <button class="btn-outline" style="padding:2px 8px;font-size:11px;color:#dc3545;border-color:#dc3545;" onclick="alert('已驳回')">驳回</button></td></tr>
-                        <tr><td>2</td><td>📚</td><td>计算机组成原理</td><td>李同学</td><td>¥30</td><td><span class="status-tag orange">待审核</span></td><td><button class="btn-outline" style="padding:2px 8px;font-size:11px;" onclick="alert('已通过审核')">通过</button> <button class="btn-outline" style="padding:2px 8px;font-size:11px;color:#dc3545;border-color:#dc3545;" onclick="alert('已驳回')">驳回</button></td></tr>
-                        <tr><td>3</td><td>🎧</td><td>AirPods Pro 2</td><td>王同学</td><td>¥1,200</td><td><span class="status-tag green">已上架</span></td><td><button class="btn-outline" style="padding:2px 8px;font-size:11px;color:#dc3545;border-color:#dc3545;" onclick="alert('已下架')">下架</button></td></tr>
-                        <tr><td>4</td><td>🖥️</td><td>戴尔 27寸 显示器</td><td>陈同学</td><td>¥1,500</td><td><span class="status-tag green">已上架</span></td><td><button class="btn-outline" style="padding:2px 8px;font-size:11px;color:#dc3545;border-color:#dc3545;" onclick="alert('已下架')">下架</button></td></tr>
-                        <tr><td>5</td><td>🎮</td><td>PS5 光驱版</td><td>赵同学</td><td>¥2,800</td><td><span class="status-tag red">已驳回</span></td><td><span style="font-size:12px;color:#999;">信息不完整</span></td></tr>
-                    </tbody>
-                </table>
+        <div style="padding-top:8px;">
+            <div class="admin-item">
+                <div>
+                    <strong>充电宝</strong>
+                    <div style="font-size:12px;color:#999;">svv2727 · ¥56.00</div>
+                </div>
+                <div>
+                    <button class="btn-submit" style="width:auto;padding:6px 14px;font-size:12px;margin:0 4px;" onclick="alert('已通过审核')">通过</button>
+                    <button style="background:#fff;color:var(--pink-dark);border:1px solid var(--pink-dark);padding:6px 14px;border-radius:8px;font-size:12px;cursor:pointer;" onclick="alert('已驳回')">驳回</button>
+                </div>
             </div>
-            <div class="page-nav">
-                <button class="btn-sm">上一页</button>
-                <span style="font-size:13px;color:#999;">共 3 页</span>
-                <button class="btn-sm">下一页</button>
+            <div class="admin-item">
+                <div>
+                    <strong>陶瓷杯A</strong>
+                    <div style="font-size:12px;color:#999;">lin · ¥10.00</div>
+                </div>
+                <div>
+                    <span class="status-tag green">已通过</span>
+                </div>
             </div>
-        </div>
-        <!-- 用户管理 -->
-        <div class="admin-content" id="admin-users" style="display:none;">
-            <div class="admin-table-wrap">
-                <table class="admin-table">
-                    <thead><tr><th>用户名</th><th>昵称</th><th>信用等级</th><th>信用分</th><th>商品数</th><th>状态</th><th>操作</th></tr></thead>
-                    <tbody>
-                        <tr><td>zhang</td><td>张同学</td><td><span class="credit-badge S">🌟 S</span></td><td>158</td><td>5</td><td><span class="status-tag green">正常</span></td><td><button class="btn-outline" style="padding:2px 8px;font-size:11px;color:#dc3545;border-color:#dc3545;" onclick="alert('已禁言该用户')">禁言</button></td></tr>
-                        <tr><td>li</td><td>李同学</td><td><span class="credit-badge A">✅ A</span></td><td>132</td><td>3</td><td><span class="status-tag green">正常</span></td><td><button class="btn-outline" style="padding:2px 8px;font-size:11px;color:#dc3545;border-color:#dc3545;" onclick="alert('已禁言该用户')">禁言</button></td></tr>
-                        <tr><td>wang</td><td>王同学</td><td><span class="credit-badge C">⚠️ C</span></td><td>55</td><td>2</td><td><span class="status-tag green">正常</span></td><td><button class="btn-outline" style="padding:2px 8px;font-size:11px;color:#dc3545;border-color:#dc3545;" onclick="alert('已禁言该用户')">禁言</button></td></tr>
-                        <tr><td>chen</td><td>陈同学</td><td><span class="credit-badge B">👍 B</span></td><td>96</td><td>4</td><td><span class="status-tag green">正常</span></td><td><button class="btn-outline" style="padding:2px 8px;font-size:11px;color:#dc3545;border-color:#dc3545;" onclick="alert('已禁言该用户')">禁言</button></td></tr>
-                        <tr><td>zhao</td><td>赵同学</td><td><span class="credit-badge D">❌ D</span></td><td>32</td><td>1</td><td><span class="status-tag orange">已禁言</span></td><td><button class="btn-outline" style="padding:2px 8px;font-size:11px;" onclick="alert('已解除禁言')">解禁</button></td></tr>
-                    </tbody>
-                </table>
-            </div>
-            <div class="page-nav">
-                <button class="btn-sm">上一页</button>
-                <span style="font-size:13px;color:#999;">共 1 页</span>
-                <button class="btn-sm">下一页</button>
-            </div>
-        </div>
-        <!-- 反馈管理 -->
-        <div class="admin-content" id="admin-feedback" style="display:none;">
-            <div class="admin-table-wrap">
-                <table class="admin-table">
-                    <thead><tr><th>ID</th><th>用户</th><th>标题</th><th>内容</th><th>状态</th><th>操作</th></tr></thead>
-                    <tbody>
-                        <tr><td>1</td><td>张同学</td><td>搜索功能建议</td><td>希望能按价格区间筛选...</td><td><span class="status-tag orange">待回复</span></td><td><button class="btn-outline" style="padding:2px 8px;font-size:11px;" onclick="alert('回复窗口')">回复</button></td></tr>
-                        <tr><td>2</td><td>李同学</td><td>交易纠纷</td><td>我买了东西卖家一直不发货...</td><td><span class="status-tag orange">待回复</span></td><td><button class="btn-outline" style="padding:2px 8px;font-size:11px;" onclick="alert('回复窗口')">回复</button></td></tr>
-                        <tr><td>3</td><td>王同学</td><td>界面反馈</td><td>建议增加暗黑模式...</td><td><span class="status-tag green">已回复</span></td><td><span style="font-size:12px;color:#999;">已处理</span></td></tr>
-                        <tr><td>4</td><td>陈同学</td><td>账号问题</td><td>忘记密码了怎么找回？</td><td><span class="status-tag green">已回复</span></td><td><span style="font-size:12px;color:#999;">已处理</span></td></tr>
-                    </tbody>
-                </table>
-            </div>
-            <div class="page-nav">
-                <button class="btn-sm">上一页</button>
-                <span style="font-size:13px;color:#999;">共 1 页</span>
-                <button class="btn-sm">下一页</button>
+            <div class="admin-item">
+                <div>
+                    <strong>吃剩的麻辣香锅</strong>
+                    <div style="font-size:12px;color:#999;">AAA · ¥5.00</div>
+                </div>
+                <div>
+                    <span class="status-tag orange">待审核</span>
+                </div>
             </div>
         </div>
     </div>
-    <div class="bottom-nav">
-        <button class="nav-item" onclick="showPage('home')"><i class="bi bi-house-fill"></i><span>首页</span></button>
-        <button class="nav-item" onclick="showPage('messages')">
-            <div class="nav-item-wrap"><i class="bi bi-chat-dots-fill"></i><span class="badge-nav">3</span></div>
-            <span>消息</span>
-        </button>
-        <button class="nav-item" onclick="showPage('publish')"><i class="bi bi-plus-circle-fill" style="font-size:28px;color:#0d6efd;"></i><span>发布</span></button>
-        <button class="nav-item" onclick="showPage('profile')"><i class="bi bi-person-fill"></i><span>我的</span></button>
-        <button class="nav-item active" onclick="showPage('admin')"><i class="bi bi-shield-fill"></i><span>管理</span></button>
+    <div class="tabbar">
+        <button class="tabbar-item" onclick="switchMainPage('home')"><i class="bi bi-house-fill"></i><span>首页</span></button>
+        <button class="tabbar-item" onclick="switchMainPage('messages')"><i class="bi bi-chat-dots-fill"></i><span>消息</span></button>
+        <button class="tabbar-item" onclick="switchMainPage('publish')"><i class="bi bi-plus-circle-fill" style="font-size:26px;color:var(--pink-dark);"></i><span>发布</span></button>
+        <button class="tabbar-item" onclick="switchMainPage('profile')"><i class="bi bi-person-fill"></i><span>我的</span></button>
+        <button class="tabbar-item active" onclick="switchMainPage('admin')"><i class="bi bi-shield-fill"></i><span>管理</span></button>
     </div>
 </div>
 
-<!-- ============================================================ -->
-<!-- JavaScript - 页面切换逻辑 -->
-<!-- ============================================================ -->
 <script>
-// 当前页面状态
-let currentPhone = 'phone-home';
-let currentPage = 'home';
+// ========== 商品数据（基于线上真实数据） ==========
+const products = [
+    {id:1, name:'橹穆跨代卡包', price:29, seller:'xjycxk1998', sellerNick:'果果', credit:'B', type:'sell', sold:true, category:'其他', emoji:'🃏', desc:'橹穆周边跨代卡包，收藏品，仅拆未用。'},
+    {id:2, name:'充电宝', price:56, seller:'svv2727', sellerNick:'有雾', credit:'B', type:'sell', sold:false, category:'手机数码', emoji:'🔋', desc:'20000mAh大容量充电宝，支持快充，八成新。'},
+    {id:3, name:'物流管理信息系统第15版书', price:10, seller:'svv2727', sellerNick:'有雾', credit:'B', type:'sell', sold:false, category:'书籍教材', emoji:'📖', desc:'教材，有少量笔记，不影响使用。'},
+    {id:5, name:'吃剩的麻辣香锅', price:5, seller:'AAAE', sellerNick:'AAA', credit:'B', type:'sell', sold:false, category:'其他', emoji:'🍲', desc:'吃剩的麻辣香锅，还剩半锅。'},
+    {id:6, name:'一只鹅腿（蔬果汁腌制）', price:16, seller:'AAAE', sellerNick:'AAA', credit:'B', type:'sell', sold:false, category:'生活用品', emoji:'🍗', desc:'新鲜鹅腿，蔬果汁腌制，口感独特。'},
+    {id:7, name:'考研资料电子版', price:5, seller:'hevi1245689', sellerNick:'hevier', credit:'B', type:'sell', sold:true, category:'书籍教材', emoji:'📚', desc:'考研政治+英语+数学全套电子资料，百度网盘分享。'},
+    {id:10, name:'星某克杯子 赠杯套', price:10, seller:'AAAE', sellerNick:'AAA', credit:'B', type:'sell', sold:true, category:'生活用品', emoji:'☕', desc:'星巴克联名杯，带杯套，轻微使用痕迹。'},
+    {id:11, name:'陶瓷杯A', price:10, seller:'lin', sellerNick:'李', credit:'B', type:'sell', sold:false, category:'生活用品', emoji:'🥤', desc:'简约白色陶瓷杯，300ml，全新未拆。'},
+    {id:13, name:'1', price:1, seller:'hevi1245689', sellerNick:'hevier', credit:'B', type:'sell', sold:true, category:'其他', emoji:'📦', desc:'测试商品'},
+    {id:15, name:'孤品 星巴克杯子 送杯套', price:20, seller:'AAAE', sellerNick:'AAA', credit:'B', type:'sell', sold:false, category:'生活用品', emoji:'☕', desc:'星巴克限量孤品杯，附赠杯套，收藏价值高。'},
+    {id:16, name:'我的大脑切片', price:888, seller:'hevi1245689', sellerNick:'hevier', credit:'B', type:'sell', sold:true, category:'其他', emoji:'🧠', desc:'测试商品系列'},
+];
 
-function showPage(pageName) {
-    // 所有电话都隐藏
-    document.querySelectorAll('.phone').forEach(p => p.style.display = 'none');
-    // 显示目标电话
-    const phoneId = 'phone-' + pageName;
-    const targetPhone = document.getElementById(phoneId);
-    if (targetPhone) {
-        targetPhone.style.display = 'block';
-        currentPhone = phoneId;
-        currentPage = pageName;
-        // 滚动到顶部
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+const buyProducts = [
+    {id:100, name:'【求购】Python编程 第3版', price:35, seller:'testbuyer', sellerNick:'测试买家', credit:'B', type:'buy', emoji:'🐍', desc:'求购Python编程从入门到实践第3版，要求九成新以上。'},
+    {id:101, name:'【求购】二手显示器 24寸', price:500, seller:'lin', sellerNick:'李', credit:'B', type:'buy', emoji:'🖥️', desc:'求购24寸以上显示器，IPS面板优先，1080P即可。'},
+];
+
+// ========== 页面切换逻辑 ==========
+function switchMainPage(page) {
+    const phones = ['home','detail','messages','chat','publish','profile','evaluate','admin'];
+    phones.forEach(p => {
+        const el = document.getElementById('phone-' + p);
+        if (el) el.classList.add('hidden');
+    });
+    
+    const target = document.getElementById('phone-' + page);
+    if (target) target.classList.remove('hidden');
+    
+    // 更新所有 tabbar active 状态
+    document.querySelectorAll('.tabbar-item').forEach(item => {
+        item.classList.remove('active');
+    });
+    
+    if (page === 'home') renderProducts('sell');
+}
+
+function showPage(page) {
+    switchMainPage(page);
+}
+
+function backToHome() {
+    switchMainPage('home');
+}
+
+// ========== 登录/登出 ==========
+function doLogin() {
+    document.getElementById('phone-login').classList.add('hidden');
+    document.getElementById('phone-home').classList.remove('hidden');
+    renderProducts('sell');
+}
+
+function doLogout() {
+    document.querySelectorAll('.phone').forEach(p => p.classList.add('hidden'));
+    document.getElementById('phone-login').classList.remove('hidden');
+}
+
+// ========== 商品列表渲染 ==========
+function renderProducts(tab) {
+    const container = document.getElementById('productList');
+    let list = [];
+    
+    if (tab === 'sell') {
+        list = products.filter(p => !p.sold);
+    } else if (tab === 'buy') {
+        list = buyProducts;
+    } else {
+        list = products.filter(p => p.sold);
     }
+    
+    if (list.length === 0) {
+        container.innerHTML = '<div class="empty-state"><i class="bi bi-inbox"></i><p>暂无商品</p></div>';
+        return;
+    }
+    
+    container.innerHTML = list.map(p => {
+        const badgeClass = p.type === 'sell' ? (p.sold ? 'sold' : 'sell') : 'buy';
+        const badgeText = p.type === 'sell' ? (p.sold ? '已售' : '出售') : '求购';
+        return `
+        <div class="product-card" onclick="openDetail(${p.id})">
+            <span class="type-badge ${badgeClass}">${badgeText}</span>
+            <div class="card-pic">${p.emoji || '📦'}</div>
+            <div class="card-info">
+                <div class="card-name">${p.name}</div>
+                <div class="card-price">¥${p.price.toFixed(2)}</div>
+                <div class="card-meta">
+                    <span>${p.sellerNick}</span>
+                    <span class="credit-badge credit-${p.credit}">👍 ${p.credit}级</span>
+                </div>
+            </div>
+        </div>`;
+    }).join('');
 }
 
-function goHome() {
-    // 滚动到顶部显示所有电话预览
-    document.querySelectorAll('.phone').forEach(p => p.style.display = '');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-}
-
-// 管理后台标签切换
-function switchAdminTab(btn, tabId) {
-    // 取消所有标签高亮
-    btn.parentElement.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
+function switchTab(btn, tab) {
+    document.querySelectorAll('.type-tab').forEach(t => t.classList.remove('active'));
     btn.classList.add('active');
-    // 显示对应内容
-    ['admin-goods', 'admin-users', 'admin-feedback'].forEach(id => {
-        document.getElementById(id).style.display = (id === tabId) ? '' : 'none';
+    renderProducts(tab);
+}
+
+function filterCategory(btn) {
+    document.querySelectorAll('.category-tab').forEach(t => t.classList.remove('active'));
+    btn.classList.add('active');
+}
+
+// ========== 商品详情 ==========
+function openDetail(id) {
+    const allProducts = [...products, ...buyProducts];
+    const p = allProducts.find(x => x.id === id);
+    if (!p) return;
+    
+    document.getElementById('detailPic').textContent = p.emoji || '📦';
+    document.getElementById('detailName').textContent = p.name;
+    document.getElementById('detailPrice').textContent = '¥' + p.price.toFixed(2);
+    document.getElementById('detailType').textContent = p.type === 'buy' ? '求购' : '出售';
+    document.getElementById('detailDesc').textContent = p.desc || '暂无描述';
+    document.getElementById('detailSeller').textContent = p.sellerNick;
+    document.getElementById('detailSellerAvatar').textContent = p.sellerNick.charAt(0);
+    document.getElementById('detailCredit').textContent = '👍 ' + p.credit + '级';
+    document.getElementById('detailCredit').className = 'credit-badge credit-' + p.credit;
+    
+    switchMainPage('detail');
+}
+
+// ========== 评价星级 ==========
+function setStars(n) {
+    const stars = document.getElementById('starRating').querySelectorAll('span');
+    stars.forEach((s, i) => {
+        s.classList.toggle('active', i < n);
     });
 }
+
+// ========== 初始化 ==========
+setStars(4);
 </script>
+
+</div>
 </body>
 </html>

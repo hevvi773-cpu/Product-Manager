@@ -1,0 +1,852 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8"><title>校园二手交易平台 PRD</title>
+<style>
+  body{font-family:'Segoe UI','Microsoft YaHei',sans-serif;max-width:920px;margin:40px auto;padding:20px;color:#222;line-height:1.85;font-size:14px;}
+  h1{font-size:24px;border-bottom:3px solid #0d6efd;padding-bottom:8px;margin-top:50px;}
+  h2{font-size:20px;border-bottom:2px solid #90caf9;padding-bottom:6px;margin-top:40px;color:#0d6efd;}
+  h3{font-size:17px;color:#1565c0;margin-top:30px;}
+  h4{font-size:15px;color:#333;}
+  p{margin:8px 0;}
+  table{width:100%;border-collapse:collapse;margin:16px 0;font-size:13px;page-break-inside:avoid;}
+  th{background:#e3f2fd;color:#0d6efd;padding:10px 12px;border:1px solid #bbb;text-align:left;font-weight:600;font-size:13px;}
+  td{padding:9px 12px;border:1px solid #ddd;}
+  tr:nth-child(even){background:#f8fbff;}
+  .flow{background:#f0f7ff;border:2px solid #90caf9;border-radius:10px;padding:16px 20px;font-family:'Courier New','SimHei',monospace;font-size:11px;white-space:pre;overflow-x:auto;line-height:1.35;margin:16px 0;page-break-inside:avoid;}
+  ul,ol{padding-left:24px;}li{margin:4px 0;}
+  @page{size:A4;margin:20mm;}
+  .cover{text-align:center;padding:60px 0 30px;border-bottom:3px solid #0d6efd;margin-bottom:30px;}
+  .cover h1{font-size:30px;border:none;margin:20px 0 10px;}
+  .cover .sub{font-size:18px;color:#0d6efd;margin:0;}
+  .cover .meta{color:#666;font-size:13px;margin:4px 0;}
+  @media print{body{max-width:none;}}
+</style>
+</head>
+<body>
+<div class="cover">
+<h1>校园二手交易平台</h1>
+<p class="sub">Product Requirements Document</p>
+<p class="meta">版本：V1.0 | 状态：已上线部署，小范围调试中 | 日期：2026-07-25</p>
+<p class="meta">线上地址：http://106.53.27.244 | 代码仓库：github.com/hevvi773-cpu/Product-Manager</p>
+</div>
+<p>校园二手交易平台 PRD</p>
+<p>版本：V1.0</p>
+<p>状态：已上线部署，小范围调试中，尚未正式交付使用</p>
+<p>关联线上地址：http://106.53.27.244</p>
+<p>代码仓库：https://github.com/hevvi773-cpu/Product-Manager</p>
+<p>文档日期：2026-07-25</p>
+<h2>Part 1：文档概述与项目背景</h2>
+<h3>1.1 文档说明</h3>
+<p>本文档为「校园二手交易平台」的产品需求文档，覆盖平台所有已上线功能模块及核心业务规则。文档面向产品、开发、测试及运营人员，用于统一对产品功能边界、业务流程和信用体系的理解。</p>
+<p>文档所描述的功能均已开发完成并部署至线上环境，当前处于小范围调试阶段。本文档同时作为后续迭代优化的基线参考。</p>
+<h3>1.2 项目背景</h3>
+<h3>1.2.1 为什么选择校园场景？</h3>
+<p>校园是二手交易天然适配的半封闭场景。西南大学拥有五万余名在校同学，日常学习生活中产生大量闲置物品流转需求，具体体现在三个方面：</p>
+<p>第一，信任基础更深厚。用户均为同校同学，身份可追溯，买卖双方天然具备比全开放平台更高的信任起点。</p>
+<p>第二，交易成本更低。平台不需要物流体系支撑，双方可直接约定校园内地点面对面交接，比如宿舍楼下、食堂门口或教学楼前。</p>
+<p>第三，需求集中且高频。开学季催生教材和生活用品的采购需求，毕业季出现大量清仓甩卖，期末季则有复习资料和笔记的密集流转，这些节点均形成明确的交易波峰。</p>
+<p>这些特点决定了校园二手交易不需要照搬闲鱼、转转等全开放平台的复杂模式，而是可以用更轻量、更高效的方式满足核心需求。</p>
+<h3>1.2.2 核心判断：身份校验是最大效率杠杆</h3>
+<p>在校园场景中，做好用户一定是本校在校学生这一身份校验，是所有信任机制的基础。一旦发生交易纠纷或违规行为，平台可直接向学校相关部门上报，追溯到具体责任人。这种真实身份加可追责的闭环，使得平台不需要在虚假账号防控、复杂物流追踪、高强度信用累积等环节投入过大精力，就能获得比全开放平台更可靠的交易环境。</p>
+<p>因此，本平台的产品策略是先做优先级最高的核心功能，用身份校验替代泛化信用体系，不盲目堆砌功能。</p>
+<h3>1.3 产品定位</h3>
+<p>面向西南大学在校学生的校园内二手物品交易平台，支持出售与求购两类需求，提供从信息发布、浏览发现、线下交易到信用积累的完整闭环。</p>
+<p>平台当前定位为半封闭社区型交易工具，只有本校学生可注册使用，交易全部在线下完成，平台仅提供信息撮合、交易状态记录和信用背书。未来在模式验证成熟后，可扩展至同小区、同村等同样具备半封闭属性的场景。</p>
+<h2>Part 2：项目目标与产品范围</h2>
+<h3>2.1 项目目标</h3>
+<table>
+<thead><tr><th>序号</th><th>目标</th><th>说明</th></tr></thead>
+<tbody>
+<tr><td>目标一</td><td>跑通交易最小闭环</td><td>确保用户从注册登录、发布商品、浏览发现、查看详情、线下交易到标记售出，全流程顺畅无阻，不存在断裂环节</td></tr>
+<tr><td>目标二</td><td>建立基于真实学籍的身份信任体系</td><td>用学号验证确保用户均为本校在校学生，再用信用等级约束买卖双方的行为表现，降低交易摩擦</td></tr>
+<tr><td>目标三</td><td>为平台运营方提供轻量高效的管理工具</td><td>支撑商品内容审核、用户违规处置和意见反馈处理，保障平台健康运转，不需要额外投入大量人力</td></tr>
+</tbody></table>
+<h3>2.2 产品范围</h3>
+<p>本次 PRD 覆盖校园二手交易平台全部已上线功能，面向西南大学校园场景。</p>
+<p>包含内容：</p>
+<table>
+<thead><tr><th>序号</th><th>功能模块</th><th>说明</th></tr></thead>
+<tbody>
+<tr><td>1</td><td>学生注册登录</td><td>含学号格式校验</td></tr>
+<tr><td>2</td><td>商品发布</td><td>支持出售和求购两种类型，可上传描述图片和联系方式图片</td></tr>
+<tr><td>3</td><td>商品列表浏览</td><td>支持关键词搜索和类型筛选</td></tr>
+<tr><td>4</td><td>商品详情</td><td>展示价格、商品描述和联系方式</td></tr>
+<tr><td>5</td><td>求购锁定</td><td>买家点击求购后商品锁定十五分钟</td></tr>
+<tr><td>6</td><td>售出操作</td><td>卖家标记售出，记录售出时间，锁定者自动成为买家</td></tr>
+<tr><td>7</td><td>信用评价体系</td><td>买卖互评加五级信用等级</td></tr>
+<tr><td>8</td><td>管理后台商品管理</td><td>内容风控与违规处置</td></tr>
+<tr><td>9</td><td>管理后台用户管理</td><td>信用重置与异常处理</td></tr>
+<tr><td>10</td><td>个人中心</td><td>交易统计、信用卡片与可视化图表</td></tr>
+<tr><td>11</td><td>站内私信</td><td>接收系统通知与联系信息</td></tr>
+<tr><td>12</td><td>意见反馈</td><td>用户提交建议与问题</td></tr>
+<tr><td>13</td><td>管理后台仪表盘</td><td>平台数据总览</td></tr>
+<tr><td>14</td><td>管理后台反馈管理</td><td>回复用户反馈</td></tr>
+<tr><td>15</td><td>二十四小时自动审核兜底</td><td>待审核商品超时自动通过</td></tr>
+</tbody></table>
+<p>不包含内容：</p>
+<table>
+<thead><tr><th>序号</th><th>内容</th><th>说明</th></tr></thead>
+<tbody>
+<tr><td>1</td><td>线上支付功能</td><td>平台不介入资金流转</td></tr>
+<tr><td>2</td><td>物流配送服务</td><td>所有交易在线下面对面完成</td></tr>
+<tr><td>3</td><td>全开放平台注册</td><td>仅限本校学生使用</td></tr>
+<tr><td>4</td><td>实时即时通讯</td><td>站内信仅作为辅助联系手段</td></tr>
+</tbody></table>
+<h2>Part 3：用户角色与使用场景</h2>
+<h3>3.1 用户角色定义</h3>
+<p>本平台涉及两类用户角色，分别是学生用户和管理员。</p>
+<p>学生用户是平台的核心使用群体，指西南大学在校全日制本科生及研究生。学生用户通过学号验证完成注册，学号即用户名，不可重复注册。学生用户可发布商品、浏览商品、联系卖家线下交易、标记售出、评价对方、查看消息以及提交意见反馈。</p>
+<p>管理员是平台的运营管理方，通过独立的管理员登录入口进入后台，负责商品内容审核、用户信用管理、意见反馈回复以及平台数据监控。管理员凭预设密码登录，不参与任何交易行为。</p>
+<h3>3.2 典型使用场景</h3>
+<h3>3.2.1 按时间节点划分的场景</h3>
+<table>
+<thead><tr><th>场景</th><th>时间节点</th><th>特点</th></tr></thead>
+<tbody>
+<tr><td>开学季教材与生活用品采购</td><td>每年三月和九月</td><td>求购需求集中爆发，教材和生活用品交易量激增</td></tr>
+<tr><td>毕业季清仓甩卖</td><td>每年六月</td><td>出售需求集中释放，商品发布量达全年峰值，价格较低</td></tr>
+<tr><td>期末季复习资料流转</td><td>每年一月和六月</td><td>课程笔记、往年试题、复习提纲需求急剧上升，交易窗口期短</td></tr>
+<tr><td>日常闲置物品流转</td><td>全年</td><td>数码产品升级、衣物不合身、冲动消费转卖等，随机性较强</td></tr>
+</tbody></table>
+<h3>3.2.2 按交易流程划分的使用流程</h3>
+<p>买家视角的完整流程：</p>
+<p>学生打开平台首页，通过搜索或分类筛选找到感兴趣的商品，进入详情页查看价格、商品描述和卖家联系方式。买家点击「求购」按钮，系统将商品锁定十五分钟，买家通过卖家留下的联系方式直接联系对方，双方约定线下见面完成交易。交易完成后，卖家标记售出，系统自动将锁定者记录为买家。买家回到商品详情页，点击「评价该商品」按钮，对卖家进行一至五星评价并附文字评价。</p>
+<p>卖家视角的完整流程：</p>
+<p>学生登录平台后进入发布页，填写商品名称、价格、描述、联系方式和取货地点，可上传描述图片和联系方式图片各一张，提交后商品进入待审核状态。管理员审核通过后商品出现在首页列表中。买家点击求购锁定商品后，卖家在商品详情页看到求购者信息。买家通过联系方式联系卖家，双方线下完成交接，随后卖家在商品详情页点击「标记已售出」按钮，系统自动记录售出时间并将锁定者写入买家字段，商品状态变为已售出。卖家收到买方的评价后，信用分同步更新。</p>
+<p>管理员视角的运营流程：</p>
+<p>管理员通过独立入口登录管理后台，在仪表盘查看平台整体数据概况。在商品管理列表中查看所有商品，对违规商品执行删除操作，对问题商品执行驳回操作并填写驳回原因。在用户管理列表中查看全体用户的信用等级，对违规用户执行禁言或注销操作。在反馈管理列表中查看用户提交的意见反馈并逐一回复处理。</p>
+<p>补填学号的特殊流程：</p>
+<p>注册时学号即用户名，系统已做格式校验。但对于早期注册或未通过正常注册流程进入的用户，系统会在发布商品时强制检查学号字段是否为空，若为空则跳转至补填学号页面，要求用户填写十五位学号，提交后方可继续发布商品。</p>
+<h3>3.3 交易闭环流程图</h3>
+<div class="flow">┌────────────┐
+│  用户注册  │
+│ 学号验证   │
+└─────┬──────┘
+▼
+┌────────────┐
+│  用户登录  │
+│ 身份校验   │
+└─────┬──────┘
+▼
+┌────────────┐
+│  商品发布  │
+│ 审核通过   │
+└─────┬──────┘
+▼
+┌────────────┐
+│  列表浏览  │
+│ 搜索筛选   │
+└─────┬──────┘
+▼
+┌────────────┐
+│  商品详情  │
+│ 查看联系   │
+└─────┬──────┘
+▼
+┌────────────┐                      ┌────────────┐
+│  买家求购  │ ──── 线下沟通 ────▶ │  线下交易  │
+│ 锁定15分钟 │                      │ 当面交接   │
+└─────┬──────┘                      └──────┬─────┘
+│                                      │
+▼                                      ▼
+┌────────────┐                      ┌────────────┐
+│  卖家售出  │ ◀─── 卖家标记 ───── │  交易完成  │
+│ 记录买家   │                      │            │
+└─────┬──────┘                      └──────┬─────┘
+│                                      │
+▼                                      │
+┌────────────┐                               │
+│  买家评价  │ ──────────────────────────────┘
+│ 信用更新   │
+└────────────┘</div>
+<h2>Part 4：功能架构总览</h2>
+<p>平台功能分为两类：交易闭环功能和可信保障功能。</p>
+<p>交易闭环功能是用户完成一次二手交易必须经过的环节，缺一个交易就走不通。</p>
+<p>可信保障功能是让平台从能用变成可靠的功能，让买卖双方有行为约束，让平台运营有管理工具。</p>
+<h3>4.1 交易闭环功能（6项）</h3>
+<table>
+<thead><tr><th>序号</th><th>功能名称</th><th>核心价值</th></tr></thead>
+<tbody>
+<tr><td>1</td><td>注册与登录</td><td>通过学号验证确保本校学生身份</td></tr>
+<tr><td>2</td><td>商品发布</td><td>支持出售和求购两种类型，可上传图片</td></tr>
+<tr><td>3</td><td>商品列表浏览</td><td>支持关键词搜索和类型筛选</td></tr>
+<tr><td>4</td><td>商品详情</td><td>展示价格、商品描述和联系方式</td></tr>
+<tr><td>5</td><td>求购意向</td><td>点击求购锁定商品十五分钟，表达购买意向</td></tr>
+<tr><td>6</td><td>售出操作</td><td>卖家标记售出，系统记录买家</td></tr>
+</tbody></table>
+<h3>4.2 可信保障功能（9项）</h3>
+<table>
+<thead><tr><th>序号</th><th>功能名称</th><th>核心价值</th></tr></thead>
+<tbody>
+<tr><td>7</td><td>信用评价体系</td><td>买卖互评加五级信用等级</td></tr>
+<tr><td>8</td><td>管理后台商品管理</td><td>内容风控与违规处置</td></tr>
+<tr><td>9</td><td>管理后台用户管理</td><td>信用重置与异常处理</td></tr>
+<tr><td>10</td><td>个人中心</td><td>交易统计、信用卡片与可视化图表</td></tr>
+<tr><td>11</td><td>站内私信</td><td>买家卖家沟通桥梁</td></tr>
+<tr><td>12</td><td>意见反馈</td><td>用户建议与问题收集</td></tr>
+<tr><td>13</td><td>管理后台仪表盘</td><td>平台数据总览</td></tr>
+<tr><td>14</td><td>管理后台反馈管理</td><td>回复用户反馈</td></tr>
+<tr><td>15</td><td>二十四小时自动审核兜底</td><td>避免商品长期积压</td></tr>
+</tbody></table>
+<h3>4.3 求购-售出-评价完整链路图</h3>
+<div class="flow">┌──────────────────────────────────────────────────────────────────────────────┐
+│                          求购-售出-评价完整链路                              │
+├──────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│  ┌────────┐      ┌────────┐      ┌────────┐      ┌────────┐      ┌────────┐│
+│  │ 买家    │      │ 系统   │      │ 买家   │      │ 卖家   │      │ 系统   ││
+│  │ 点击求购│ ───▶ │ 记录   │ ───▶ │ 联系   │ ───▶ │ 线下   │ ───▶ │ locker ││
+│  │         │      │ locker │      │ 卖家   │      │ 交易   │      │ 写入   ││
+│  └────────┘      └────────┘      └────────┘      └────────┘      │ buyer  ││
+│       │              │                │               │           └───┬────┘│
+│       │              │                │               │               │      │
+│       ▼              ▼                ▼               ▼               ▼      │
+│  ┌────────┐      ┌────────┐      ┌────────┐      ┌────────┐      ┌────────┐│
+│  │ 锁定   │      │ 卖家   │      │ 买家   │      │ 卖家   │      │ 买家   ││
+│  │ 15分钟 │      │ 看到   │      │ 通过   │      │ 标记   │      │ 获得   ││
+│  │         │      │ 求购者 │      │ 联系   │      │ 售出   │      │ 评价   ││
+│  └────────┘      └────────┘      └────────┘      └────────┘      │ 权限   ││
+│                                                                   └───┬────┘│
+│                                                                       │      │
+│                                                                       ▼      │
+│                                                                  ┌────────┐   │
+│                                                                  │ 卖家   │   │
+│                                                                  │ 信用   │   │
+│                                                                  │ 更新   │   │
+│                                                                  └────────┘   │
+│                                                                              │
+│  关键字段流转：                                                             │
+│  求购时写入 locker ──▶ 售出时 locker 自动写入 buyer ──▶ buyer 获得评价权限    │
+└──────────────────────────────────────────────────────────────────────────────┘</div>
+<h2>Part 5：功能详细说明</h2>
+<h3>5.1 交易闭环功能</h3>
+<h3>功能一：注册与登录</h3>
+<p>功能描述</p>
+<p>用户通过学号验证完成注册，学号即用户名。注册成功后使用学号和密码登录平台。系统通过严格的学号格式校验确保注册者具备西南大学在校学生身份。</p>
+<p>触发入口</p>
+<p>注册：访问 /login_page，点击「注册」标签，填写信息后提交至 /do_register</p>
+<p>登录：访问 /login_page，填写用户名密码后提交至 /do_login</p>
+<p>主要流程</p>
+<p>注册流程：</p>
+<p>用户访问登录页，切换到注册标签</p>
+<p>填写学号、密码、确认密码、昵称</p>
+<p>系统校验学号格式</p>
+<p>系统校验两次密码是否一致</p>
+<p>系统检查学号是否已被注册</p>
+<p>校验通过后创建用户账号，角色为学生，信用分初始值一百分，信用等级为 B 级</p>
+<p>提示注册成功，引导用户登录</p>
+<p>登录流程：</p>
+<p>用户填写用户名和密码</p>
+<p>系统验证用户名和密码是否匹配</p>
+<p>登录成功后写入会话</p>
+<p>若学生用户尚未补填学号，跳转至补填学号页面</p>
+<p>管理员用户跳转至管理后台</p>
+<p>普通学生用户跳转至首页</p>
+<p>业务规则</p>
+<p>学号格式校验规则：</p>
+<table>
+<thead><tr><th>字段位置</th><th>内容</th><th>校验规则</th></tr></thead>
+<tbody>
+<tr><td>第1-2位</td><td>学历层次代码</td><td>必须是 01（博士）、11（硕士）或 22（本科）</td></tr>
+<tr><td>第3-6位</td><td>入学年份</td><td>4位数字，不能晚于当前年份，不能早于该学历允许的最早年份</td></tr>
+<tr><td>第7-9位</td><td>学院代码</td><td>必须在西南大学学院代码白名单内</td></tr>
+<tr><td>第10-12位</td><td>专业代码</td><td>必须是3位数字</td></tr>
+<tr><td>第13-15位</td><td>个人序号</td><td>必须是3位数字</td></tr>
+</tbody></table>
+<p>其他规则：</p>
+<p>密码明文存储，暂未加密，后续迭代升级</p>
+<p>一个学号只能注册一个账号</p>
+<p>昵称不能为空</p>
+<p>异常情况</p>
+<p>学号格式不符合规则：返回具体错误提示</p>
+<p>两次密码不一致：提示重新输入</p>
+<p>学号已被注册：提示该学号已存在，引导登录</p>
+<p>用户名或密码错误：提示登录失败</p>
+<h3>功能二：商品发布</h3>
+<p>功能描述</p>
+<p>已登录且已完成学号补填、未被禁言的学生用户可发布商品。用户填写商品信息后提交，商品进入待审核状态，待管理员审核通过后展示在首页。</p>
+<p>触发入口</p>
+<p>访问 /publish 进入发布页面</p>
+<p>提交表单至 /add</p>
+<p>主要流程</p>
+<p>用户点击导航栏「发布」按钮进入发布页</p>
+<p>系统检查用户是否已登录，未登录则跳转登录页</p>
+<p>系统检查用户是否已填学号，未填则跳转补填学号页</p>
+<p>系统检查用户是否被禁言，被禁言则提示无法发布</p>
+<p>用户填写商品信息：发布类型、价格、名称、描述、联系方式</p>
+<p>用户可选上传描述图片和联系方式图片各一张</p>
+<p>提交后商品写入数据库，状态为待审核</p>
+<p>提示发布成功，跳转至首页</p>
+<p>业务规则</p>
+<table>
+<thead><tr><th>字段</th><th>规则</th></tr></thead>
+<tbody>
+<tr><td>发布类型</td><td>出售或求购，二选一</td></tr>
+<tr><td>价格</td><td>大于零的数值</td></tr>
+<tr><td>商品名称</td><td>不能为空</td></tr>
+<tr><td>联系方式</td><td>不能为空</td></tr>
+<tr><td>描述图片</td><td>可选，支持 png、jpg、jpeg、gif、webp，单张不超过 5MB</td></tr>
+<tr><td>联系方式图片</td><td>可选，支持 png、jpg、jpeg、gif、webp，单张不超过 5MB</td></tr>
+</tbody></table>
+<p>图片以 base64 编码存入数据库，不依赖文件系统</p>
+<p>新发布商品状态为待审核</p>
+<p>被禁言用户无法发布商品</p>
+<p>异常情况</p>
+<p>未登录：跳转登录页</p>
+<p>未填学号：跳转补填学号页</p>
+<p>被禁言：提示禁言状态，禁止发布</p>
+<p>必填字段为空：返回发布页并提示</p>
+<p>图片格式不支持：忽略该图片，其余信息正常提交</p>
+<h3>功能三：商品列表浏览</h3>
+<p>功能描述</p>
+<p>首页展示所有已审核通过的商品，按发布时间倒序排列。用户可通过关键词搜索和类型筛选快速找到目标商品。</p>
+<p>触发入口</p>
+<p>访问首页 /</p>
+<p>主要流程</p>
+<p>用户访问首页</p>
+<p>系统查询所有状态为已通过的商品，同时触发二十四小时自动审核检查</p>
+<p>按发布时间倒序排列，每页十条</p>
+<p>若用户已登录，首页导航栏展示用户昵称及功能入口</p>
+<p>用户可在搜索框输入关键词进行搜索</p>
+<p>用户可通过下拉菜单按出售或求购类型筛选</p>
+<p>搜索和筛选可叠加使用</p>
+<p>业务规则</p>
+<p>仅展示状态为已通过的商品</p>
+<p>已售出的商品仍展示，但状态标签显示为已售</p>
+<p>搜索关键词匹配商品名称和商品描述</p>
+<p>分页展示，每页十条</p>
+<h3>功能四：商品详情</h3>
+<p>功能描述</p>
+<p>用户点击商品卡片进入详情页，查看商品的完整信息。卖家可在详情页执行售出操作，买家可在商品售出后发起评价。</p>
+<p>触发入口</p>
+<p>点击首页商品卡片，访问 /product/<id></p>
+<p>主要流程</p>
+<p>用户点击商品卡片进入详情页</p>
+<p>页面展示商品完整信息</p>
+<p>若当前用户为卖家且商品状态为已通过，显示「标记已售出」按钮</p>
+<p>若商品状态为已售出且当前用户为买家，显示「评价该商品」按钮</p>
+<p>业务规则</p>
+<p>任何已登录用户均可查看商品详情</p>
+<p>已下架或已删除的商品不可访问</p>
+<p>仅卖家本人可见「标记已售出」按钮</p>
+<p>仅买家本人可见「评价该商品」按钮</p>
+<h3>功能五：求购意向</h3>
+<p>功能描述</p>
+<p>买家对某商品产生购买意向后，点击「求购」按钮向卖家表达求购意向，系统将买家信息记录到商品的 locker 字段并计时锁定十五分钟，防止其他买家在沟通期间同时求购。</p>
+<p>触发入口</p>
+<p>商品详情页点击「求购」按钮，以异步请求方式提交至 /request_buy/<product_id></p>
+<p>主要流程</p>
+<p>买家进入商品详情页，点击「求购」按钮</p>
+<p>系统执行求购锁定校验</p>
+<p>校验通过后，系统将当前用户名写入 locker 字段，记录 locked_at 为当前时间</p>
+<p>前端提示求购成功</p>
+<p>买家通过联系方式联系卖家，双方沟通交易细节</p>
+<p>业务规则</p>
+<p>任何已登录学生用户均可点击求购</p>
+<p>卖家本人不能求购自己的商品</p>
+<p>已售出的商品不可求购</p>
+<p>商品被其他用户锁定且未超过十五分钟时，新求购者收到提示</p>
+<p>锁定时长十五分钟，超时自动释放</p>
+<h3>功能六：售出操作</h3>
+<p>功能描述</p>
+<p>卖家在线下完成交易后，回到平台标记商品为已售出。系统自动将求购锁定者 locker 写入 buyer 字段，同时记录售出时间，商品状态变更为已售出。</p>
+<p>触发入口</p>
+<p>商品详情页点击「标记已售出」按钮，访问 /mark_sold/<pid></p>
+<p>主要流程</p>
+<p>卖家在商品详情页点击「标记已售出」按钮</p>
+<p>系统校验当前用户是否为该商品卖家</p>
+<p>系统校验商品状态是否为已通过且未售出</p>
+<p>校验通过后，系统执行以下更新：</p>
+<p>读取 locker 字段，将其值写入 buyer 字段</p>
+<p>更新商品状态为已售出</p>
+<p>记录 sold_time 为当前时间</p>
+<p>清除 locker 和 locked_at 字段</p>
+<p>页面跳转，显示售出成功提示</p>
+<p>业务规则</p>
+<p>仅商品卖家本人可执行售出操作</p>
+<p>仅状态为已通过且未售出的商品可标记售出</p>
+<p>标记售出时必须将 locker 写入 buyer</p>
+<p>若 locker 为空，则 buyer 为空</p>
+<p>buyer 字段是评价权限控制的唯一依据</p>
+<h3>5.2 可信保障功能</h3>
+<h3>功能七：信用评价体系</h3>
+<p>功能描述</p>
+<p>买家在交易完成后可对卖家进行一至五星评价并附文字内容。系统通过 buyer 字段校验评价人身份，确保只有实际购买者才能评价。评价提交后自动触发卖家信用分更新。</p>
+<p>触发入口</p>
+<p>商品详情页点击「评价该商品」按钮，访问 /evaluate/<pid></p>
+<p>主要流程</p>
+<p>买家在商品详情页点击「评价该商品」按钮</p>
+<p>进入评价页面，选择一至五星评分，填写评价内容</p>
+<p>提交评价</p>
+<p>系统执行评价权限校验：</p>
+<p>当前用户必须等于该商品的 buyer</p>
+<p>当前用户不能是该商品的卖家</p>
+<p>该商品未被当前用户评价过</p>
+<p>校验通过后写入评价记录</p>
+<p>系统自动触发信用分更新，重算卖家信用分和信用等级</p>
+<p>跳转至首页</p>
+<p>信用分计算规则</p>
+<table>
+<thead><tr><th>计算项</th><th>公式</th><th>说明</th></tr></thead>
+<tbody>
+<tr><td>平均分</td><td>所有评价评分之和 ÷ 评价总数</td><td>无评价时默认100分</td></tr>
+<tr><td>基础分</td><td>平均分 × 20</td><td>—</td></tr>
+<tr><td>数量奖励</td><td>MIN(评价总数 × 2, 15)</td><td>上限15分</td></tr>
+<tr><td>差评惩罚</td><td>1星数 × 5 + 2星数 × 2</td><td>—</td></tr>
+<tr><td>信用分</td><td>MAX(基础分 + 数量奖励 - 差评惩罚, 0)</td><td>最低0分</td></tr>
+</tbody></table>
+<p>信用等级划分</p>
+<table>
+<thead><tr><th>等级</th><th>信用分范围</th><th>标签</th><th>图标</th><th>颜色</th></tr></thead>
+<tbody>
+<tr><td>S</td><td>≥ 150</td><td>信用极好</td><td>🌟</td><td>#FFD700</td></tr>
+<tr><td>A</td><td>120 - 149</td><td>信用优秀</td><td>✅</td><td>#0d6efd</td></tr>
+<tr><td>B</td><td>80 - 119</td><td>信用良好</td><td>👍</td><td>#198754</td></tr>
+<tr><td>C</td><td>40 - 79</td><td>信用一般</td><td>⚠️</td><td>#fd7e14</td></tr>
+<tr><td>D</td><td>< 40</td><td>信用较差</td><td>❌</td><td>#dc3545</td></tr>
+</tbody></table>
+<p>业务规则</p>
+<p>仅买家可以评价，即当前用户必须等于该商品的 buyer</p>
+<p>不能评价自己的商品</p>
+<p>同一商品同一用户只能评价一次</p>
+<p>仅已售出的商品可被评价</p>
+<p>评价提交后自动触发卖家信用分重算</p>
+<h3>功能八：管理后台商品管理</h3>
+<p>功能描述</p>
+<p>管理员在后台查看全部商品列表，支持按名称搜索和分页浏览。可对商品执行通过审核、驳回并填写驳回原因、删除等操作。支持一键通过所有待审核商品。</p>
+<p>触发入口</p>
+<p>管理员登录后访问 /admin，点击左侧菜单「商品管理」</p>
+<p>主要功能</p>
+<table>
+<thead><tr><th>操作</th><th>说明</th></tr></thead>
+<tbody>
+<tr><td>商品列表</td><td>展示全部商品，含图片、类型、价格、名称、发布人、状态等</td></tr>
+<tr><td>搜索</td><td>按商品名称搜索</td></tr>
+<tr><td>通过审核</td><td>待审核商品变为已上架，出现在首页</td></tr>
+<tr><td>驳回</td><td>待审核商品变为已驳回，填写驳回原因，通知卖家</td></tr>
+<tr><td>删除</td><td>直接移除商品，不可恢复</td></tr>
+<tr><td>一键通过</td><td>批量通过所有待审核商品</td></tr>
+</tbody></table>
+<h3>功能九：管理后台用户管理</h3>
+<p>功能描述</p>
+<p>管理员在后台查看全部用户列表，可对违规学生用户执行禁言、解禁和注销操作。支持一键禁言和一键解禁。</p>
+<p>触发入口</p>
+<p>管理员登录后访问 /admin，点击左侧菜单「用户管理」</p>
+<p>主要功能</p>
+<table>
+<thead><tr><th>操作</th><th>说明</th></tr></thead>
+<tbody>
+<tr><td>用户列表</td><td>展示全部用户，含 ID、用户名、昵称、学号、角色、禁言状态</td></tr>
+<tr><td>禁言</td><td>对状态正常的学生用户禁言七天</td></tr>
+<tr><td>解禁</td><td>恢复已禁言用户的发布权限</td></tr>
+<tr><td>注销</td><td>删除用户账号及所有关联数据</td></tr>
+<tr><td>一键禁言</td><td>批量禁言所有未禁言学生用户</td></tr>
+<tr><td>一键解禁</td><td>批量解除所有禁言</td></tr>
+</tbody></table>
+<p>业务规则</p>
+<p>管理员账号不可被禁言、不可被注销</p>
+<p>禁言期间用户无法发布新商品</p>
+<p>注销用户时自动删除关联商品及图片</p>
+<h3>功能十：个人中心</h3>
+<p>功能描述</p>
+<p>学生用户可在个人中心查看交易统计数据、信用信息、评价记录、商品管理以及可视化图表。</p>
+<p>触发入口</p>
+<p>点击导航栏「个人」按钮，访问 /profile</p>
+<p>主要功能模块</p>
+<table>
+<thead><tr><th>模块</th><th>内容</th></tr></thead>
+<tbody>
+<tr><td>交易统计</td><td>卖出总单数、卖出总金额、买入总单数、买入总金额</td></tr>
+<tr><td>信用卡片</td><td>信用等级图标、信用等级、信用分、信用标签、评价总数</td></tr>
+<tr><td>可视化图表</td><td>每月交易数量柱状图、评价星级分布饼图、全校信用等级分布环形图</td></tr>
+<tr><td>我发出的评价</td><td>评价过的商品列表</td></tr>
+<tr><td>我收到的评价</td><td>收到的评价列表</td></tr>
+<tr><td>我的商品</td><td>按状态分类展示本人发布的商品</td></tr>
+</tbody></table>
+<h3>功能十一：站内私信</h3>
+<p>功能描述</p>
+<p>学生用户可通过站内私信与其他用户进行一对一沟通。消息列表展示所有对话会话，未读消息有数量标记。</p>
+<p>触发入口</p>
+<p>点击导航栏「消息」按钮，访问 /messages</p>
+<p>点击会话进入对话详情页 /messages/<receiver></p>
+<p>业务规则</p>
+<p>仅学生用户可使用私信功能</p>
+<p>不能给自己发消息</p>
+<p>未读消息进入对话后自动标记为已读</p>
+<h3>功能十二：意见反馈</h3>
+<p>功能描述</p>
+<p>学生用户可向平台提交意见反馈，包含标题、内容和选配图片。提交后可在反馈列表页查看历史记录及管理员回复。</p>
+<p>触发入口</p>
+<p>点击导航栏「反馈」按钮，访问 /feedback</p>
+<p>提交反馈至 /feedback/submit</p>
+<p>业务规则</p>
+<p>仅学生用户可提交反馈</p>
+<p>标题和内容为必填项</p>
+<p>图片为选填项</p>
+<p>反馈提交后状态为待处理</p>
+<p>管理员回复后状态变为已处理</p>
+<h3>功能十三：管理后台仪表盘</h3>
+<p>功能描述</p>
+<p>管理员登录后台后首先看到数据概览页面，通过统计卡片和图表全面了解平台运行状况。</p>
+<p>统计卡片</p>
+<table>
+<thead><tr><th>卡片名称</th><th>数据说明</th></tr></thead>
+<tbody>
+<tr><td>总商品</td><td>全部商品数量</td></tr>
+<tr><td>待审核</td><td>状态为待审核的商品数量</td></tr>
+<tr><td>已上架</td><td>状态为已通过的商品数量</td></tr>
+<tr><td>已售出</td><td>交易状态为已售出的商品数量</td></tr>
+<tr><td>总用户</td><td>学生用户总数</td></tr>
+<tr><td>今日新增</td><td>今日新发布商品数量</td></tr>
+</tbody></table>
+<p>图表</p>
+<table>
+<thead><tr><th>图表名称</th><th>类型</th><th>说明</th></tr></thead>
+<tbody>
+<tr><td>商品状态分布</td><td>环形图</td><td>待审核、已上架、已驳回占比</td></tr>
+<tr><td>近七天发布趋势</td><td>柱状图</td><td>每日商品发布数量</td></tr>
+<tr><td>近七天交易额</td><td>折线图</td><td>每日交易总额</td></tr>
+<tr><td>近七天用户注册趋势</td><td>折线图</td><td>每日新注册用户数</td></tr>
+<tr><td>用户角色分布</td><td>饼图</td><td>管理员与学生占比</td></tr>
+</tbody></table>
+<h3>功能十四：管理后台反馈管理</h3>
+<p>功能描述</p>
+<p>管理员在后台查看全部用户反馈，可对状态为待处理的反馈进行回复，回复后状态变为已处理。</p>
+<p>触发入口</p>
+<p>管理员登录后访问 /admin，切换到反馈管理面板</p>
+<h3>功能十五：二十四小时自动审核兜底</h3>
+<p>功能描述</p>
+<p>系统在页面访问时自动检查所有待审核商品，若商品发布时间超过二十四小时仍未被管理员审核，则自动将其状态变更为已通过。</p>
+<p>触发入口</p>
+<p>首页访问时自动触发</p>
+<p>管理后台访问时自动触发</p>
+<h2>Part 6：数据模型</h2>
+<h3>6.1 核心业务表</h3>
+<h3>6.1.1 users——用户表</h3>
+<table>
+<thead><tr><th>字段名</th><th>类型</th><th>约束</th><th>说明</th></tr></thead>
+<tbody>
+<tr><td>id</td><td>SERIAL</td><td>PRIMARY KEY</td><td>用户唯一标识</td></tr>
+<tr><td>username</td><td>VARCHAR(100)</td><td>UNIQUE, NOT NULL</td><td>用户名，即学号</td></tr>
+<tr><td>password</td><td>VARCHAR(255)</td><td>NOT NULL</td><td>密码，明文存储</td></tr>
+<tr><td>nickname</td><td>VARCHAR(100)</td><td></td><td>昵称</td></tr>
+<tr><td>role</td><td>VARCHAR(20)</td><td>DEFAULT 'student'</td><td>角色：student / admin</td></tr>
+<tr><td>ban_until</td><td>TIMESTAMP</td><td>NULL</td><td>禁言截止时间</td></tr>
+<tr><td>student_id</td><td>VARCHAR(15)</td><td>UNIQUE</td><td>学号</td></tr>
+<tr><td>credit_score</td><td>INT</td><td>DEFAULT 100</td><td>信用分</td></tr>
+<tr><td>credit_level</td><td>VARCHAR(5)</td><td>DEFAULT 'B'</td><td>信用等级</td></tr>
+<tr><td>created_at</td><td>TIMESTAMP</td><td>DEFAULT CURRENT_TIMESTAMP</td><td>注册时间</td></tr>
+</tbody></table>
+<h3>6.1.2 products——商品表</h3>
+<table>
+<thead><tr><th>字段名</th><th>类型</th><th>约束</th><th>说明</th></tr></thead>
+<tbody>
+<tr><td>id</td><td>SERIAL</td><td>PRIMARY KEY</td><td>商品唯一标识</td></tr>
+<tr><td>name</td><td>VARCHAR(200)</td><td>NOT NULL</td><td>商品名称</td></tr>
+<tr><td>price</td><td>DECIMAL(10,2)</td><td>NOT NULL</td><td>价格</td></tr>
+<tr><td>description</td><td>TEXT</td><td></td><td>商品描述</td></tr>
+<tr><td>seller</td><td>VARCHAR(100)</td><td>NOT NULL</td><td>卖家用户名</td></tr>
+<tr><td>status</td><td>VARCHAR(20)</td><td>DEFAULT 'pending'</td><td>pending / approved / rejected</td></tr>
+<tr><td>contact</td><td>VARCHAR(100)</td><td>DEFAULT ''</td><td>联系方式文本</td></tr>
+<tr><td>sold_status</td><td>VARCHAR(20)</td><td>DEFAULT 'unsold'</td><td>unsold / sold</td></tr>
+<tr><td>sold_time</td><td>TIMESTAMP</td><td>NULL</td><td>售出时间</td></tr>
+<tr><td>type</td><td>SMALLINT</td><td>DEFAULT 1</td><td>1=出售，0=求购</td></tr>
+<tr><td>desc_image</td><td>TEXT</td><td>DEFAULT ''</td><td>描述图片 base64</td></tr>
+<tr><td>contact_image</td><td>TEXT</td><td>DEFAULT ''</td><td>联系方式图片 base64</td></tr>
+<tr><td>created_at</td><td>TIMESTAMP</td><td>DEFAULT CURRENT_TIMESTAMP</td><td>发布时间</td></tr>
+<tr><td>locker</td><td>VARCHAR(100)</td><td></td><td>求购锁定者用户名</td></tr>
+<tr><td>locked_at</td><td>TIMESTAMP</td><td></td><td>锁定时间</td></tr>
+<tr><td>buyer</td><td>VARCHAR(100)</td><td></td><td>买家用户名</td></tr>
+<tr><td>reject_reason</td><td>VARCHAR(255)</td><td></td><td>驳回原因</td></tr>
+</tbody></table>
+<p>状态流转图：</p>
+<div class="flow">发布 ──▶ pending（待审核）
+│
+┌───────┼───────┐
+▼       ▼       ▼</div>
+<p>approved  rejected  删除</p>
+<p>（已上架） （已驳回）</p>
+<div class="flow">│
+▼</div>
+<p>sold（已售出）</p>
+<h3>6.1.3 evaluations——评价表</h3>
+<table>
+<thead><tr><th>字段名</th><th>类型</th><th>约束</th><th>说明</th></tr></thead>
+<tbody>
+<tr><td>id</td><td>SERIAL</td><td>PRIMARY KEY</td><td>评价唯一标识</td></tr>
+<tr><td>product_id</td><td>INTEGER</td><td>NOT NULL, UNIQUE</td><td>商品 ID</td></tr>
+<tr><td>from_user</td><td>VARCHAR(100)</td><td>NOT NULL</td><td>评价人用户名</td></tr>
+<tr><td>to_user</td><td>VARCHAR(100)</td><td>NOT NULL</td><td>被评价人用户名</td></tr>
+<tr><td>rating</td><td>SMALLINT</td><td>NOT NULL</td><td>评分：1-5 星</td></tr>
+<tr><td>content</td><td>TEXT</td><td></td><td>评价内容</td></tr>
+<tr><td>created_at</td><td>TIMESTAMP</td><td>DEFAULT CURRENT_TIMESTAMP</td><td>评价时间</td></tr>
+</tbody></table>
+<h3>6.1.4 messages——私信表</h3>
+<table>
+<thead><tr><th>字段名</th><th>类型</th><th>约束</th><th>说明</th></tr></thead>
+<tbody>
+<tr><td>id</td><td>SERIAL</td><td>PRIMARY KEY</td><td>消息唯一标识</td></tr>
+<tr><td>sender</td><td>VARCHAR(100)</td><td>NOT NULL</td><td>发送者用户名</td></tr>
+<tr><td>receiver</td><td>VARCHAR(100)</td><td>NOT NULL</td><td>接收者用户名</td></tr>
+<tr><td>content</td><td>TEXT</td><td>NOT NULL</td><td>消息内容</td></tr>
+<tr><td>is_read</td><td>BOOLEAN</td><td>DEFAULT FALSE</td><td>是否已读</td></tr>
+<tr><td>created_at</td><td>TIMESTAMP</td><td>DEFAULT CURRENT_TIMESTAMP</td><td>发送时间</td></tr>
+</tbody></table>
+<h3>6.1.5 feedbacks——反馈表</h3>
+<table>
+<thead><tr><th>字段名</th><th>类型</th><th>约束</th><th>说明</th></tr></thead>
+<tbody>
+<tr><td>id</td><td>SERIAL</td><td>PRIMARY KEY</td><td>反馈唯一标识</td></tr>
+<tr><td>username</td><td>VARCHAR(100)</td><td>NOT NULL</td><td>提交者用户名</td></tr>
+<tr><td>title</td><td>VARCHAR(200)</td><td>NOT NULL</td><td>反馈标题</td></tr>
+<tr><td>content</td><td>TEXT</td><td>NOT NULL</td><td>反馈内容</td></tr>
+<tr><td>status</td><td>VARCHAR(20)</td><td>DEFAULT 'pending'</td><td>pending / resolved</td></tr>
+<tr><td>reply</td><td>TEXT</td><td></td><td>管理员回复内容</td></tr>
+<tr><td>image</td><td>TEXT</td><td>DEFAULT ''</td><td>附图</td></tr>
+<tr><td>created_at</td><td>TIMESTAMP</td><td>DEFAULT CURRENT_TIMESTAMP</td><td>提交时间</td></tr>
+<tr><td>updated_at</td><td>TIMESTAMP</td><td>DEFAULT CURRENT_TIMESTAMP</td><td>更新时间</td></tr>
+</tbody></table>
+<h3>6.2 日志表</h3>
+<table>
+<thead><tr><th>表名</th><th>字段</th><th>说明</th></tr></thead>
+<tbody>
+<tr><td>login_logs</td><td>username, ip, login_time</td><td>登录日志</td></tr>
+<tr><td>view_logs</td><td>username, product_id, view_time</td><td>商品浏览日志</td></tr>
+<tr><td>search_logs</td><td>username, keyword, search_time</td><td>搜索日志</td></tr>
+<tr><td>action_logs</td><td>username, action_type, target_id, detail, action_time</td><td>行为日志</td></tr>
+</tbody></table>
+<h3>6.3 表关系图</h3>
+<div class="flow">users (1) ──────< (N) products      （一个用户发布多个商品）
+users (1) ──────< (N) evaluations   （一个用户收到多条评价）
+users (1) ──────< (N) messages      （一个用户收到多条消息）
+users (1) ──────< (N) feedbacks     （一个用户提交多条反馈）
+products (1) ──── (1) evaluations   （一个商品对应一条评价）</div>
+<h2>Part 7：管理后台功能详述</h2>
+<h3>7.1 概述</h3>
+<p>管理后台是平台运营管理的核心工具，供管理员对商品、用户、反馈和平台数据进行统一管理。后台采用左侧导航菜单加右侧内容区的布局。</p>
+<p>访问方式：</p>
+<p>管理员通过独立入口 /admin/login 登录</p>
+<p>登录后访问 /admin 进入管理面板</p>
+<p>普通用户无法访问后台</p>
+<p>默认管理员账号：</p>
+<p>用户名：admin</p>
+<p>密码：通过环境变量 ADMIN_PASSWORD 配置，默认 admin123</p>
+<h3>7.2 后台导航结构</h3>
+<div class="flow">┌─────────────────────────────────────────────┐
+│  🏫 二手交易后台                            │
+├─────────────────────────────────────────────┤
+│  📊 首页（仪表盘）                          │
+│  📋 商品管理                                │
+│  👥 用户管理                                │
+│  📝 反馈管理                                │
+│  ─────────────────                          │
+│  🚪 退出登录                                │
+└─────────────────────────────────────────────┘</div>
+<h3>7.3 管理后台路由汇总</h3>
+<table>
+<thead><tr><th>路由</th><th>方法</th><th>功能</th><th>权限</th></tr></thead>
+<tbody>
+<tr><td>/admin/login</td><td>GET/POST</td><td>管理员登录</td><td>公开</td></tr>
+<tr><td>/admin</td><td>GET</td><td>管理面板首页</td><td>admin_required</td></tr>
+<tr><td>/admin/logout</td><td>GET</td><td>退出管理</td><td>admin_required</td></tr>
+<tr><td>/approve/<pid></td><td>GET</td><td>通过商品审核</td><td>admin_required</td></tr>
+<tr><td>/reject/<pid></td><td>GET/POST</td><td>驳回商品并填写原因</td><td>admin_required</td></tr>
+<tr><td>/delete/<pid></td><td>GET</td><td>删除商品</td><td>admin_required 或卖家本人</td></tr>
+<tr><td>/approve_all</td><td>GET</td><td>一键通过所有待审核商品</td><td>admin_required</td></tr>
+<tr><td>/ban_user/<username></td><td>GET</td><td>禁言用户七天</td><td>admin_required</td></tr>
+<tr><td>/unban_user/<username></td><td>GET</td><td>解除禁言</td><td>admin_required</td></tr>
+<tr><td>/delete_user/<username></td><td>GET</td><td>注销用户</td><td>admin_required</td></tr>
+<tr><td>/ban_all</td><td>GET</td><td>一键禁言所有未禁言用户</td><td>admin_required</td></tr>
+<tr><td>/unban_all</td><td>GET</td><td>一键解除所有禁言</td><td>admin_required</td></tr>
+<tr><td>/admin/reply_feedback/<fid></td><td>POST</td><td>回复反馈</td><td>admin_required</td></tr>
+</tbody></table>
+<h2>Part 8：非功能需求</h2>
+<h3>8.1 性能需求</h3>
+<table>
+<thead><tr><th>指标</th><th>要求</th><th>说明</th></tr></thead>
+<tbody>
+<tr><td>页面加载时间</td><td>首页 ≤ 3 秒</td><td>2核2GB服务器配置下</td></tr>
+<tr><td>商品列表接口</td><td>响应 ≤ 500ms</td><td>单次查询十条商品数据</td></tr>
+<tr><td>并发用户数</td><td>支持 50-100 人同时在线</td><td>基于当前服务器配置估算</td></tr>
+<tr><td>数据库连接</td><td>连接池管理</td><td>每次请求独立获取和释放</td></tr>
+</tbody></table>
+<h3>8.2 安全需求</h3>
+<table>
+<thead><tr><th>维度</th><th>要求</th></tr></thead>
+<tbody>
+<tr><td>身份认证</td><td>使用 Flask session 管理登录状态</td></tr>
+<tr><td>学号验证</td><td>前后端双重校验</td></tr>
+<tr><td>密码存储</td><td>明文存储（后续迭代升级为哈希加密）</td></tr>
+<tr><td>权限控制</td><td>后台路由统一 admin_required 鉴权</td></tr>
+<tr><td>图片上传</td><td>仅允许指定格式，单张不超过 5MB</td></tr>
+<tr><td>SQL 注入防护</td><td>所有数据库操作使用参数化查询</td></tr>
+</tbody></table>
+<h3>8.3 可靠性需求</h3>
+<table>
+<thead><tr><th>维度</th><th>要求</th></tr></thead>
+<tbody>
+<tr><td>数据备份</td><td>cron 每日凌晨2点备份，保留最近7天</td></tr>
+<tr><td>服务可用性</td><td>systemd 管理，开机自启，异常自动重启</td></tr>
+<tr><td>数据一致性</td><td>信用分更新等操作使用事务</td></tr>
+<tr><td>异常兜底</td><td>待审核商品超24小时自动通过</td></tr>
+</tbody></table>
+<h3>8.4 可扩展性需求</h3>
+<table>
+<thead><tr><th>维度</th><th>说明</th></tr></thead>
+<tbody>
+<tr><td>数据埋点</td><td>已预留四张日志表，为后续分析提供基础</td></tr>
+<tr><td>密码加密</td><td>可平滑升级为 bcrypt 哈希加密</td></tr>
+<tr><td>图片存储</td><td>可迁移至对象存储服务</td></tr>
+<tr><td>社区扩展</td><td>可扩展至同小区、同村等半封闭场景</td></tr>
+</tbody></table>
+<h2>Part 9：运营规则与自动化</h2>
+<h3>9.1 自动化规则汇总</h3>
+<table>
+<thead><tr><th>规则名称</th><th>触发时机</th><th>执行动作</th><th>人工干预</th></tr></thead>
+<tbody>
+<tr><td>二十四小时自动审核</td><td>首页/后台访问</td><td>待审核超24小时商品自动通过</td><td>无需</td></tr>
+<tr><td>信用分自动更新</td><td>评价提交后</td><td>重算卖家信用分和等级</td><td>无需</td></tr>
+<tr><td>求购锁定释放</td><td>新用户求购时检查</td><td>超15分钟自动释放锁定</td><td>无需</td></tr>
+<tr><td>禁言生效</td><td>发布商品时检查</td><td>禁言期内禁止发布</td><td>管理员执行禁言</td></tr>
+<tr><td>低信用管理</td><td>信用分更新后</td><td>D级用户标记，管理员人工决策</td><td>管理员判断是否禁言</td></tr>
+</tbody></table>
+<h3>9.2 求购锁定机制流程图</h3>
+<div class="flow">┌─────────────────────────────────────────────────────────────┐
+│                      求购锁定机制流程                        │
+├─────────────────────────────────────────────────────────────┤
+│                                                             │
+│  用户A点击求购 ──▶ 系统检查是否被他人锁定且未过期           │
+│                          │                                  │
+│              ┌───────────┴───────────┐                      │
+│              ▼                       ▼                      │
+│         未被锁定                已被他人锁定                 │
+│              │                       │                      │
+│              ▼                       ▼                      │
+│     记录 locker = A         检查是否超过15分钟              │
+│     记录 locked_at                  │                      │
+│     锁定成功                  ┌─────┴─────┐                │
+│              │                ▼           ▼                │
+│              ▼           超过15分钟   未超过15分钟          │
+│     卖家看到求购者           │           │                  │
+│              │                ▼           ▼                │
+│              ▼       锁定自动释放   提示已被他人求购         │
+│     买家联系卖家         允许新锁定                          │
+│              │                                              │
+│              ▼                                              │
+│     线下完成交易                                            │
+│              │                                              │
+│              ▼                                              │
+│     卖家标记售出                                            │
+│              │                                              │
+│              ▼                                              │
+│     locker 自动写入 buyer                                   │
+│     清除 locker 和 locked_at                               │
+│                                                             │
+└─────────────────────────────────────────────────────────────┘</div>
+<h2>Part 10：验收标准</h2>
+<h3>10.1 功能验收</h3>
+<table>
+<thead><tr><th>编号</th><th>功能</th><th>验收标准</th></tr></thead>
+<tbody>
+<tr><td>TC-01</td><td>注册</td><td>有效学号可成功注册；非法学号被拦截；已注册学号不可重复注册</td></tr>
+<tr><td>TC-02</td><td>登录</td><td>注册账号可正常登录；错误密码登录失败</td></tr>
+<tr><td>TC-03</td><td>商品发布</td><td>已登录且已填学号的用户可成功发布；未填学号跳转补填页；被禁言用户无法发布</td></tr>
+<tr><td>TC-04</td><td>商品列表</td><td>首页仅展示已通过商品；搜索和类型筛选正常工作</td></tr>
+<tr><td>TC-05</td><td>商品详情</td><td>完整展示商品信息；卖家可见售出按钮；买家可见评价按钮</td></tr>
+<tr><td>TC-06</td><td>求购意向</td><td>点击求购锁定商品；被他人锁定时收到提示</td></tr>
+<tr><td>TC-07</td><td>售出操作</td><td>卖家标记售出后状态变更；locker 自动写入 buyer</td></tr>
+<tr><td>TC-08</td><td>信用评价</td><td>买家可评价；非买家不可评价；不可重复评价；信用分自动更新</td></tr>
+<tr><td>TC-09</td><td>信用分计算</td><td>公式正确；等级映射正确</td></tr>
+<tr><td>TC-10</td><td>管理后台</td><td>商品管理、用户管理、反馈管理各操作正常</td></tr>
+<tr><td>TC-11</td><td>个人中心</td><td>统计卡片、信用卡片、图表、评价列表、商品列表展示完整</td></tr>
+<tr><td>TC-12</td><td>站内私信</td><td>消息列表、收发消息、未读标记功能正常</td></tr>
+<tr><td>TC-13</td><td>意见反馈</td><td>提交、列表、回复功能正常</td></tr>
+<tr><td>TC-14</td><td>自动审核</td><td>待审核商品超24小时自动通过</td></tr>
+</tbody></table>
+<h3>10.2 业务流程验收</h3>
+<table>
+<thead><tr><th>编号</th><th>场景</th><th>验收标准</th></tr></thead>
+<tbody>
+<tr><td>TC-15</td><td>完整交易闭环</td><td>注册→登录→发布→审核→求购→线下交易→售出→评价，全流程走通</td></tr>
+<tr><td>TC-16</td><td>评价权限控制</td><td>非 buyer 被拦截；buyer 可正常评价；信用分实时更新</td></tr>
+<tr><td>TC-17</td><td>禁言控制</td><td>禁言用户无法发布；解禁后恢复</td></tr>
+<tr><td>TC-18</td><td>驳回通知</td><td>驳回时填写原因，系统通知卖家</td></tr>
+</tbody></table>
+<h2>Part 11：未来迭代方向</h2>
+<h3>11.1 功能增强</h3>
+<p>密码加密存储： 当前版本密码以明文存储，存在安全隐患。后续迭代引入 bcrypt 或 argon2 哈希加密，用户登录时比对哈希值，提升账号安全性。</p>
+<p>图片存储迁移： 当前 base64 内嵌数据库的方式在图片数量增长后会影响数据库性能。后续可迁移至腾讯云 COS 或阿里云 OSS 对象存储，数据库仅存储图片 URL，降低数据库压力。</p>
+<p>站内私信升级： 当前私信需要手动刷新查看新消息。后续可引入 WebSocket 实现消息实时推送，提升沟通体验。同时可增加消息已读未读状态回执。</p>
+<p>商品推荐算法： 基于四张日志表积累的浏览、搜索、行为数据，实现个性化商品推荐。例如根据用户浏览历史推荐同类商品，根据搜索关键词推荐相关商品，提升商品曝光率和成交转化。</p>
+<p>AI 智能定价建议： 卖家发布商品时，系统基于平台历史成交数据，结合商品品类、成色、品牌、原始价格等多维度信息，利用机器学习模型实时生成建议价格区间。例如用户发布一台二手 iPhone，系统自动分析平台上同类 iPhone 的历史成交价分布，结合屏幕成色、电池健康度、存储容量等信息，给出「建议定价 2800-3200 元」的参考区间。首期可先用统计规则实现简单版本，后续随数据积累迭代升级为 ML 模型。</p>
+<p>AI 推荐平替商品： 求购者发布求购信息后，但通过联系方式联系卖家后最终未成交，原因主要是价格谈不拢或对商品状态不满意。这说明求购者确实有购买意向，只是当前商品与需求不匹配。此时系统从平台已有商品库中，根据品类、价格、成色、品牌等维度推荐相近的替代商品供求购者浏览选择。</p>
+<p>推荐逻辑为：若平台上没有与求购需求完全匹配的商品，则按品类和价格区间匹配同类目下的其他商品；若求购者浏览但未购买，则记录其行为偏好，下次访问时优先推荐相关性更高的商品。</p>
+<p>设计原则：推荐对象是求购者本人，由求购者主动浏览推荐的平替商品列表并决定是否联系卖家，而不是将求购信息主动推送或提醒给不特定的卖家。</p>
+<p>举报与纠纷处理： 当前平台缺乏用户举报机制。后续增加举报入口，用户可对违规商品、违规用户进行举报，管理员在后台统一处理，完善平台治理能力。</p>
+<p>多校联盟扩展： 产品模式在西南大学验证成熟后，可扩展至其他高校。增加学校选择入口，用户注册时选择所属学校，首页按学校筛选展示商品，实现多校联盟模式。</p>
+<p>同小区/同村场景适配： 半封闭社区模式可复制至小区、村庄等场景。调整注册验证方式，例如小区用户通过房产证明或物业验证，村庄用户通过村委会验证，保留身份可信的核心优势。</p>
+<h2>附录</h2>
+<h2>附录一：信用等级配置</h2>
+<table>
+<thead><tr><th>等级</th><th>最低信用分</th><th>标签</th><th>图标</th><th>颜色值</th></tr></thead>
+<tbody>
+<tr><td>S</td><td>150</td><td>信用极好</td><td>🌟</td><td>#FFD700</td></tr>
+<tr><td>A</td><td>120</td><td>信用优秀</td><td>✅</td><td>#0d6efd</td></tr>
+<tr><td>B</td><td>80</td><td>信用良好</td><td>👍</td><td>#198754</td></tr>
+<tr><td>C</td><td>40</td><td>信用一般</td><td>⚠️</td><td>#fd7e14</td></tr>
+<tr><td>D</td><td>0</td><td>信用较差</td><td>❌</td><td>#dc3545</td></tr>
+</tbody></table>
+<h2>附录二：学历层次代码映射</h2>
+<table>
+<thead><tr><th>代码</th><th>学历层次</th><th>最长入学年限</th></tr></thead>
+<tbody>
+<tr><td>01</td><td>博士</td><td>7年</td></tr>
+<tr><td>11</td><td>硕士</td><td>5年</td></tr>
+<tr><td>22</td><td>本科</td><td>6年</td></tr>
+</tbody></table>
+<h2>附录三：状态枚举</h2>
+<p>商品审核状态（status）：</p>
+<table>
+<thead><tr><th>状态值</th><th>中文</th><th>说明</th></tr></thead>
+<tbody>
+<tr><td>pending</td><td>待审核</td><td>新发布商品初始状态</td></tr>
+<tr><td>approved</td><td>已上架</td><td>审核通过，展示在首页</td></tr>
+<tr><td>rejected</td><td>已驳回</td><td>审核不通过，附带驳回原因</td></tr>
+</tbody></table>
+<p>商品交易状态（sold_status）：</p>
+<table>
+<thead><tr><th>状态值</th><th>中文</th><th>说明</th></tr></thead>
+<tbody>
+<tr><td>unsold</td><td>未售出</td><td>商品尚未完成交易</td></tr>
+<tr><td>sold</td><td>已售出</td><td>卖家已标记完成交易</td></tr>
+</tbody></table>
+<p>商品类型（type）：</p>
+<table>
+<thead><tr><th>状态值</th><th>中文</th><th>说明</th></tr></thead>
+<tbody>
+<tr><td>1</td><td>出售</td><td>卖家出售闲置物品</td></tr>
+<tr><td>0</td><td>求购</td><td>买家发布求购需求</td></tr>
+</tbody></table>
+<h2>附录四：功能分类速查表</h2>
+<table>
+<thead><tr><th>分类</th><th>序号</th><th>功能名称</th></tr></thead>
+<tbody>
+<tr><td>交易闭环功能</td><td>1</td><td>注册与登录</td></tr>
+<tr><td>交易闭环功能</td><td>2</td><td>商品发布</td></tr>
+<tr><td>交易闭环功能</td><td>3</td><td>商品列表浏览</td></tr>
+<tr><td>交易闭环功能</td><td>4</td><td>商品详情</td></tr>
+<tr><td>交易闭环功能</td><td>5</td><td>求购意向</td></tr>
+<tr><td>交易闭环功能</td><td>6</td><td>售出操作</td></tr>
+<tr><td>可信保障功能</td><td>7</td><td>信用评价体系</td></tr>
+<tr><td>可信保障功能</td><td>8</td><td>管理后台-商品管理</td></tr>
+<tr><td>可信保障功能</td><td>9</td><td>管理后台-用户管理</td></tr>
+<tr><td>可信保障功能</td><td>10</td><td>个人中心</td></tr>
+<tr><td>可信保障功能</td><td>11</td><td>站内私信</td></tr>
+<tr><td>可信保障功能</td><td>12</td><td>意见反馈</td></tr>
+<tr><td>可信保障功能</td><td>13</td><td>管理后台-仪表盘</td></tr>
+<tr><td>可信保障功能</td><td>14</td><td>管理后台-反馈管理</td></tr>
+<tr><td>可信保障功能</td><td>15</td><td>二十四小时自动审核兜底</td></tr>
+</tbody></table>
+<p>文档结束</p>
+
+</body>
+</html>
