@@ -1,0 +1,13 @@
+# 智能体工作目录
+.workbuddy/
+
+# Word 临时锁文件
+~$*
+
+# 构建产物 / 分发目录
+portfolio-dist/
+
+# 系统
+.DS_Store
+Thumbs.db
+*.tmp

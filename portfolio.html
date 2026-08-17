@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>陆慧慧 · 产品经理作品集</title>
+<style>
+:root{
+  --indigo:#6C8CFF; --violet:#9B8CFF; --pink:#FF8FB3; --amber:#FFC078;
+  --emerald:#56C6B8; --sky:#8FD3FF; --red:#FF7A9C;
+  --ink:#34304C; --body:#575472; --sub:#9490A6; --line:#F1EAF4;
+  --bg:#FFFBFE; --card:#FFFFFF;
+  --g-main:linear-gradient(135deg,#6C8CFF,#FF8FB3);
+  --g-warm:linear-gradient(135deg,#FF8FB3,#FFC078);
+  --g-cool:linear-gradient(135deg,#8FD3FF,#56C6B8);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:"PingFang SC","Microsoft YaHei",-apple-system,system-ui,sans-serif;
+  background:var(--bg);color:var(--body);line-height:1.75;-webkit-font-smoothing:antialiased}
+a{text-decoration:none;color:inherit}
+.wrap{max-width:1120px;margin:0 auto;padding:0 28px}
+
+/* ---------- nav ---------- */
+nav{position:sticky;top:0;z-index:100;background:rgba(255,251,254,.86);backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--line)}
+nav .wrap{display:flex;align-items:center;justify-content:space-between;height:64px}
+nav .brand{font-weight:900;font-size:16px;color:var(--ink);display:flex;align-items:center;gap:9px}
+nav .brand i{width:26px;height:26px;border-radius:8px;background:var(--g-main);display:inline-block}
+nav .links{display:flex;gap:26px;font-size:14px;font-weight:600;color:var(--sub)}
+nav .links a:hover{color:var(--indigo)}
+nav .cta{background:var(--g-main);color:#fff;padding:8px 18px;border-radius:999px;font-size:13px;font-weight:700;
+  box-shadow:0 6px 18px rgba(108,140,255,.28)}
+@media(max-width:820px){nav .links{display:none}}
+
+/* ---------- hero ---------- */
+header{position:relative;overflow:hidden;padding:86px 0 66px;
+  background:
+   radial-gradient(700px 380px at 12% 0%,rgba(108,140,255,.18),transparent 60%),
+   radial-gradient(620px 340px at 88% 12%,rgba(255,143,179,.15),transparent 60%),
+   radial-gradient(560px 320px at 60% 100%,rgba(155,140,255,.13),transparent 60%);}
+header .tagline{display:inline-flex;align-items:center;gap:8px;background:#fff;border:1px solid var(--line);
+  padding:6px 16px;border-radius:999px;font-size:13px;font-weight:700;color:var(--indigo);
+  box-shadow:0 4px 14px rgba(108,140,255,.08)}
+header h1{font-size:52px;line-height:1.2;font-weight:900;color:var(--ink);margin:22px 0 6px;letter-spacing:-1px}
+header h1 em{font-style:normal;background:linear-gradient(90deg,#6C8CFF,#FF8FB3);
+  -webkit-background-clip:text;background-clip:text;color:transparent}
+header .sub{font-size:17px;color:var(--body);max-width:660px;margin-top:14px}
+header .sub b{color:var(--ink)}
+.hero-tags{display:flex;gap:9px;flex-wrap:wrap;margin-top:24px}
+.hero-tags span{font-size:13px;font-weight:700;padding:7px 15px;border-radius:10px;background:#fff;
+  border:1px solid var(--line);color:var(--body)}
+.hero-btns{display:flex;gap:12px;margin-top:32px;flex-wrap:wrap}
+.btn{padding:13px 26px;border-radius:14px;font-weight:800;font-size:14.5px;display:inline-flex;align-items:center;gap:8px;
+  transition:transform .18s ease,box-shadow .18s ease}
+.btn:hover{transform:translateY(-2px)}
+.btn.p{background:var(--g-main);color:#fff;box-shadow:0 10px 26px rgba(108,140,255,.3)}
+.btn.g{background:#fff;color:var(--ink);border:1.5px solid var(--line);box-shadow:0 4px 14px rgba(52,48,76,.05)}
+
+/* stats */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:52px}
+.stat{background:#fff;border:1px solid var(--line);border-radius:18px;padding:20px 18px;
+  box-shadow:0 6px 20px rgba(52,48,76,.04)}
+.stat b{display:block;font-size:32px;font-weight:900;line-height:1;letter-spacing:-1px}
+.stat small{display:block;font-size:12.5px;color:var(--sub);margin-top:8px;font-weight:600}
+@media(max-width:760px){.stats{grid-template-columns:repeat(2,1fr)}header h1{font-size:36px}}
+
+/* ---------- section ---------- */
+section{padding:78px 0}
+.sec-head{margin-bottom:38px}
+.sec-head .kicker{font-size:12.5px;font-weight:900;letter-spacing:2px;color:var(--indigo);text-transform:uppercase}
+.sec-head h2{font-size:33px;font-weight:900;color:var(--ink);margin-top:8px;letter-spacing:-.5px}
+.sec-head p{font-size:15px;color:var(--sub);margin-top:9px;max-width:680px}
+
+/* ---------- project ---------- */
+.proj{background:var(--card);border:1px solid var(--line);border-radius:26px;overflow:hidden;margin-bottom:34px;
+  box-shadow:0 10px 34px rgba(52,48,76,.05)}
+.proj-top{padding:30px 34px 26px;position:relative;color:#fff}
+.proj-top::after{content:"";position:absolute;right:-40px;top:-60px;width:230px;height:230px;border-radius:50%;
+  background:rgba(255,255,255,.14)}
+.proj-top .no{font-size:12px;font-weight:900;letter-spacing:2px;opacity:.85}
+.proj-top h3{font-size:27px;font-weight:900;margin:6px 0 8px;letter-spacing:-.3px}
+.proj-top .one{font-size:14.5px;opacity:.96;max-width:660px}
+.proj-top .meta{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px;position:relative;z-index:2}
+.proj-top .meta span{font-size:12px;font-weight:800;background:rgba(255,255,255,.22);border:1px solid rgba(255,255,255,.3);
+  padding:5px 13px;border-radius:999px;backdrop-filter:blur(4px)}
+.proj-body{padding:30px 34px 34px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:26px}
+@media(max-width:820px){.grid2{grid-template-columns:1fr}.proj-top,.proj-body{padding-left:22px;padding-right:22px}}
+.blk h4{font-size:14px;font-weight:900;color:var(--ink);display:flex;align-items:center;gap:8px;margin-bottom:11px}
+.blk h4 i{width:22px;height:22px;border-radius:7px;display:grid;place-items:center;font-size:11px;font-style:normal;color:#fff}
+.blk p{font-size:14px;color:var(--body);margin-bottom:10px}
+.blk ul{list-style:none;font-size:14px}
+.blk li{position:relative;padding-left:18px;margin-bottom:9px;color:var(--body)}
+.blk li::before{content:"";position:absolute;left:0;top:10px;width:6px;height:6px;border-radius:50%;background:var(--indigo)}
+.blk li b{color:var(--ink)}
+.hl{background:linear-gradient(180deg,transparent 62%,rgba(255,143,179,.34) 62%);font-weight:700;color:var(--ink)}
+
+/* result numbers */
+.nums{display:grid;grid-template-columns:repeat(auto-fit,minmax(118px,1fr));gap:12px;margin-top:6px}
+.num{background:#F8F7FE;border:1px solid var(--line);border-radius:14px;padding:14px 12px;text-align:center}
+.num b{display:block;font-size:23px;font-weight:900;line-height:1.1;letter-spacing:-.5px}
+.num small{display:block;font-size:11.5px;color:var(--sub);margin-top:5px;font-weight:600}
+
+/* deliverables */
+.deliv{margin-top:26px;border-top:1px dashed var(--line);padding-top:22px}
+.deliv .lb{font-size:12px;font-weight:900;letter-spacing:2px;color:var(--sub);margin-bottom:13px}
+.files{display:flex;gap:12px;flex-wrap:wrap}
+.file{display:flex;align-items:center;gap:11px;background:#fff;border:1.5px solid var(--line);border-radius:14px;
+  padding:11px 17px 11px 13px;transition:all .18s ease}
+.file:hover{border-color:var(--indigo);transform:translateY(-2px);box-shadow:0 8px 22px rgba(108,140,255,.14)}
+.file .ic{width:34px;height:34px;border-radius:10px;display:grid;place-items:center;font-size:15px;flex:0 0 34px}
+.file .tx b{display:block;font-size:13.5px;font-weight:800;color:var(--ink)}
+.file .tx small{display:block;font-size:11.5px;color:var(--sub)}
+.file .go{color:var(--sub);font-size:13px;margin-left:4px}
+
+/* ---------- method ---------- */
+.flowbox{background:#fff;border:1px solid var(--line);border-radius:24px;padding:34px 30px;
+  box-shadow:0 10px 30px rgba(52,48,76,.05)}
+.flow{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}
+@media(max-width:900px){.flow{grid-template-columns:repeat(2,1fr)}}
+.step{position:relative;background:#F8F7FE;border:1px solid var(--line);border-radius:16px;padding:18px 15px}
+.step .n{width:28px;height:28px;border-radius:9px;color:#fff;display:grid;place-items:center;font-size:13px;font-weight:900;margin-bottom:10px}
+.step b{display:block;font-size:14px;color:var(--ink);font-weight:900}
+.step small{display:block;font-size:12px;color:var(--sub);margin-top:6px;line-height:1.6}
+.loopnote{margin-top:18px;background:#F6F0FB;border:1px dashed #D9C9F5;border-radius:14px;padding:13px 18px;
+  font-size:13.5px;color:#6B4BA0;font-weight:600}
+
+/* ---------- skills ---------- */
+.skgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+@media(max-width:880px){.skgrid{grid-template-columns:1fr}}
+.sk{background:#fff;border:1px solid var(--line);border-radius:20px;padding:24px;box-shadow:0 8px 24px rgba(52,48,76,.04)}
+.sk .hd{display:flex;align-items:center;gap:11px;margin-bottom:16px}
+.sk .hd .ic{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;font-size:17px;color:#fff}
+.sk .hd b{font-size:15.5px;font-weight:900;color:var(--ink)}
+.skrow{display:flex;align-items:center;gap:10px;font-size:13px;margin-bottom:10px}
+.skrow span:first-child{width:70px;flex:0 0 70px;color:var(--body);font-weight:700}
+.skbar{flex:1;height:7px;border-radius:99px;background:#EFEEF9;overflow:hidden}
+.skbar i{display:block;height:100%;border-radius:99px}
+.tagset{display:flex;gap:7px;flex-wrap:wrap;margin-top:4px}
+.tagset span{font-size:12px;font-weight:700;padding:5px 12px;border-radius:8px;background:#F6F0FB;color:var(--body)}
+
+/* ---------- about / footer ---------- */
+.about{background:var(--g-main);border-radius:26px;padding:44px 40px;color:#fff;position:relative;overflow:hidden}
+.about::after{content:"";position:absolute;right:-70px;bottom:-90px;width:280px;height:280px;border-radius:50%;background:rgba(255,255,255,.12)}
+.about h3{font-size:26px;font-weight:900;margin-bottom:14px}
+.about p{font-size:15px;opacity:.95;max-width:680px;position:relative;z-index:2}
+.about .contact{display:flex;gap:12px;flex-wrap:wrap;margin-top:18px;position:relative;z-index:2}
+.about .contact a{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.4);
+  color:#fff;padding:10px 18px;border-radius:13px;font-weight:800;font-size:14px;transition:all .18s ease}
+.about .contact a:hover{background:#fff;color:var(--indigo);transform:translateY(-2px)}
+.about .cta2{display:flex;gap:12px;margin-top:18px;flex-wrap:wrap;position:relative;z-index:2}
+.about .cta2 a{background:#fff;color:var(--indigo);padding:12px 24px;border-radius:13px;font-weight:800;font-size:14px}
+.about .cta2 a.ghost{background:rgba(255,255,255,.16);color:#fff;border:1px solid rgba(255,255,255,.45)}
+footer{padding:40px 0 56px;text-align:center;color:var(--sub);font-size:13px}
+
+/* reveal */
+.rv{opacity:0;transform:translateY(22px);transition:opacity .6s ease,transform .6s ease}
+.rv.in{opacity:1;transform:none}
+
+/* ---------- print / PDF ---------- */
+@media print{
+  *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  html,body{background:#fff!important}
+  nav,.hero-btns,.about .cta2,.btn{display:none!important}
+  .rv{opacity:1!important;transform:none!important}
+  a[href]{text-decoration:none;color:inherit}
+  header{padding-top:40px!important}
+  @page{size:A4;margin:14mm}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <div class="brand"><i></i>陆慧慧 · Portfolio</div>
+    <div class="links">
+      <a href="#works">项目</a>
+      <a href="#method">方法论</a>
+      <a href="#skills">能力</a>
+      <a href="#about">关于</a>
+    </div>
+    <a href="#about" class="cta">联系我</a>
+  </div>
+</nav>
+
+<header>
+  <div class="wrap">
+    <span class="tagline">🎓 西南大学 · 2027 届 · 求职方向：AI 产品经理 / 产品经理</span>
+    <h1>把真实的问题<br>做成<em>能验证的产品</em></h1>
+    <p class="sub">我做的三个项目都不是练习题：一个<b>已部署上线并完成三轮机制演化</b>；一个从真实痛点出发、独立完成的 <b>AI 产品</b>（赛前预测模型已用真实数据验证）；还有一个跑通了<b>完整的数据建模 Pipeline</b>。共同点是——都从具体问题出发，最后都拿到了可验证的结果。</p>
+    <div class="hero-tags">
+      <span>📄 PRD 撰写</span><span>🎨 高保真原型</span><span>🔍 竞品与用户分析</span>
+      <span>📊 数据分析建模</span><span>🤖 AI 能力规划</span><span>🔁 版本迭代闭环</span>
+    </div>
+    <div class="hero-btns">
+      <a href="#works" class="btn p">查看项目 ↓</a>
+      <a href="#about" class="btn g">📮 联系方式</a>
+    </div>
+
+    <div class="stats">
+      <div class="stat"><b style="background:var(--g-main);-webkit-background-clip:text;background-clip:text;color:transparent">3</b><small>完整项目<br>产品 / AI / 数据各一</small></div>
+      <div class="stat"><b style="background:var(--g-warm);-webkit-background-clip:text;background-clip:text;color:transparent">6</b><small>交付文档与原型<br>PRD、原型、分析报告</small></div>
+      <div class="stat"><b style="background:var(--g-cool);-webkit-background-clip:text;background-clip:text;color:transparent">2</b><small>已验证 AI 模型<br>真实数据训练</small></div>
+      <div class="stat"><b style="color:var(--emerald)">1</b><small>已上线产品<br>三轮机制演化</small></div>
+    </div>
+  </div>
+</header>
+
+<!-- ============ WORKS ============ -->
+<section id="works">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <div class="kicker">Selected Works</div>
+      <h2>精选项目</h2>
+      <p>每个项目按「发现问题 → 我的判断 → 核心产出 → 验证结果」展开，所有原始文档可直接点开查看。</p>
+    </div>
+
+    <!-- ---------- P1 ---------- -->
+    <div class="proj rv">
+      <div class="proj-top" style="background:var(--g-main)">
+        <div class="no">PROJECT 01 · 产品全流程</div>
+        <h3>校园二手交易平台 · 三轮机制演化</h3>
+        <div class="one">源于课程作业的校园二手平台。老师明确要求必须包含信用评价体系，而我认为真正难的不是「评价」本身，而是<b>怎么把商品和它真正卖出的买家绑定起来</b>——这成了贯穿三轮机制演化的主线。</div>
+        <div class="meta">
+          <span>产品经理 · 全流程负责</span><span>✅ 已部署上线</span><span>三轮机制演化</span><span>2026</span>
+        </div>
+      </div>
+      <div class="proj-body">
+        <div class="grid2">
+          <div class="blk">
+            <h4><i style="background:var(--indigo)">1</i>起点与核心难题</h4>
+            <p>它最初是<b>课程作业</b>，定位是校园二手信息的<b>集结平台</b>（发布+浏览），并非一开始就做交易闭环。老师明确要求必须包含<b>信用评价体系</b>，于是我顺着课程要求去搭建。</p>
+            <ul>
+              <li><b>但我很快意识到真正难的不是「评价」本身</b>——而是<span class="hl">怎么把「商品」和它真正卖出的「买家」绑定起来</span>。绑不住，评价就可能是卖家找人刷的，信用体系形同虚设。</li>
+              <li>结合 <b>80+ 份线下问卷</b>，我确认用户核心痛点是「商品状态不透明、信息滞后白跑」，并据此重构信息架构+身份核验，信息查找效率较 QQ 群<b>提升 60%</b>。</li>
+            </ul>
+          </div>
+          <div class="blk">
+            <h4><i style="background:var(--red)">2</i>三轮机制演化：把「商品」钉给「真实买家」</h4>
+            <div style="border-left:3px solid #FFB36B;background:#FFF8F0;border-radius:0 14px 14px 0;padding:13px 18px;margin-bottom:12px">
+              <div style="font-size:12px;font-weight:900;color:#B26A12;letter-spacing:1px">V1 · 随机校验码</div>
+              <p style="font-size:13.5px;margin:6px 0 0;color:#7c4a12">卖家售出后系统生成<b>随机校验码</b>；买家评价时须输入正确校验码才能留评。漏洞：若卖家把码发给他人代评，真实买家可凭聊天记录向反馈系统举报，由<b>运营兜底</b>。能跑，但「靠自觉 + 兜底」，不够优雅。</p>
+            </div>
+            <div style="border-left:3px solid #9B8CFF;background:#F5F1FE;border-radius:0 14px 14px 0;padding:13px 18px;margin-bottom:12px">
+              <div style="font-size:12px;font-weight:900;color:#6B4BA0;letter-spacing:1px">V2 · 求购锁（15 分钟）</div>
+              <p style="font-size:13.5px;margin:6px 0 0;color:#4C1D95">买卖前，买家先点「求购」→ 商品被锁定 <b>15 分钟</b>，期间必须完成交易；卖家只能在被锁定的商品上点「已售」，随后才能评价。超时未售 → 商品<b>自动释放</b>重新上架。<b>从源头把「谁买了」钉死</b>，比校验码更硬。</p>
+            </div>
+            <div style="border-left:3px solid #56C6B8;background:#EFFBF8;border-radius:0 14px 14px 0;padding:13px 18px">
+              <div style="font-size:12px;font-weight:900;color:#0B7E6E;letter-spacing:1px">V3 · 类闲鱼交易闭环（当前）</div>
+              <p style="font-size:13.5px;margin:6px 0 0;color:#064E3B">演进到与<b>闲鱼高度一致</b>的完整交易体系：买家下单 → 卖家确认 → 收货 → 评价，商品与买家在订单层<b>天然绑定</b>。机制收敛到行业共识方案，信用数据真实可信。</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid2" style="margin-top:26px">
+          <div class="blk">
+            <h4><i style="background:var(--violet)">3</i>核心产出</h4>
+            <ul>
+              <li><b>PRD V1.0 / V2.0</b>：合计 15 个功能模块、6 张数据表、交易闭环流程图、信用评价与举报兜底规则、V1→V2 机制演化对照（校验码 → 求购锁）、订单状态流转图</li>
+              <li><b>小程序高保真原型</b>：商品详情、消息、发布、评价、管理后台等 8 页</li>
+              <li><b>Cursor 辅助开发</b>：<b>2 周完成全功能 Demo</b>（原估 4 周）</li>
+            </ul>
+          </div>
+          <div class="blk">
+            <h4><i style="background:var(--emerald)">4</i>上线结果</h4>
+            <div class="nums">
+              <div class="num"><b style="color:var(--indigo)">87</b><small>注册用户</small></div>
+              <div class="num"><b style="color:var(--violet)">32</b><small>日活</small></div>
+              <div class="num"><b style="color:var(--pink)">25%</b><small>成交转化率</small></div>
+              <div class="num"><b style="color:var(--emerald)">93</b><small>NPS 得分</small></div>
+            </div>
+            <p style="margin-top:14px;font-size:13.5px">这个项目我最想讲的不是功能有多少，而是<span class="hl">围绕「商品怎么绑定真实买家」这一道题，我连做了三版机制</span>——从校验码到求购锁，最后收敛到类闲鱼方案，证明我能在约束下持续把核心难题解透。</p>
+          </div>
+        </div>
+
+        <div class="deliv">
+          <div class="lb">DELIVERABLES · 点击查看原文档</div>
+          <div class="files">
+            <a class="file" href="campus-trade-PRD.html" target="_blank">
+              <span class="ic" style="background:#EEF0FE;color:var(--indigo)">📄</span>
+              <span class="tx"><b>PRD V1.0</b><small>10 Part · 15 功能 · 6 张表</small></span><span class="go">↗</span>
+            </a>
+            <a class="file" href="campus-trade-PRD2.0.html" target="_blank">
+              <span class="ic" style="background:#F5F1FE;color:var(--violet)">📄</span>
+              <span class="tx"><b>PRD V2.0</b><small>机制演化 · 变更对照</small></span><span class="go">↗</span>
+            </a>
+            <a class="file" href="index-campustrade.html" target="_blank">
+              <span class="ic" style="background:#FEF0F7;color:var(--pink)">📱</span>
+              <span class="tx"><b>小程序高保真原型</b><small>可交互 · 含管理后台</small></span><span class="go">↗</span>
+            </a>
+            <a class="file" href="http://106.53.27.244" target="_blank">
+              <span class="ic" style="background:#EAFBF6;color:var(--emerald)">🌐</span>
+              <span class="tx"><b>线上环境</b><small>已部署运行</small></span><span class="go">↗</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ---------- P2 ---------- -->
+    <div class="proj rv">
+      <div class="proj-top" style="background:linear-gradient(135deg,#9B8CFF,#FF8FB3)">
+        <div class="no">PROJECT 02 · AI 产品 · 自驱立项</div>
+        <h3>校园足球助手 · AI 队长</h3>
+        <div class="one">从校园球队长期存在的痛点出发——排阵靠经验、约人靠接龙、复盘靠感觉——我独立完成了这款 AI 产品的 PRD、高保真原型与预测模型 PoC。定位是「AI 队长」：用 AI 承担排阵、约人、复盘这些重复劳动。</div>
+        <div class="meta">
+          <span>自驱立项 · 产品 + 数据</span><span>🤖 AI 能力规划</span><span>预测模型 PoC</span><span>2026</span>
+        </div>
+      </div>
+      <div class="proj-body">
+        <div class="grid2">
+          <div class="blk">
+            <h4><i style="background:var(--emerald)">1</i>市场与机会</h4>
+            <ul>
+              <li>全国普通高校 <b>3000+</b> 所 × 均校 20 支院队 × 25 人 ≈ <b>150 万人</b>的长尾市场，被主流体育产品完全忽视</li>
+              <li>西南大学：40+ 学院、30+ 独立球队、核心活跃 <b>约 500 人</b>，全部散落在微信／QQ 群里</li>
+              <li>值得做的四个理由：周期性稳定（联赛／毕业季）→ 稳定回访；用户画像清晰 → 冷启动容易；数据价值高 → 可形成闭环；现有工具完全不满足</li>
+            </ul>
+          </div>
+          <div class="blk">
+            <h4><i style="background:var(--sky)">2</i>竞品结论：三者缺一不可</h4>
+            <p style="font-size:13.5px">我把赛道拆成<b>工具需求 × AI 赋能 × 社交属性</b>三个维度打分：</p>
+            <ul style="font-size:13.5px">
+              <li>微信／QQ 群 —— 只有社交 <b>1/3</b>（最大竞争对手，但信息不沉淀、不结构化、不可检索）</li>
+              <li>传统球队工具 —— 只有工具 <b>1/3</b>（界面陈旧、无 AI、无社交）</li>
+              <li>懂球帝／虎扑 —— <b>1.5/3</b>（用户是职业球迷，不是校园队长）</li>
+              <li><b>校园足球助手 —— 3/3</b>，这就是切入点</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="grid2" style="margin-top:26px">
+          <div class="blk">
+            <h4><i style="background:var(--violet)">3</i>AI 能力与数据闭环</h4>
+            <p>规划了 <b>5 大功能模块 + 4 项 AI 能力</b>（赛前预测／阵容推荐／赛后复盘／综合总结），并分 P0／P1／P2 排期，其中<b>赛前预测已用真实数据验证</b>。需求变更率控制在 <b>15% 以内</b>。</p>
+            <ul>
+              <li><b>赛后复盘</b>是我认为最有价值的一环：AI 数据复盘 → 队员感想 → 队长总结 → AI 综合总结（✅亮点／⚠️待改进／🔮下场建议），这是所有球队都在做但都做不好的事</li>
+              <li><b>数据闭环</b>：赛前分析 → AI 预测 → 阵容推荐 → 比赛 → 赛果录入 → 回传模型 → 下一轮更准，形成「预测越准 → 越信任 → 数据越多 → 模型越准」的正反馈</li>
+            </ul>
+          </div>
+          <div class="blk">
+            <h4><i style="background:var(--amber)">4</i>模型验证结果</h4>
+            <div class="nums">
+              <div class="num"><b style="color:var(--emerald)">77.1%</b><small>主队胜预测</small></div>
+              <div class="num"><b style="color:var(--sky)">5</b><small>功能模块</small></div>
+              <div class="num"><b style="color:var(--violet)">4</b><small>AI 能力</small></div>
+              <div class="num"><b style="color:var(--indigo)">50+</b><small>演示用户</small></div>
+            </div>
+            <p style="margin-top:14px;font-size:13.5px">从 QQ 空间爬取 6 年 349 条记录，清洗后 <b>343 条</b>；XGBoost 多分类 + <b>15 维滚动窗口特征</b>，<span class="hl">严格时序切分防止数据泄露</span>。当前因校园足球数据特征缺失，先用职业足球数据完成模型与链路验证，再逐步适配校园场景。向 50+ 名目标用户演示，收集有效反馈 <b>23 条</b>。</p>
+          </div>
+        </div>
+
+        <div class="deliv">
+          <div class="lb">DELIVERABLES · 点击查看原文档</div>
+          <div class="files">
+            <a class="file" href="PRD-football.html" target="_blank">
+              <span class="ic" style="background:#EAFBF6;color:var(--emerald)">📄</span>
+              <span class="tx"><b>PRD · AI 方向</b><small>市场／竞品／功能／AI 规划</small></span><span class="go">↗</span>
+            </a>
+            <a class="file" href="index-football.html" target="_blank">
+              <span class="ic" style="background:#E9F4FE;color:var(--sky)">⚽</span>
+              <span class="tx"><b>高保真可交互原型</b><small>8 页 · 手机端适配</small></span><span class="go">↗</span>
+            </a>
+          </div>
+          <p style="font-size:12.5px;color:var(--sub);margin-top:13px">另有：Python 数据清洗与特征工程脚本、Dify + Agent 定义的 4 大 AI 场景、Flask 后端 Demo（预测 → 阵容 → 复盘完整链路），可面谈演示。</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ---------- P3 ---------- -->
+    <div class="proj rv">
+      <div class="proj-top" style="background:var(--g-warm)">
+        <div class="no">PROJECT 03 · 数据分析建模</div>
+        <h3>新能源汽车市场分析与高端购车人群预测</h3>
+        <div class="one">从原始销量数据出发，跑通「清洗 → 特征工程 → EDA → PCA 降维 → XGBoost 建模 → SHAP 可解释」完整 Pipeline，最终输出可落地的车企产品与营销策略建议。</div>
+        <div class="meta">
+          <span>数据分析 · 独立完成</span><span>完整建模 Pipeline</span><span>SHAP 可解释</span><span>2026</span>
+        </div>
+      </div>
+      <div class="proj-body">
+        <div class="grid2">
+          <div class="blk">
+            <h4><i style="background:var(--amber)">1</i>分析路径</h4>
+            <ul>
+              <li><b>EDA 发现</b>：入门代步车型销量中位数最高且分布集中，高端车型（≥35万）市场容量有限；爆款车型综合产品力评分整体高于滞销车型</li>
+              <li><b>发现共线性</b>：热力图显示均价、综合产品力、性价比指数彼此 <b>|r| &gt; 0.5</b>，多重共线性明显</li>
+              <li><b>因此做 PCA</b>：对 4 个核心特征降维，<b>前 2 个主成分累计方差解释率超 90%</b>，二维投影中代步／高端呈现清晰分割边界</li>
+              <li><b>XGBoost 二分类</b>：预测高端购车倾向（均价≥25万 + 爆款），23 维特征、137 训练 / 46 测试</li>
+            </ul>
+          </div>
+          <div class="blk">
+            <h4><i style="background:var(--pink)">2</i>模型结果与业务结论</h4>
+            <div class="nums">
+              <div class="num"><b style="color:var(--pink)">0.843</b><small>模型 R²</small></div>
+              <div class="num"><b style="color:var(--amber)">4</b><small>销售梯队</small></div>
+              <div class="num"><b style="color:var(--indigo)">3</b><small>需调整 SKU 滞销车型</small></div>
+              <div class="num"><b style="color:var(--violet)">27</b><small>聚类车型数</small></div>
+            </div>
+            <ul style="margin-top:14px">
+              <li><b>25 万是天然分界线</b>——均价是区分高端／代步用户的最强信号，SHAP 分析进一步验证高均价正向推动高端购车倾向</li>
+              <li><b>产品力即销量力</b>——综合产品力评分越高越容易成为爆款，建议优先提升外观、空间、配置</li>
+              <li>将 27 款车型<b>聚类为 4 个销售梯队</b>，识别出 3 款需调整 SKU 的滞销车型，建议车企双线产品布局</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="deliv">
+          <div class="lb">DELIVERABLES · 点击查看原文档</div>
+          <div class="files">
+            <a class="file" href="sales_analysis_report.html" target="_blank">
+              <span class="ic" style="background:#FEF3E8;color:var(--amber)">📊</span>
+              <span class="tx"><b>完整分析报告</b><small>含 EDA／PCA／SHAP 全部可视化图表</small></span><span class="go">↗</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============ METHOD ============ -->
+<section id="method" style="background:linear-gradient(180deg,#F6F0FB,#FFFBFE)">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <div class="kicker">How I Work</div>
+      <h2>我的做事方式</h2>
+      <p>三个项目虽然领域不同，但走的是同一套流程——而且每一步我都留下了可查的产出。</p>
+    </div>
+    <div class="flowbox rv">
+      <div class="flow">
+        <div class="step"><div class="n" style="background:var(--indigo)">1</div><b>发现真问题</b><small>从真实场景出发：球队排阵、校园闲置流转，不做凭空想象的需求</small></div>
+        <div class="step"><div class="n" style="background:var(--violet)">2</div><b>找关键杠杆</b><small>不堆功能，先找那个「解决它就解决一半」的支点，比如二手平台里「商品绑定真实买家」</small></div>
+        <div class="step"><div class="n" style="background:var(--pink)">3</div><b>定义与排期</b><small>PRD 写清边界、状态流转、异常路径；功能按 P0/P1/P2 分阶段交付</small></div>
+        <div class="step"><div class="n" style="background:var(--amber)">4</div><b>原型与落地</b><small>高保真可交互原型对齐认知，配合开发上线，参与验收</small></div>
+        <div class="step"><div class="n" style="background:var(--emerald)">5</div><b>用数据验证</b><small>模型跑准确率、产品看真实使用；发现问题就迭代下一版</small></div>
+      </div>
+      <div class="loopnote">🔁 这套流程不是线性的——校园二手交易平台就是例子：从「校验码」到「求购锁」再到「类闲鱼」，每一版都回到第 1 步重新审视「商品怎么绑定真实买家」这个根因，再走一遍完整闭环。</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SKILLS ============ -->
+<section id="skills">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <div class="kicker">Capability</div>
+      <h2>能力构成</h2>
+      <p>产品定义能力 + 数据建模能力，是我做 AI 产品时最主要的两条腿。</p>
+    </div>
+    <div class="skgrid">
+      <div class="sk rv">
+        <div class="hd"><div class="ic" style="background:var(--g-main)">📐</div><b>产品能力</b></div>
+        <div class="skrow"><span>需求分析</span><div class="skbar"><i style="width:88%;background:var(--g-main)"></i></div></div>
+        <div class="skrow"><span>PRD 撰写</span><div class="skbar"><i style="width:92%;background:var(--g-main)"></i></div></div>
+        <div class="skrow"><span>竞品分析</span><div class="skbar"><i style="width:85%;background:var(--g-main)"></i></div></div>
+        <div class="skrow"><span>原型设计</span><div class="skbar"><i style="width:86%;background:var(--g-main)"></i></div></div>
+        <div class="skrow"><span>版本迭代</span><div class="skbar"><i style="width:84%;background:var(--g-main)"></i></div></div>
+        <div class="tagset" style="margin-top:14px"><span>用户故事</span><span>状态机设计</span><span>优先级排期</span><span>验收标准</span></div>
+      </div>
+      <div class="sk rv">
+        <div class="hd"><div class="ic" style="background:var(--g-cool)">📊</div><b>数据能力</b></div>
+        <div class="skrow"><span>数据清洗</span><div class="skbar"><i style="width:86%;background:var(--g-cool)"></i></div></div>
+        <div class="skrow"><span>特征工程</span><div class="skbar"><i style="width:82%;background:var(--g-cool)"></i></div></div>
+        <div class="skrow"><span>可视化</span><div class="skbar"><i style="width:88%;background:var(--g-cool)"></i></div></div>
+        <div class="skrow"><span>机器学习</span><div class="skbar"><i style="width:76%;background:var(--g-cool)"></i></div></div>
+        <div class="skrow"><span>模型解释</span><div class="skbar"><i style="width:74%;background:var(--g-cool)"></i></div></div>
+        <div class="tagset" style="margin-top:14px"><span>XGBoost</span><span>PCA</span><span>SHAP</span><span>滚动窗口特征</span><span>时序切分</span></div>
+      </div>
+      <div class="sk rv">
+        <div class="hd"><div class="ic" style="background:var(--g-warm)">🛠️</div><b>工具栈</b></div>
+        <div class="tagset">
+          <span>SPSS</span><span>PowerPoint</span><span>Excel</span><span>Python</span>
+          <span>SQL</span><span>墨刀</span><span>Dify</span><span>Tableau</span><span>Flask</span><span>Git</span><span>Cursor</span><span>WorkBuddy</span>
+        </div>
+        <div style="margin-top:20px;padding-top:18px;border-top:1px dashed var(--line)">
+          <b style="font-size:13.5px;color:var(--ink);display:block;margin-bottom:8px">额外说明</b>
+          <p style="font-size:13px;color:var(--sub)">能自己写 Python 完成数据清洗与建模，也能搭 Flask Demo 把链路跑通——这让我在和研发沟通 AI 功能时，能把需求描述到<b style="color:var(--ink)">可实现的颗粒度</b>，而不是只提一句「这里加个 AI」。</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ ABOUT ============ -->
+<section id="about" style="padding-top:20px">
+  <div class="wrap">
+    <div class="about rv">
+      <h3>关于我</h3>
+      <p>陆慧慧，西南大学 2027 届，<b>大数据管理与应用</b>专业，GPA 3.6 / 5.0。求职方向是 AI 产品经理 / 产品经理，期望行业互联网、人工智能。<br><br>
+      我做产品的习惯是：<b>先解决自己真的遇到的问题</b>。校园球队排阵、约人、复盘的痛点，让我想做一个 AI 助手去解决它；校园里闲置东西流转麻烦，所以做了二手平台并部署上线。围绕「商品怎么绑定真实买家」这个核心难题，我连做了三轮机制演化——发现问题、承认问题、然后一层层把它解透，本身就是产品能力。<br><br>
+      <b>实习经历：</b>广西壮族自治区信息中心 · 大数据应用处 实习生。<br>
+      <b>可连续实习 6 个月及以上，每周可线下出勤 5 天及以上。</b></p>
+      <div class="contact">
+        <a href="mailto:cata1245689@163.com">📧 cata1245689@163.com</a>
+        <a href="tel:18878630254">📱 188 7863 0254</a>
+      </div>
+      <div class="cta2">
+        <a href="http://106.53.27.244" target="_blank">🌐 访问上线产品</a>
+        <a href="https://github.com/hevvi773-cpu/Product-Manager" target="_blank" class="ghost">💻 GitHub 代码仓库</a>
+        <a href="portfolio.pdf" download class="ghost">📄 下载 PDF 版作品集</a>
+        <a href="#works" class="ghost">↑ 回到项目</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  陆慧慧 · 产品经理作品集 · 2026 &nbsp;|&nbsp; 所有文档均为本人独立完成，点击卡片可查看原件
+</footer>
+
+<script>
+(function(){
+  var io=new IntersectionObserver(function(es){
+    es.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+  },{threshold:.08,rootMargin:'0px 0px -40px 0px'});
+  document.querySelectorAll('.rv').forEach(function(el,i){ el.style.transitionDelay=(i%3*70)+'ms'; io.observe(el); });
+})();
+</script>
+</body>
+</html>
